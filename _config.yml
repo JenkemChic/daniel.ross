@@ -4,7 +4,10 @@ baseurl: "" # Leave blank for GitHub Pages
 url: "https://jenkemchic.github.io/daniel.ross"
 
 # Jekflix Theme Configuration
-theme: jekflix-theme
+include:
+  - _layouts
+  - _includes
+  - _sass
 paginate: 6
 paginate_path: "/page:num/"
 cover: "/assets/img/cover.jpg"  # Change to your cover image if needed
@@ -18,7 +21,7 @@ paginate: 6
 paginate_path: "/page:num/"
 theme_color: "#ff0000"
 
-# Plugins
+# Pluginsls ~/PycharmProjects/daniel.ross
 plugins:
   - jekyll-paginate
   - jekyll-feed
