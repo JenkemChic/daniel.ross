@@ -7,18 +7,8 @@ url: "https://jenkemchic.github.io/daniel.ross"
 theme: jekflix-theme
 paginate: 6
 paginate_path: "/page:num/"
-cover: "/assets/img/cover.jpg"  # Path to the cover image
-logo: "/assets/img/logo.png"  # Path to the site logo
-author: "Daniel Ross"
-email: "your-email@example.com"
-twitter_username: "your_twitter"  # Remove if not using Twitter
-github_username: "JenkemChic"
-
-# SEO & Social Media
-social:
-  github: "https://github.com/JenkemChic"
-  linkedin: "your-linkedin-profile-url"
-  twitter: "your-twitter-profile-url"
+cover: "/assets/img/cover.jpg"  # Change to your cover image if needed
+logo: "/assets/img/logo.png"  # Change to your logo if needed
 
 # Build settings
 markdown: kramdown
@@ -37,11 +27,3 @@ plugins:
   - jekyll-archives
   - jekyll-paginate-content
   - jekyll-sass-converter
-
-# Google Analytics (Optional)
-google_analytics: "UA-XXXXXXXXX-X"
-
-# Disqus Comments (Optional)
-disqus:
-  shortname: "your-disqus-shortname"
-
