@@ -1,72 +1,68 @@
 # Site settings
-title: Freelancer
-email: your-email@domain.com
-url: https://github.com/jeromelachaud/freelancer-theme
-description: "Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description."
-keywords: "your keywords, separated by commas"
-skills: "Web Developer - Graphic Artist - User Experience Designer"
-meta_author: LastName FirstName
+title: Daniel Ross - UX Designer & Developer
+email: your-email@domain.com  # Add your actual email here
+url: "https://jenkemchic.github.io"
+description: "Daniel Ross is a UX Designer & Frontend Developer with expertise in Python, JavaScript, and UI/UX design."
+keywords: "UX Design, Frontend Development, Python, JavaScript, User Experience"
+skills: "UX/UI Designer - Frontend Developer - Creative Technologist"
+meta_author: Ross Daniel
 
-# Site settings
-baseurl: "/daniel.ross"  # Make sure this matches your repository name!
-url: "https://jenkemchic.github.io"  # Your GitHub Pages URL
+# GitHub Pages settings
+baseurl: "/daniel.ross"  # Ensure this matches your repo name!
+url: "https://jenkemchic.github.io"
 
 # Google webmaster tools
 google_verify:
 
-# https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
+# Bing webmaster tools verification
 bing_verify:
 
-# Contact form:
-# - static : pass through formspree.io to validate email sending
-# - disqus : replace contact form by disqus thread
-# - comment the line below if you want to stick with the default PHP contact form
-contact: static
+# Contact form
+contact: static  # Uses Formspree.io for contact form
 
-# If you use disqus you need disqus shortname
-# https://help.disqus.com/customer/portal/articles/466208
-disqus_shortname: myshortname
+# Disqus comments
+disqus_shortname:
 
-# Color settings (hex-codes without the leading hash-tag)
+# Color settings (hex-codes without the leading #)
 color:
-  primary: 18bc9c #80B3FF
-  primary-rgb: "24,288,156" #"128,179,255"
-  secondary: 2c3e50 #FD6E8A
-  secondary-dark: 233140 #A2122F
+  primary: 18bc9c  # Default theme color
+  primary-rgb: "24,188,156"
+  secondary: 2c3e50
+  secondary-dark: 233140
 
 # Footer settings
 footer:
-  copyright: Dr. Henry Jekyll
-  location: Location
-  social: Around the Web
-  credits: Credits
+  copyright: "© 2025 Daniel Ross"
+  location: "Based in the USA"
+  social: "Follow Me"
+  credits: "Designed & Developed by Daniel Ross"
 
-# Social networks usernames (many more available: google-plus, flickr, dribbble, pinterest, instagram, tumblr, linkedin, etc.)
+# Social media (Update these with your actual links)
 social:
   - title: twitter
-    url: http://twitter.com/jekyllrb
-  - title: facebook
-    url:
-  - title: stack-overflow
-    url: http://stackoverflow.com/questions/tagged/jekyll
-  - title: bitbucket
-    url: http://bitbucket.org/jekyll
+    url: "https://twitter.com/yourhandle"
+  - title: linkedin
+    url: "https://www.linkedin.com/in/danielross"
   - title: github
-    url: http://github.com/jekyll
+    url: "https://github.com/JenkemChic"
+  - title: dribbble
+    url: "https://dribbble.com/yourprofile"
+  - title: medium
+    url: "https://medium.com/@yourprofile"
 
-# Postal address (add as many lines as necessary)
+# Postal address (Optional)
 address:
-  - line: 3481 Melrose Place
-  - line: Beverly Hills, CA 90210
+  - line: "Available for remote work worldwide"
+  - line: "Currently based in the USA"
 
 # Credits content
-credits: 'Freelancer is a free to use, open source Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.'
+credits: 'Theme adapted from <a href="http://startbootstrap.com">Start Bootstrap</a>. Customized by Daniel Ross.'
 
 # Build settings
 markdown: kramdown
 permalink: pretty
 
-#for posts
+# Default settings for posts
 defaults:
   - scope:
       path: ""
