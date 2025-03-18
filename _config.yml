@@ -7,6 +7,10 @@ keywords: "your keywords, separated by commas"
 skills: "Web Developer - Graphic Artist - User Experience Designer"
 meta_author: LastName FirstName
 
+# Site settings
+baseurl: "/daniel.ross"  # Make sure this matches your repository name!
+url: "https://jenkemchic.github.io"  # Your GitHub Pages URL
+
 # Google webmaster tools
 google_verify:
 
