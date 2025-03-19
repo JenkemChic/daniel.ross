@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Daniel Ross - UX/UI Portfolio</title>
+		<title>Daniel Ross - Portfolio</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -36,61 +36,79 @@
 								<h1>Hi, I'm Daniel Ross</h1>
 							</header>
 							<div class="content">
-								<p>UX/UI Designer with a passion for creating intuitive and engaging experiences.</p>
+								<p>UX/UI Designer specializing in intuitive digital experiences.</p>
+								<ul class="actions">
+									<li><a href="#work" class="button next scrolly">View My Work</a></li>
+								</ul>
 							</div>
 						</div>
 					</section>
 
-				<!-- About Section -->
-					<section id="about" class="inner">
-						<header class="major">
-							<h2>About Me</h2>
-						</header>
-						<p>I'm a UX/UI designer with a background in frontend development and graphic design. My work focuses on user-centered solutions, blending aesthetics with functionality.</p>
-					</section>
+				<!-- Main -->
+					<div id="main">
 
-				<!-- Work Section -->
-					<section id="work" class="tiles">
-						<article>
-							<span class="image">
-								<img src="images/helio.jpg" alt="Helio Weather App" />
-							</span>
-							<header class="major">
-								<h3><a href="#" class="link">Helio Weather App</a></h3>
-								<p>A high-fidelity weather app designed for accurate and real-time weather updates.</p>
-							</header>
-						</article>
-						<article>
-							<span class="image">
-								<img src="images/galeriste.jpg" alt="Galeriste Art Auction" />
-							</span>
-							<header class="major">
-								<h3><a href="#" class="link">Galeriste</a></h3>
-								<p>A streamlined app for artists to auction artwork at shows via QR code.</p>
-							</header>
-						</article>
-					</section>
+						<!-- About -->
+						<section id="about" class="tiles">
+							<article>
+								<header class="major">
+									<h2>About Me</h2>
+									<p>I'm a UX/UI designer with a strong background in web development and Python programming. Passionate about creating seamless user experiences.</p>
+								</header>
+							</article>
+						</section>
 
-				<!-- Contact Section -->
+						<!-- Work -->
+						<section id="work" class="tiles">
+							<article>
+								<span class="image">
+									<img src="images/work1.jpg" alt="Work Example" />
+								</span>
+								<header class="major">
+									<h3><a href="#" class="link">Project Name</a></h3>
+									<p>Brief project description here.</p>
+								</header>
+							</article>
+						</section>
+
+					</div>
+
+				<!-- Contact -->
 					<section id="contact">
 						<div class="inner">
 							<header class="major">
-								<h2>Contact</h2>
+								<h2>Contact Me</h2>
 							</header>
-							<p>Feel free to reach out for collaborations, opportunities, or just to say hi!</p>
-							<ul class="icons">
-								<li><a href="mailto:daniel@example.com" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
-								<li><a href="https://github.com/JenkemChic" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-								<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-							</ul>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field half">
+										<label for="name">Name</label>
+										<input type="text" name="name" id="name" />
+									</div>
+									<div class="field half">
+										<label for="email">Email</label>
+										<input type="text" name="email" id="email" />
+									</div>
+									<div class="field">
+										<label for="message">Message</label>
+										<textarea name="message" id="message" rows="6"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" class="primary" /></li>
+								</ul>
+							</form>
 						</div>
 					</section>
 
 				<!-- Footer -->
 					<footer id="footer">
 						<div class="inner">
+							<ul class="icons">
+								<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
 							<ul class="copyright">
-								<li>&copy; 2025 Daniel Ross</li>
+								<li>&copy; Daniel Ross</li>
 							</ul>
 						</div>
 					</footer>
@@ -99,6 +117,11 @@
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
 
 	</body>
