@@ -1,5 +1,5 @@
 # Site settings
-title: Daniel Ross - UX Designer & Developer
+title: Daniel Ross
 email: your-email@domain.com  # Add your actual email here
 url: "https://jenkemchic.github.io"
 description: "Daniel Ross is a UX Designer & Frontend Developer with expertise in Python, JavaScript, and UI/UX design."
@@ -69,3 +69,29 @@ defaults:
       type: "posts"
     values:
       permalink: ""
+
+# Footer settings
+footer:
+  copyright: "Daniel Ross"
+  location: "Based in [Your City, State]"  # Update location
+  social: "Find Me Online"
+  credits: "Built with a customized Freelancer Theme"
+
+# Social networks (Update with actual URLs)
+social:
+  - title: github
+    url: "https://github.com/JenkemChic"
+  - title: linkedin
+    url: "https://www.linkedin.com/in/your-profile"
+  - title: twitter
+    url: "https://twitter.com/your-handle"
+  - title: portfolio
+    url: "https://your-portfolio-url.com"
+
+# Postal address (optional, or remove)
+address:
+  - line: "Available for Remote & In-Person Projects"
+  - line: "Email me at: youremail@domain.com"
+
+# Credits
+credits: "This portfolio showcases my work as a UX Designer, Web Developer, and Digital Artist."
