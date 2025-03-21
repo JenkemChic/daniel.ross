@@ -3411,6 +3411,7 @@ input, select, textarea {
 			transition-delay: 0.75s;
 			pointer-events: none;
 			background-color: #FF0000;
+			opacity: 0.85;
 			content: '';
 			display: block;
 			height: 100%;
