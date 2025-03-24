@@ -6,27 +6,20 @@
 
 (function($) {
 
-	var	$window = $(window),
-		$body = $('body'),
-		$wrapper = $('#wrapper'),
-		$header = $('#header'),
-		$banner = $('#banner');
-
-	// Breakpoints.
-		breakpoints({
-			xlarge:    ['1281px',   '1680px'   ],
-			large:     ['981px',    '1280px'   ],
-			medium:    ['737px',    '980px'    ],
-			small:     ['481px',    '736px'    ],
-			xsmall:    ['361px',    '480px'    ],
-			xxsmall:   [null,       '360px'    ]
-		});
+	skel.breakpoints({
+		xlarge: '(max-width: 1680px)',
+		large: '(max-width: 1280px)',
+		medium: '(max-width: 980px)',
+		small: '(max-width: 736px)',
+		xsmall: '(max-width: 480px)',
+		xxsmall: '(max-width: 360px)'
+	});
 
 	/**
 	 * Applies parallax scrolling to an element's background image.
 	 * @return {jQuery} jQuery object.
 	 */
-	$.fn._parallax = (browser.name == 'ie' || browser.name == 'edge' || browser.mobile) ? function() { return $(this) } : function(intensity) {
+	$.fn._parallax = (skel.vars.browser == 'ie' || skel.vars.browser == 'edge' || skel.vars.mobile) ? function() { return $(this) } : function(intensity) {
 
 		var	$window = $(window),
 			$this = $(this);
@@ -76,8 +69,14 @@
 
 			};
 
-			breakpoints.on('<=medium', off);
-			breakpoints.on('>medium', on);
+			skel.on('change', function() {
+
+				if (skel.breakpoint('medium').active)
+					(off)();
+				else
+					(on)();
+
+			});
 
 		});
 
@@ -91,245 +90,263 @@
 
 	};
 
-	// Play initial animations on page load.
-		$window.on('load', function() {
+	$(function() {
+
+		var	$window = $(window),
+			$body = $('body'),
+			$wrapper = $('#wrapper'),
+			$header = $('#header'),
+			$banner = $('#banner');
+
+		// Disable animations/transitions until the page has loaded.
+			$body.addClass('is-loading');
+
 			window.setTimeout(function() {
-				$body.removeClass('is-preload');
-			}, 100);
-		});
+				$body.removeClass('is-loading');
+			}, 200);
 
-	// Clear transitioning state on unload/hide.
-		$window.on('unload pagehide', function() {
-			window.setTimeout(function() {
-				$('.is-transitioning').removeClass('is-transitioning');
-			}, 250);
-		});
-
-	// Fix: Enable IE-only tweaks.
-		if (browser.name == 'ie' || browser.name == 'edge')
-			$body.addClass('is-ie');
-
-	// Scrolly.
-		$('.scrolly').scrolly({
-			offset: function() {
-				return $header.height() - 2;
-			}
-		});
-
-	// Tiles.
-		var $tiles = $('.tiles > article');
-
-		$tiles.each(function() {
-
-			var $this = $(this),
-				$image = $this.find('.image'), $img = $image.find('img'),
-				$link = $this.find('.link'),
-				x;
-
-			// Image.
-
-				// Set image.
-					$this.css('background-image', 'url(' + $img.attr('src') + ')');
-
-				// Set position.
-					if (x = $img.data('position'))
-						$image.css('background-position', x);
-
-				// Hide original.
-					$image.hide();
-
-			// Link.
-				if ($link.length > 0) {
-
-					$x = $link.clone()
-						.text('')
-						.addClass('primary')
-						.appendTo($this);
-
-					$link = $link.add($x);
-
-					$link.on('click', function(event) {
-
-						var href = $link.attr('href');
-
-						// Prevent default.
-							event.stopPropagation();
-							event.preventDefault();
-
-						// Target blank?
-							if ($link.attr('target') == '_blank') {
-
-								// Open in new tab.
-									window.open(href);
-
-							}
-
-						// Otherwise ...
-							else {
-
-								// Start transitioning.
-									$this.addClass('is-transitioning');
-									$wrapper.addClass('is-transitioning');
-
-								// Redirect.
-									window.setTimeout(function() {
-										location.href = href;
-									}, 500);
-
-							}
-
-					});
-
-				}
-
-		});
-
-	// Header.
-		if ($banner.length > 0
-		&&	$header.hasClass('alt')) {
-
-			$window.on('resize', function() {
-				$window.trigger('scroll');
-			});
-
-			$window.on('load', function() {
-
-				$banner.scrollex({
-					bottom:		$header.height() + 10,
-					terminate:	function() { $header.removeClass('alt'); },
-					enter:		function() { $header.addClass('alt'); },
-					leave:		function() { $header.removeClass('alt'); $header.addClass('reveal'); }
-				});
-
+		// Clear transitioning state on unload/hide.
+			$window.on('unload pagehide', function() {
 				window.setTimeout(function() {
-					$window.triggerHandler('scroll');
-				}, 100);
-
+					$('.is-transitioning').removeClass('is-transitioning');
+				}, 250);
 			});
 
-		}
+		// Fix: Enable IE-only tweaks.
+			if (skel.vars.browser == 'ie' || skel.vars.browser == 'edge')
+				$body.addClass('is-ie');
 
-	// Banner.
-		$banner.each(function() {
+		// Fix: Placeholder polyfill.
+			$('form').placeholder();
 
-			var $this = $(this),
-				$image = $this.find('.image'), $img = $image.find('img');
+		// Prioritize "important" elements on medium.
+			skel.on('+medium -medium', function() {
+				$.prioritize(
+					'.important\\28 medium\\29',
+					skel.breakpoint('medium').active
+				);
+			});
 
-			// Parallax.
-				$this._parallax(0.275);
+		// Scrolly.
+			$('.scrolly').scrolly({
+				offset: function() {
+					return $header.height() - 2;
+				}
+			});
 
-			// Image.
-				if ($image.length > 0) {
+		// Tiles.
+			var $tiles = $('.tiles > article');
+
+			$tiles.each(function() {
+
+				var $this = $(this),
+					$image = $this.find('.image'), $img = $image.find('img'),
+					$link = $this.find('.link'),
+					x;
+
+				// Image.
 
 					// Set image.
 						$this.css('background-image', 'url(' + $img.attr('src') + ')');
 
+					// Set position.
+						if (x = $img.data('position'))
+							$image.css('background-position', x);
+
 					// Hide original.
 						$image.hide();
 
-				}
+				// Link.
+					if ($link.length > 0) {
 
-		});
+						$x = $link.clone()
+							.text('')
+							.addClass('primary')
+							.appendTo($this);
+						
+						$x.attr('aria-label', $link.text());
 
-	// Menu.
-		var $menu = $('#menu'),
-			$menuInner;
+						$link = $link.add($x);
 
-		$menu.wrapInner('<div class="inner"></div>');
-		$menuInner = $menu.children('.inner');
-		$menu._locked = false;
+						$link.on('click', function(event) {
 
-		$menu._lock = function() {
+							var href = $link.attr('href');
 
-			if ($menu._locked)
-				return false;
+							// Prevent default.
+								event.stopPropagation();
+								event.preventDefault();
 
-			$menu._locked = true;
+							// Start transitioning.
+								$this.addClass('is-transitioning');
+								$wrapper.addClass('is-transitioning');
 
-			window.setTimeout(function() {
-				$menu._locked = false;
-			}, 350);
+							// Redirect.
+								window.setTimeout(function() {
 
-			return true;
+									if ($link.attr('target') == '_blank')
+										window.open(href);
+									else
+										location.href = href;
 
-		};
+								}, 500);
 
-		$menu._show = function() {
+						});
 
-			if ($menu._lock())
-				$body.addClass('is-menu-visible');
-
-		};
-
-		$menu._hide = function() {
-
-			if ($menu._lock())
-				$body.removeClass('is-menu-visible');
-
-		};
-
-		$menu._toggle = function() {
-
-			if ($menu._lock())
-				$body.toggleClass('is-menu-visible');
-
-		};
-
-		$menuInner
-			.on('click', function(event) {
-				event.stopPropagation();
-			})
-			.on('click', 'a', function(event) {
-
-				var href = $(this).attr('href');
-
-				event.preventDefault();
-				event.stopPropagation();
-
-				// Hide.
-					$menu._hide();
-
-				// Redirect.
-					window.setTimeout(function() {
-						window.location.href = href;
-					}, 250);
+					}
 
 			});
 
-		$menu
-			.appendTo($body)
-			.on('click', function(event) {
+		// Header.
+			if (skel.vars.IEVersion < 9)
+				$header.removeClass('alt');
 
-				event.stopPropagation();
-				event.preventDefault();
+			if ($banner.length > 0
+			&&	$header.hasClass('alt')) {
 
-				$body.removeClass('is-menu-visible');
+				$window.on('resize', function() {
+					$window.trigger('scroll');
+				});
 
-			})
-			.append('<a class="close" href="#menu">Close</a>');
+				$window.on('load', function() {
 
-		$body
-			.on('click', 'a[href="#menu"]', function(event) {
+					$banner.scrollex({
+						bottom:		$header.height() + 10,
+						terminate:	function() { $header.removeClass('alt'); },
+						enter:		function() { $header.addClass('alt'); },
+						leave:		function() { $header.removeClass('alt'); $header.addClass('reveal'); }
+					});
 
-				event.stopPropagation();
-				event.preventDefault();
+					window.setTimeout(function() {
+						$window.triggerHandler('scroll');
+					}, 100);
 
-				// Toggle.
-					$menu._toggle();
+				});
 
-			})
-			.on('click', function(event) {
+			}
 
-				// Hide.
-					$menu._hide();
+		// Banner.
+			$banner.each(function() {
 
-			})
-			.on('keydown', function(event) {
+				var $this = $(this),
+					$image = $this.find('.image'), $img = $image.find('img');
 
-				// Hide on escape.
-					if (event.keyCode == 27)
+				// Parallax.
+					$this._parallax(0.275);
+
+				// Image.
+					if ($image.length > 0) {
+
+						// Set image.
+							$this.css('background-image', 'url(' + $img.attr('src') + ')');
+
+						// Hide original.
+							$image.hide();
+
+					}
+
+			});
+
+		// Menu.
+			var $menu = $('#menu'),
+				$menuInner;
+
+			$menu.wrapInner('<div class="inner"></div>');
+			$menuInner = $menu.children('.inner');
+			$menu._locked = false;
+
+			$menu._lock = function() {
+
+				if ($menu._locked)
+					return false;
+
+				$menu._locked = true;
+
+				window.setTimeout(function() {
+					$menu._locked = false;
+				}, 350);
+
+				return true;
+
+			};
+
+			$menu._show = function() {
+
+				if ($menu._lock())
+					$body.addClass('is-menu-visible');
+
+			};
+
+			$menu._hide = function() {
+
+				if ($menu._lock())
+					$body.removeClass('is-menu-visible');
+
+			};
+
+			$menu._toggle = function() {
+
+				if ($menu._lock())
+					$body.toggleClass('is-menu-visible');
+
+			};
+
+			$menuInner
+				.on('click', function(event) {
+					event.stopPropagation();
+				})
+				.on('click', 'a', function(event) {
+
+					var href = $(this).attr('href');
+
+					event.preventDefault();
+					event.stopPropagation();
+
+					// Hide.
 						$menu._hide();
 
-			});
+					// Redirect.
+						window.setTimeout(function() {
+							window.location.href = href;
+						}, 250);
+
+				});
+
+			$menu
+				.appendTo($body)
+				.on('click', function(event) {
+
+					event.stopPropagation();
+					event.preventDefault();
+
+					$body.removeClass('is-menu-visible');
+
+				})
+				.append('<a class="close" href="#menu">Close</a>');
+
+			$body
+				.on('click', 'a[href="#menu"]', function(event) {
+
+					event.stopPropagation();
+					event.preventDefault();
+
+					// Toggle.
+						$menu._toggle();
+
+				})
+				.on('click', function(event) {
+
+					// Hide.
+						$menu._hide();
+
+				})
+				.on('keydown', function(event) {
+
+					// Hide on escape.
+						if (event.keyCode == 27)
+							$menu._hide();
+
+				});
+
+	});
 
 })(jQuery);
