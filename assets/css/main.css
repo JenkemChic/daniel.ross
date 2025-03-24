@@ -47,6 +47,37 @@ body {
   body { font-size: 11px; }
 }
 
+/* Banner */
+#banner {
+  padding: 4em 2em;
+  background: linear-gradient(to right, #2b2e4a, #242943);
+  color: #fff;
+  text-align: center;
+}
+
+#banner h1 {
+  font-size: 3em;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  color: #9bf1ff;
+}
+
+#banner p {
+  font-size: 1.25em;
+  color: #ffffffcc;
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+@media screen and (max-width: 736px) {
+  #banner h1 {
+    font-size: 2em;
+  }
+  #banner p {
+    font-size: 1em;
+  }
+}
+
 /* Links */
 a {
   color: inherit;
