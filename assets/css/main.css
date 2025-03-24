@@ -3950,3 +3950,30 @@ input, select, textarea {
 			opacity: 1;
 			visibility: visible;
 		}
+
+/* ----- Styles for the ABOUT section ----- */
+
+#about article {
+  position: relative;
+  background-image: url('image/work1.jpg'); /* Your image */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+#about article::before {
+  content: '';
+  position: absolute; /* Overlay positioning */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.5); /* Adjust opacity as needed */
+  z-index: 1; /* Overlay above the background */
+}
+
+#about article > * {
+  position: relative;
+  z-index: 2; /* Content above the overlay */
+}
