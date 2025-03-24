@@ -3955,7 +3955,7 @@ input, select, textarea {
 
 #about article {
   position: relative;
-  background-image: url('image/work1.jpg'); /* Your image */
+  background-image: url('images/work1.jpg'); /* Your image */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
