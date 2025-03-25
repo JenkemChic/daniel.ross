@@ -5,6 +5,7 @@
 │   │   ├── fontawesome-all.min.css
 │   │   ├── font-awesome.min.css
 │   │   ├── main.css
+│   │   ├── main.css.map
 │   │   └── noscript.css
 │   ├── fonts
 │   │   ├── fontawesome-webfont.eot?
@@ -128,6 +129,7 @@
 │   │   │   ├── fontawesome-all.min.css
 │   │   │   ├── font-awesome.min.css
 │   │   │   ├── main.css
+│   │   │   ├── main.css.map
 │   │   │   └── noscript.css
 │   │   ├── fonts
 │   │   │   ├── fontawesome-webfont.eot?
@@ -197,8 +199,9 @@
 │   ├── index.html
 │   ├── landing.html
 │   ├── LICENSE.txt
-│   └── README.txt
+│   ├── README.txt
+│   └── structure.txt
 ├── structure.txt
 └── .travis.yml
 
-29 directories, 173 files
+29 directories, 176 files
