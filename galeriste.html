@@ -40,15 +40,16 @@
         overflow: hidden;
         display: flex;
         justify-content: center;
-        align-items: flex-end;
+        align-items: center;
       }
       .masked-container img {
         width: 100%;
         object-fit: cover;
         object-position: center 85%;
         height: 100%;
-        mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
-        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+        mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+        display: block;
       }
       .inner {
         max-width: 800px;
@@ -63,8 +64,14 @@
         .headline-underline,
         .masked-container,
         .inner {
-          max-width: 100%;
+          max-width: 90%;
           padding: 0 1em;
+        }
+        .headline-img {
+          width: 100%;
+        }
+        .masked-container {
+          width: 100%;
         }
       }
     </style>
