@@ -9,62 +9,62 @@
     <style>
       body {
         background-color: #891446;
+        margin: 0;
+        padding: 0;
       }
       header.major {
-        text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
+        text-align: center;
       }
       .headline-img {
-        display: block;
-        margin: 0 auto;
         width: 100%;
         max-width: 800px;
         height: auto;
+        display: block;
       }
       .headline-underline {
         height: 3px;
         background-color: white;
         margin: 0.5em auto;
+        width: 100%;
+        max-width: 800px;
       }
-      .masked-image {
+      .masked-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
         margin: 1.5em auto;
-        background: url('assets/images/gallerysetting.png') center 85%/cover no-repeat;
-        mask-image: linear-gradient(black, black);
-        -webkit-mask-image: linear-gradient(black, black);
+        aspect-ratio: 2 / 1;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+      }
+      .masked-container img {
+        width: 100%;
+        object-fit: cover;
+        object-position: center 75%;
+        height: 100%;
       }
       .inner {
         max-width: 800px;
         margin: 0 auto;
-        text-align: left;
         padding: 0 1em;
+        text-align: left;
       }
       .inner p {
         text-align: left;
       }
       @media screen and (max-width: 768px) {
-        .headline-img {
-          max-width: 100%;
-        }
-        .masked-image {
+        .headline-img,
+        .headline-underline,
+        .masked-container {
           max-width: 100%;
         }
       }
     </style>
-    <script>
-      window.addEventListener('load', () => {
-        const img = document.querySelector('.headline-img');
-        const underline = document.querySelector('.headline-underline');
-        const masked = document.querySelector('.masked-image');
-        if (img && underline && masked) {
-          const imgWidth = img.clientWidth;
-          underline.style.width = `${imgWidth}px`;
-          masked.style.width = `${imgWidth}px`;
-          masked.style.height = `${imgWidth / 2}px`;
-        }
-      });
-    </script>
   </head>
   <body>
     <div id="wrapper">
@@ -76,7 +76,9 @@
           <header class="major">
             <img src="assets/images/galeristehl.png" alt="Galeriste Case Study" class="headline-img">
             <div class="headline-underline"></div>
-            <div class="masked-image"></div>
+            <div class="masked-container">
+              <img src="assets/images/gallerysetting.png" alt="Gallery Setting" />
+            </div>
           </header>
           <p>
             Galeriste is a mobile-first app concept designed to assist artists and patrons during art shows. The app allows artists to photograph and upload their work into a simple auction interface, which patrons can access by scanning a QR code at the event.
