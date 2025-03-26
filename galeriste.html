@@ -19,13 +19,9 @@
       .headline-img {
         display: block;
         margin: 0 auto;
-        max-width: 60%;
+        width: 100%;
+        max-width: 800px;
         height: auto;
-      }
-      @media screen and (max-width: 768px) {
-        .headline-img {
-          max-width: 90%;
-        }
       }
       .headline-underline {
         height: 3px;
@@ -46,6 +42,14 @@
       }
       .inner p {
         text-align: left;
+      }
+      @media screen and (max-width: 768px) {
+        .headline-img {
+          max-width: 100%;
+        }
+        .masked-image {
+          max-width: 100%;
+        }
       }
     </style>
     <script>
