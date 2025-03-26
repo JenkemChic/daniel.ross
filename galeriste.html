@@ -17,11 +17,12 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
+        width: 100%;
       }
       .headline-img {
         width: 100%;
-        max-width: 800px;
         height: auto;
+        max-width: 100%;
         display: block;
       }
       .headline-underline {
@@ -29,12 +30,11 @@
         background-color: white;
         margin: 0.5em auto;
         width: 100%;
-        max-width: 800px;
+        max-width: 100%;
       }
       .masked-container {
         position: relative;
         width: 100%;
-        max-width: 800px;
         margin: 1.5em auto;
         aspect-ratio: 2 / 1;
         overflow: hidden;
@@ -44,34 +44,37 @@
       }
       .masked-container img {
         width: 100%;
+        height: 100%;
         object-fit: cover;
         object-position: center 85%;
-        height: 100%;
         mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
         -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
         display: block;
       }
       .inner {
-        max-width: 800px;
+        width: 100%;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 0 1em;
       }
-      .inner p {
+      .text-content {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 1000px;
+        padding: 0 1em;
+      }
+      .text-content p {
         text-align: left;
       }
       @media screen and (max-width: 768px) {
         .headline-img,
         .headline-underline,
         .masked-container,
-        .inner {
-          max-width: 90%;
+        .inner,
+        .text-content {
+          width: 100%;
+          max-width: 100%;
           padding: 0 1em;
-        }
-        .headline-img {
-          width: 100%;
-        }
-        .masked-container {
-          width: 100%;
         }
       }
     </style>
@@ -90,21 +93,23 @@
               <img src="assets/images/gallerysetting.png" alt="Gallery Setting" />
             </div>
           </header>
-          <p>
-            Galeriste is a mobile-first app concept designed to assist artists and patrons during art shows. The app allows artists to photograph and upload their work into a simple auction interface, which patrons can access by scanning a QR code at the event.
-          </p>
-          <p>
-            Once scanned, patrons can place bids through their Venmo or PayPal accounts, creating a fast and streamlined experience. The bidding doesn’t stop when the show ends—instead, it continues as the show travels to different cities. This rolling auction structure keeps competition high and maximizes the visibility and final sale price of the artworks.
-          </p>
-          <p>
-            A unique feature of Galeriste is its emphasis on security and privacy. Auctions are completely wiped from the servers after they close, ensuring that user data and bid history are not stored indefinitely.
-          </p>
-          <p>
-            The design philosophy of Galeriste is minimalist and functional, with black-and-white paper textures dominating the aesthetic. This keeps the visual focus on the artwork while creating a tactile, gallery-like experience on screen.
-          </p>
-          <p>
-            The app is built with DIY art shows in mind, giving artists autonomy in how their work is viewed and sold. Galeriste is about more than convenience—it's about creating an inclusive, artist-driven platform that modernizes the art auction experience.
-          </p>
+          <div class="text-content">
+            <p>
+              Galeriste is a mobile-first app concept designed to assist artists and patrons during art shows. The app allows artists to photograph and upload their work into a simple auction interface, which patrons can access by scanning a QR code at the event.
+            </p>
+            <p>
+              Once scanned, patrons can place bids through their Venmo or PayPal accounts, creating a fast and streamlined experience. The bidding doesn’t stop when the show ends—instead, it continues as the show travels to different cities. This rolling auction structure keeps competition high and maximizes the visibility and final sale price of the artworks.
+            </p>
+            <p>
+              A unique feature of Galeriste is its emphasis on security and privacy. Auctions are completely wiped from the servers after they close, ensuring that user data and bid history are not stored indefinitely.
+            </p>
+            <p>
+              The design philosophy of Galeriste is minimalist and functional, with black-and-white paper textures dominating the aesthetic. This keeps the visual focus on the artwork while creating a tactile, gallery-like experience on screen.
+            </p>
+            <p>
+              The app is built with DIY art shows in mind, giving artists autonomy in how their work is viewed and sold. Galeriste is about more than convenience—it's about creating an inclusive, artist-driven platform that modernizes the art auction experience.
+            </p>
+          </div>
         </section>
       </div>
       <footer id="footer">
