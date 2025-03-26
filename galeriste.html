@@ -45,14 +45,15 @@
       .masked-container img {
         width: 100%;
         object-fit: cover;
-        object-position: center 75%;
+        object-position: center 85%;
         height: 100%;
+        mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
       }
       .inner {
         max-width: 800px;
         margin: 0 auto;
         padding: 0 1em;
-        text-align: left;
       }
       .inner p {
         text-align: left;
@@ -60,8 +61,10 @@
       @media screen and (max-width: 768px) {
         .headline-img,
         .headline-underline,
-        .masked-container {
+        .masked-container,
+        .inner {
           max-width: 100%;
+          padding: 0 1em;
         }
       }
     </style>
