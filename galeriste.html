@@ -6,34 +6,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="assets/css/main.css" />
     <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+      body {
+        background-color: #891446;
+      }
+      header.major {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .headline-img {
+        display: block;
+        margin: 0 auto;
+        max-width: 60%;
+        height: auto;
+      }
+      .headline-underline {
+        height: 3px;
+        background-color: white;
+        margin: 0.5em auto;
+      }
+      .masked-image {
+        margin: 1.5em auto;
+        background: url('assets/images/gallerysetting.png') center 85%/cover no-repeat;
+        mask-image: linear-gradient(black, black);
+        -webkit-mask-image: linear-gradient(black, black);
+      }
+      .inner {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: left;
+      }
+      .inner p {
+        text-align: left;
+      }
+    </style>
+    <script>
+      window.addEventListener('load', () => {
+        const img = document.querySelector('.headline-img');
+        const underline = document.querySelector('.headline-underline');
+        const masked = document.querySelector('.masked-image');
+        if (img && underline && masked) {
+          const imgWidth = img.clientWidth;
+          underline.style.width = `${imgWidth}px`;
+          masked.style.width = `${imgWidth}px`;
+          masked.style.height = `${imgWidth / 2}px`;
+        }
+      });
+    </script>
   </head>
   <body>
     <div id="wrapper">
-
-      <!-- Header -->
       <header id="header">
         <a href="index.html" class="logo"><strong>Galeriste</strong> <span>Case Study</span></a>
       </header>
-
-      <!-- Main Content -->
       <div id="main" class="alt">
         <section class="inner">
           <header class="major">
-            <h1>Galeriste Case Study</h1>
+            <img src="assets/images/galeristehl.png" alt="Galeriste Case Study" class="headline-img">
+            <div class="headline-underline"></div>
+            <div class="masked-image"></div>
           </header>
           <p>
-            Galeriste is a mobile-first app concept created to help artists and patrons connect more efficiently at local art shows. Artists use the app to upload artwork, set minimum bids, and manage sales across events. Patrons enter shows by scanning a QR code and can bid on works immediately via Venmo or PayPal integration.
+            Galeriste is a mobile-first app concept designed to assist artists and patrons during art shows. The app allows artists to photograph and upload their work into a simple auction interface, which patrons can access by scanning a QR code at the event.
           </p>
           <p>
-            One key challenge addressed was making the show accessible after its physical closure, allowing bidding to continue city to city. This helped maximize exposure and sale value. Privacy and security were emphasized by wiping auctions after completion.
+            Once scanned, patrons can place bids through their Venmo or PayPal accounts, creating a fast and streamlined experience. The bidding doesn’t stop when the show ends—instead, it continues as the show travels to different cities. This rolling auction structure keeps competition high and maximizes the visibility and final sale price of the artworks.
           </p>
           <p>
-            The result is a minimal, paper-inspired black-and-white interface allowing art to take center stage while providing artists with more autonomy and patrons with convenient access.
+            A unique feature of Galeriste is its emphasis on security and privacy. Auctions are completely wiped from the servers after they close, ensuring that user data and bid history are not stored indefinitely.
+          </p>
+          <p>
+            The design philosophy of Galeriste is minimalist and functional, with black-and-white paper textures dominating the aesthetic. This keeps the visual focus on the artwork while creating a tactile, gallery-like experience on screen.
+          </p>
+          <p>
+            The app is built with DIY art shows in mind, giving artists autonomy in how their work is viewed and sold. Galeriste is about more than convenience—it's about creating an inclusive, artist-driven platform that modernizes the art auction experience.
           </p>
         </section>
       </div>
-
-      <!-- Footer -->
       <footer id="footer">
         <div class="inner">
           <ul class="copyright">
@@ -42,8 +93,6 @@
         </div>
       </footer>
     </div>
-
-    <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/jquery.scrolly.min.js"></script>
     <script src="assets/js/jquery.scrollex.min.js"></script>
