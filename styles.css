@@ -1,6 +1,6 @@
 from pathlib import Path
 
-# Define the corrected CSS content based on the latest instructions
+# Full corrected CSS with additional mobile and layout fixes
 corrected_css = """
 /*===============
   global styles
@@ -248,8 +248,8 @@ main {
 
 .nav__list {
   display: flex;
-  flex-direction: row;  /* ensure side-by-side layout */
-  gap: 1.5em;            /* spacing between links */
+  flex-direction: row;
+  gap: 1.5em;
   align-items: center;
 }
 
@@ -321,7 +321,7 @@ main {
 }
 
 .project__description {
-  flex-grow: 1; /* Pushes content upward so the button stays anchored */
+  flex-grow: 1;
   margin-bottom: 1em;
 }
 
@@ -343,6 +343,11 @@ main {
   margin-left: 0.5em;
 }
 
+.skills {
+  text-align: center;
+  margin: 0 auto;
+}
+
 .skills__list {
   max-width: 450px;
   width: 95%;
@@ -350,6 +355,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  text-align: center;
 }
 
 .skills__list-item {
@@ -388,15 +394,16 @@ main {
 }
 
 .project__logo {
-  height: 3.5em; /* Increased from 1.5em */
-  width: auto;
-  max-width: 100%;
+  height: auto;
+  width: 100%;
+  max-width: 250px;
+  object-fit: contain;
   display: inline-block;
   vertical-align: middle;
 }
 
 .case-study {
-  margin-top: 1em; /* adjust to 0.5em or even 0 if you want it tighter */
+  margin-top: 1em;
 }
 
 main,
@@ -451,6 +458,22 @@ section {
     margin-top: 2em;
   }
 
+  .projects__grid {
+    flex-direction: column;
+  }
+
+  .project {
+    min-height: 300px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .skills__list {
+    padding: 0 1em;
+    justify-content: center;
+    text-align: center;
+  }
+
   .footer {
     padding: 2em;
     margin-top: 3em;
@@ -461,14 +484,11 @@ section {
   }
 }
 
-
-/* Add this to the bottom of styles.css */
-
 .image-center-wrapper {
   display: flex;
   justify-content: center;
-  width: 100vw;           /* Full viewport width */
-  margin-left: calc(-45vw + 50%); /* Cancel the main container centering */
+  width: 100vw;
+  margin-left: calc(-45vw + 50%);
 }
 
 .gallery-img {
@@ -476,9 +496,9 @@ section {
   width: 63%;
   height: auto;
 }
+"""
 
-
-# Save the corrected CSS to a file
+# Save the file
 css_path = Path("/mnt/data/styles.css")
 css_path.write_text(corrected_css)
 

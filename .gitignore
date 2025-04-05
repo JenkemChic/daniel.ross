@@ -5,4 +5,9 @@ _site
 .jekyll-cache
 .jekyll-metadata
 
+venv/
+*.pyc
+__pycache__/
+
+
 Gemfile.lock
