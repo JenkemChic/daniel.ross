@@ -1,158 +1,133 @@
-<!DOCTYPE html>
-<!--
-	Customized Portfolio Template
-	Original design by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Home | Daniel Ross</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <!--[if lte IE 8]>
-    <script src="/forty-jekyll-theme/assets/js/ie/html5shiv.js"></script><![endif]-->
-    <link rel="stylesheet" href="assets/css/main.css"/>
-    <!--[if lte IE 9]>
-    <link rel="stylesheet" href="/forty-jekyll-theme/assets/css/ie9.css"/><![endif]-->
-    <!--[if lte IE 8]>
-    <link rel="stylesheet" href="/forty-jekyll-theme/assets/css/ie8.css"/><![endif]-->
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content="Portfolio of Daniel Ross"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/fa62c117c7.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css"/>
+    <title>Daniel Ross | Portfolio</title>
 </head>
+<body class="light" id="top">
 
-<body>
-<div id="wrapper">
-
-    <header id="header" class="alt">
-        <a href="index.html" class="logo"><strong>Daniel Ross</strong> <span>Portfolio</span></a>
-        <nav>
-            <a href="index.html#menu">Menu</a>
-        </nav>
-    </header>
-
-    <nav id="menu">
-        <ul class="links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="projects.html">Projects</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-        <ul class="actions vertical">
-            <li><a href="#" class="button special fit">Start a Project</a></li>
-            <li><a href="#" class="button fit">Client Login</a></li>
+<header class="header center">
+    <h3><a href="index.html" class="link">DR.</a></h3>
+    <nav class="nav center">
+        <ul class="nav__list center">
+            <li class="nav__list-item"><a class="link link--nav" href="#projects">Projects</a></li>
+            <li class="nav__list-item"><a class="link link--nav" href="#skills">Skills</a></li>
+            <li class="nav__list-item"><a class="link link--nav" href="#contact">Contact</a></li>
         </ul>
     </nav>
+</header>
 
-    <section id="banner" class="major">
-        <div class="inner">
-            <header class="major">
-                <h1>Hi, I'm Daniel Ross</h1>
-            </header>
-            <div class="content">
-                <p style="text-transform: uppercase;">UX/UI Design, Frontend Development & Visual Strategy<br/></p>
-                <ul class="actions">
-                    <li><a href="#projects" class="button next scrolly">View My Work</a></li>
-                </ul>
+<main>
+    <div class="about__contact stacked">
+        <h1><span class="about__name">Daniel Ross.</span></h1>
+        <h2 class="about__role">UX/UI Designer and Programmer.</h2>
+        <p class="about__desc">
+            I focus on frontend development, UX/UI design, and prototyping digital tools, with a background in
+            archaeology that supports my work on utilities for field research.
+        </p>
+
+        <div class="about__contact center">
+            <a href="https://example.com">
+                <span class="btn btn--outline">resume</span>
+            </a>
+
+            <div class="about__contact-icons">
+                <a href="https://github.com/yourprofile" aria-label="github" class="link link--icon">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/yourprofile" aria-label="linkedin" class="link link--icon">
+                    <i class="fab fa-linkedin"></i>
+                </a>
             </div>
         </div>
-    </section>
 
-    <div id="main">
-        <section id="projects" class="tiles">
-            <article>
-					<span class="image">
-						<img src="assets/images/work1.jpg" alt="Project 1"/>
-					</span>
-                <header class="major">
-                    <h3><a href="project1.html" class="link">About:</a></h3>
-With 15+ years in archaeology, I now apply my expertise to frontend development, UX/UI design, and programming for digital tools.</header>
-            </article>
+        <!-- Projects -->
+        <section id="projects" class="section projects">
+            <h2 class="section__title">Projects</h2>
 
-            <article>
-					<span class="image">
-						<img src="assets/images/work2.jpg" alt="Project 2"/>
-					</span>
-                <header class="major">
-                    <h3><a href="galeriste.html" class="link">Project Examples:</a></h3>
-                    <p>I develop digital tools to manage information and improve manual processes. I designed and am currently coding Galeriste, a mobile auction app for local art shows. I also built DirtLENS, a field utility for archaeological data collection, including hardware prototyping and custom software.</p>
-                </header>
-            </article>
+            <div class="projects__grid">
+                <div class="project">
+                    <div class="project__title-img">
+                        <img src="galeristehl.png" alt="Galeriste Logo" class="project__logo"/>
+                    </div>
+                    <p class="project__description">
+                        A mobile-first app designed to help artists manage art shows by creating a rolling auction
+                        system.
+                        Patrons can bid using QR codes and payment apps, with bids continuing as shows move to different
+                        cities.
+                    </p>
+                    <ul class="project__stack">
+                        <li class="project__stack-item">Python</li>
+                        <li class="project__stack-item">Django</li>
+                        <li class="project__stack-item">Figma</li>
+                    </ul>
+                    <a href="galeriste.html" class="btn btn--outline">View Project</a>
+                </div>
 
-<!--            <article>-->
-<!--					<span class="image">-->
-<!--						<img src="assets/images/work3.jpg" alt="Project 3"/>-->
-<!--					</span>-->
-<!--                <header class="major">-->
-<!--                    <h3><a href="project3.html" class="link">Prototyping</a></h3>-->
-<!--                    <p>From concept to reality</p>-->
-<!--                </header>-->
-<!--            </article>-->
+                <div class="project">
+                    <div class="project__title-img">
+                        <img src="dirtlens-logo.png" alt="DirtLENS Logo" class="project__logo"/>
+                    </div>
+
+                    <p class="project__description">
+                        A digital tool developed for archaeological fieldwork, enabling the recording and analysis of
+                        site data through custom hardware and intuitive software interfaces.
+                    </p>
+                    <ul class="project__stack">
+                        <li class="project__stack-item">Python</li>
+                        <li class="project__stack-item">Raspberry Pi</li>
+                        <li class="project__stack-item">UX/UI</li>
+                    </ul>
+                    <a href="dirtlens.html" class="btn btn--outline">View Project</a>
+                </div>
+            </div>
         </section>
 
-        <section id="two">
-            <div class="inner">
-                <header class="major">
-                    <h2>About My Work</h2>
-                </header>
-                <p>I specialize in UX/UI design, frontend web development, and interactive prototyping. My goal is to
-                    create engaging and effective digital experiences by focusing on user needs and modern design
-                    practices.</p>
-                <ul class="actions">
-                    <li><a href="about.html" class="button next">Learn More</a></li>
-                </ul>
-            </div>
+        <!-- Skills -->
+        <section class="section skills" id="skills">
+            <h2 class="section__title">Skills</h2>
+            <ul class="skills__list">
+                <li class="skills__list-item btn btn--plain">HTML</li>
+                <li class="skills__list-item btn btn--plain">CSS/SCSS</li>
+                <li class="skills__list-item btn btn--plain">JavaScript</li>
+                <li class="skills__list-item btn btn--plain">Python</li>
+                <li class="skills__list-item btn btn--plain">Django</li>
+                <li class="skills__list-item btn btn--plain">UX/UI Design</li>
+                <li class="skills__list-item btn btn--plain">Figma</li>
+                <li class="skills__list-item btn btn--plain">Version Control (Git)</li>
+            </ul>
+        </section>
+
+        <!-- Contact -->
+        <section class="section contact center" id="contact">
+            <h2 class="section__title">Contact</h2>
+            <a href="mailto:arthurpockets@gmail.com">
+                <span class="btn btn--outline">Email me</span>
+            </a>
         </section>
     </div>
+</main>
 
-    <section id="contact">
-        <div class="inner">
-            <section>
-                <form action="https://formspree.io/youremailaddress@gmail.com" method="POST">
-                    <div class="field half first">
-                        <label for="name">Name</label>
-                        <input type="text" name="name" id="name"/>
-                    </div>
-                    <div class="field half">
-                        <label for="email">Email</label>
-                        <input type="text" name="_replyto" id="email"/>
-                    </div>
-                    <div class="field">
-                        <label for="message">Message</label>
-                        <textarea name="message" id="message" rows="6"></textarea>
-                    </div>
-                    <ul class="actions">
-                        <li><input type="submit" value="Send Message" class="special"/></li>
-                        <li><input type="reset" value="Clear"/></li>
-                    </ul>
-                </form>
-            </section>
-        </div>
-    </section>
+<footer class="footer">
+    <a href="https://github.com/jenkem_chic" class="link footer__link" target="_blank">
+        Created by Daniel Ross
+    </a>
+</footer>
 
-    <footer id="footer">
-        <div class="inner">
-            <ul class="icons">
-                <li><a href="https://github.com/yourusername" class="icon alt fa-github" target="_blank"><span
-                        class="label">GitHub</span></a></li>
-                <li><a href="https://linkedin.com/in/yourprofile" class="icon alt fa-linkedin" target="_blank"><span
-                        class="label">LinkedIn</span></a></li>
-            </ul>
-            <ul class="copyright">
-                <li>&copy; Daniel Ross</li>
-                <li>Original Template: <a href="https://html5up.net" target="_blank">HTML5 UP</a></li>
-            </ul>
-        </div>
-    </footer>
-
+<div class="scroll-container">
+    <div class="scroll-top">
+        <a aria-label="Scroll up" href="#top">
+            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+        </a>
+    </div>
 </div>
 
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/jquery.scrolly.min.js"></script>
-<script src="assets/js/jquery.scrollex.min.js"></script>
-<script src="assets/js/skel.min.js"></script>
-<script src="assets/js/util.js"></script>
-<script src="assets/js/main.js"></script>
-
 </body>
-
 </html>
