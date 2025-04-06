@@ -156,11 +156,9 @@ main {
 }
 
 .section__title {
-  max-width: 100%;
-  width: auto;
-  text-align: center;
+  white-space: nowrap;
   word-break: normal;
-  white-space: normal;
+  overflow-wrap: normal;
 }
 
 .nav__list {
