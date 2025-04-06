@@ -157,7 +157,7 @@ main {
 
 .section__title {
   text-align: center;
-  margin: 0 auto 1em auto;
+  margin: 1.5 auto 1em auto;
   text-transform: uppercase;
   white-space: nowrap;
   word-break: keep-all;
