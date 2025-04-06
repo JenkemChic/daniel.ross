@@ -200,6 +200,18 @@ main {
   word-break: break-word;
 }
 
+.hero-title {
+  font-size: clamp(2rem, 8vw, 4rem); /* Responsive size */
+  white-space: nowrap;
+  text-align: center;
+}
+
+.hero-subtext {
+  font-size: clamp(1.2rem, 4.5vw, 2rem);
+  white-space: nowrap;
+  text-align: center;
+}
+
 .about__name {
   color: var(--clr-primary);
 }
