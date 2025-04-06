@@ -159,11 +159,11 @@ main {
   text-align: center;
   margin: 0 auto 1em auto;
   text-transform: uppercase;
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  white-space: normal;
+  white-space: nowrap;
+  word-break: normal;
   width: 100%;
-  display: block;
+  max-width: 100%;
+  overflow-wrap: normal;
 }
 
 .nav__list {
