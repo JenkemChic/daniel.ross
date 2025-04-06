@@ -1,6 +1,5 @@
 from pathlib import Path
 
-# Reformatted CSS for consistent mobile and desktop styling
 corrected_css = """
 /*===============
   global styles
@@ -58,36 +57,23 @@ h1, h2, h3, h4 {
   color: var(--clr-fg-alt);
 }
 
-h1 {
-  font-size: 4rem;
-}
+h1 { font-size: 4rem; }
+h2 { font-size: 2rem; }
 
-h2 {
-  font-size: 2rem;
-}
+ul { list-style-type: none; }
+a { text-decoration: none; }
+button { cursor: pointer; }
 
-ul {
-  list-style-type: none;
-}
-
-a {
-  text-decoration: none;
-}
-
-button {
-  cursor: pointer;
-}
+/*===============
+  Buttons & Links
+===============*/
 
 .link {
   color: var(--clr-primary);
   padding: 0 0 0.3em 0;
   position: relative;
 }
-
-.link:hover {
-  color: var(--clr-primary);
-}
-
+.link:hover { color: var(--clr-primary); }
 .link::before {
   content: "";
   display: inline;
@@ -98,7 +84,6 @@ button {
   background-color: var(--clr-primary);
   transition: width 0.2s ease-in;
 }
-
 .link:hover::before,
 .link:focus::before {
   width: 100%;
@@ -133,11 +118,7 @@ button {
   overflow: hidden;
   z-index: 1;
 }
-
-.btn--outline:hover {
-  color: var(--clr-bg);
-}
-
+.btn--outline:hover { color: var(--clr-bg); }
 .btn--outline:before {
   content: "";
   position: absolute;
@@ -149,10 +130,11 @@ button {
   z-index: -1;
   transition: right 0.2s ease-in-out;
 }
+.btn--outline:hover::before { right: 0; }
 
-.btn--outline:hover::before {
-  right: 0;
-}
+/*========
+  Layout
+========*/
 
 .center {
   display: flex;
@@ -193,7 +175,32 @@ main {
   text-align: left;
 }
 
-/* Media Queries */
+.project {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2em;
+  flex: 1;
+  text-align: center; /* Centered for both desktop and mobile */
+}
+
+.project__description {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.project__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/*===============
+  Media Queries
+===============*/
+
 @media (max-width: 600px) {
   .about__name.hero-title {
     font-size: clamp(2.5rem, 6vw, 3.5rem);
@@ -216,8 +223,6 @@ main {
 }
 """
 
-# Save the file
 css_path = Path("/mnt/data/styles.css")
 css_path.write_text(corrected_css)
-
 css_path.name
