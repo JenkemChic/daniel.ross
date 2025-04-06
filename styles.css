@@ -248,6 +248,7 @@ main {
 }
 
 .project__description {
+  text-align: left;
   margin-top: 1em;
   font-size: 0.95rem;
   line-height: 1.4;
