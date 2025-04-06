@@ -338,7 +338,7 @@ main {
   }
   .about {
     align-items: center;
-    text-align: center;
+    text-align: left;
     margin-top: 2em;
   }
   .about__desc {
