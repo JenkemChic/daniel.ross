@@ -342,5 +342,9 @@ main {
   .scroll-container {
     display: none;
   }
+  @media (max-width: 600px) {
+  .about__desc {
+    text-align: center;
+  }
 }
 
