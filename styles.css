@@ -342,7 +342,7 @@ main {
     margin-top: 2em;
   }
   .about__desc {
-    text-align: center;
+    text-align: left;
   }
   .footer {
     padding: 2em;
