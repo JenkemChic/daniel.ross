@@ -167,6 +167,7 @@ main {
 }
 
 .section__title span {
+  transform: translateY(1px);
   display: inline-block;
   text-align: center;
   margin: 0 auto;
