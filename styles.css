@@ -171,20 +171,22 @@ main {
 }
 
 .about {
+  display: flex;
   flex-direction: column;
-  margin-top: 3em;
   align-items: center;
   text-align: center;
+  margin-top: 3em;
+  width: 100%;
 }
 
 .about h1,
 .about h2 {
-  text-align: center;
-  margin: 0 auto;
-  white-space: normal;
-  word-break: keep-word;
+  margin: 0.5em auto;
   max-width: 90%;
+  text-align: center;
+  word-break: break-word;
 }
+
 
 .about__name { color: var(--clr-primary); }
 .about__role { margin-top: 1.2em; }
