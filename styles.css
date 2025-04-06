@@ -198,8 +198,8 @@ main {
 .about__desc {
   font-size: 1rem;
   max-width: 600px;
-  text-align: center;
-  margin-top: 2em;
+  text-align: left;
+  margin-top: 1em;
 }
 
 .about__contact {
