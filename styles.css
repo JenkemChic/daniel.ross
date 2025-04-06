@@ -29,7 +29,7 @@ body {
 
 .light {
   --clr-bg: transparent;
-  --clr-bg-alt: #fff;
+  --clr-bg-alt: transparent;
   --clr-fg: #555;
   --clr-fg-alt: #444;
   --clr-primary: #2978b5;
@@ -105,7 +105,7 @@ button { cursor: pointer; }
   overflow: hidden;
   z-index: 1;
 }
-.btn--outline:hover { color: var(--clr-bg); }
+.btn--outline:hover { color: #fff; }
 .btn--outline:before {
   content: "";
   position: absolute;
