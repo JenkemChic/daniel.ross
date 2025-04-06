@@ -161,9 +161,15 @@ main {
   text-transform: uppercase;
   white-space: nowrap;
   word-break: normal;
-  width: 100%;
   max-width: 100%;
-  overflow-wrap: normal;
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+}
+
+.section__title span {
+  display: inline-block;
+  text-align: center;
+  margin: 0 auto;
 }
 
 .nav__list {
