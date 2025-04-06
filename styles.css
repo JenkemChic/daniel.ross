@@ -222,10 +222,12 @@ main {
 
 .about__desc {
   font-size: 1rem;
-  max-width: 600px;
+  max-width: 480px;
+  margin: 1.5em auto 0 auto;
+  padding: 0 1.2em;
   text-align: left;
-  margin-top: 1em;
 }
+
 
 .about__contact {
   display: flex;
