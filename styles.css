@@ -187,19 +187,37 @@ main {
   word-break: break-word;
 }
 
+.about__name {
+  color: var(--clr-primary);
+}
 
-.about__name { color: var(--clr-primary); }
-.about__role { margin-top: 1.2em; }
+.about__role {
+  margin-top: 1.2em;
+}
+
+/* Description remains left-aligned but still centered as a block */
 .about__desc {
   font-size: 1rem;
   max-width: 600px;
   text-align: left;
+  margin-top: 2em;
 }
-.about__desc, .about__contact {
+
+/* Center contact block (resume + icons) below the content */
+.about__contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: 2.4em;
 }
-.about .link--icon { margin-right: 0.8em; }
-.about .btn--outline { margin-right: 1em; }
+
+.about .btn--outline {
+  margin-bottom: 1em; /* adds spacing between button and icons */
+}
+
+.about .link--icon {
+  margin: 0 0.5em;
+}
 
 .projects__grid {
   max-width: 1100px;
