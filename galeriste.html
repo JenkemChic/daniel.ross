@@ -7,109 +7,37 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <title>Galeriste Case Study</title>
-
   <style>
-    :root {
-      --clr-bg: #fcfcfc;
-      --clr-fg: #555;
-      --clr-fg-alt: #444;
-      --clr-primary: #8e0e1e;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: "Poppins", sans-serif;
-      color: var(--clr-fg);
-      background-color: var(--clr-bg);
-      background-image: url("paperbg.jpg");
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .center {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .galeriste-header {
       flex-direction: column;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      max-width: 1100px;
-      width: 95%;
-      margin: 0 auto;
-      padding: 1.5em 0 0.5em;
+      margin: 1.5em auto 0;
     }
 
     .header__galeriste {
       display: flex;
       align-items: baseline;
+      gap: 0.3em;
     }
 
     .dr-logo {
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--clr-primary);
-      margin-right: 0.3em;
     }
 
     .link--case {
       font-size: 1.5rem;
       font-weight: 700;
-      color: #000;
-    }
-
-    .nav {
-      display: flex;
-    }
-
-    .nav__list {
-      display: flex;
-      gap: 1.5em;
-      list-style: none;
-    }
-
-    .nav__list-item .link--nav {
-      font-weight: 500;
-      text-transform: lowercase;
-      color: var(--clr-fg);
-    }
-
-    main {
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    .image-top {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 0.5em;
+      color: var(--clr-fg-alt);
     }
 
     .image-center-wrapper {
-      width: 100%;
       display: flex;
       justify-content: center;
-      align-items: center;
+      margin-top: 1em;
     }
 
     .gallery-img {
@@ -118,85 +46,27 @@
       height: auto;
       max-height: 70vh;
       object-fit: contain;
-      display: block;
     }
 
     .description-container {
       max-width: 600px;
       width: 90%;
-      margin-top: 1em;
-      padding: 1em 0;
+      margin: 1em auto;
       font-size: 1rem;
+      line-height: 1.6;
       color: var(--clr-fg);
       text-align: left;
-      line-height: 1.6;
     }
 
     .text-content {
       margin-top: 1em;
       text-align: center;
     }
-
-    .btn {
-      display: inline-block;
-      padding: 0.8em 1.4em;
-      font-weight: 500;
-      font-size: 0.9rem;
-      text-transform: lowercase;
-      color: var(--clr-primary);
-      border: 2px solid var(--clr-primary);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn:hover {
-      background-color: var(--clr-primary);
-      color: #fff;
-    }
-
-    .footer {
-      padding: 3em 0;
-      margin-top: 4em;
-      text-align: center;
-    }
-
-    .footer__link {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--clr-fg);
-    }
-
-    @media (max-width: 768px) {
-      .header {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .header__galeriste {
-        margin-bottom: 1em;
-      }
-
-      .nav {
-        margin-top: 1em;
-      }
-
-      .nav__list {
-        flex-direction: row; /* Make it horizontal */
-        flex-wrap: wrap;
-        gap: 1.2em;
-        justify-content: center;
-      }
-
-
-      .gallery-img {
-        max-width: 90vw;
-      }
-    }
   </style>
 </head>
 
 <body class="light" id="top">
-  <header class="header">
+  <header class="header galeriste-header">
     <div class="header__galeriste">
       <a href="index.html" class="link dr-logo">DR.</a>
       <span class="link--case">Galeriste</span>
@@ -212,9 +82,9 @@
   </header>
 
   <main>
-    <section class="image-top">
+    <section>
       <div class="image-center-wrapper">
-        <img src="galeristebroad.png" alt="Gallery Setting" class="gallery-img" />
+        <img src="galeristebroad.png" alt="Galeriste mobile mockup" class="gallery-img" />
       </div>
 
       <div class="description-container">
@@ -225,7 +95,7 @@
       </div>
 
       <div class="text-content">
-        <a href="GaleristeBroadsheet.pdf" class="btn">product design showcase</a>
+        <a href="GaleristeBroadsheet.pdf" class="btn btn--outline">product design showcase</a>
       </div>
     </section>
   </main>
