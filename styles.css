@@ -29,7 +29,7 @@ body {
 
 .light {
   --clr-bg: transparent;
-  --clr-bg-alt: transparent;
+  --clr-bg-alt: #fff;
   --clr-fg: #555;
   --clr-fg-alt: #444;
   --clr-primary: #2978b5;
