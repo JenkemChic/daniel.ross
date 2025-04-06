@@ -214,7 +214,7 @@ main {
     padding: 0 1rem;
   }
 
-  .project              {
+  .project {
     display: flex;
     flex-direction: column;
     align-items: center;
