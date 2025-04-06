@@ -1,5 +1,6 @@
 from pathlib import Path
 
+# Fully restored and corrected CSS
 corrected_css = """
 /*===============
   global styles
@@ -57,23 +58,36 @@ h1, h2, h3, h4 {
   color: var(--clr-fg-alt);
 }
 
-h1 { font-size: 4rem; }
-h2 { font-size: 2rem; }
+h1 {
+  font-size: 4rem;
+}
 
-ul { list-style-type: none; }
-a { text-decoration: none; }
-button { cursor: pointer; }
+h2 {
+  font-size: 2rem;
+}
 
-/*===============
-  Buttons & Links
-===============*/
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
 
 .link {
   color: var(--clr-primary);
   padding: 0 0 0.3em 0;
   position: relative;
 }
-.link:hover { color: var(--clr-primary); }
+
+.link:hover {
+  color: var(--clr-primary);
+}
+
 .link::before {
   content: "";
   display: inline;
@@ -84,6 +98,7 @@ button { cursor: pointer; }
   background-color: var(--clr-primary);
   transition: width 0.2s ease-in;
 }
+
 .link:hover::before,
 .link:focus::before {
   width: 100%;
@@ -118,7 +133,11 @@ button { cursor: pointer; }
   overflow: hidden;
   z-index: 1;
 }
-.btn--outline:hover { color: var(--clr-bg); }
+
+.btn--outline:hover {
+  color: var(--clr-bg);
+}
+
 .btn--outline:before {
   content: "";
   position: absolute;
@@ -130,11 +149,10 @@ button { cursor: pointer; }
   z-index: -1;
   transition: right 0.2s ease-in-out;
 }
-.btn--outline:hover::before { right: 0; }
 
-/*========
-  Layout
-========*/
+.btn--outline:hover::before {
+  right: 0;
+}
 
 .center {
   display: flex;
@@ -175,32 +193,54 @@ main {
   text-align: left;
 }
 
+.projects__grid {
+  display: flex;
+  gap: 2em;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
 .project {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 2em;
   flex: 1;
-  text-align: center; /* Centered for both desktop and mobile */
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s linear;
+}
+
+.project:hover {
+  transform: translateY(-7px);
 }
 
 .project__description {
-  text-align: center;
+  flex-grow: 1;
   margin-bottom: 1em;
+  text-align: center;
 }
 
 .project__stack {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
   text-align: center;
+  margin: 1.2em 0;
 }
 
-/*===============
-  Media Queries
-===============*/
+.project__stack-item {
+  margin: 0.5em;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--clr-fg-alt);
+}
 
+.project .link--icon {
+  margin-left: 0.5em;
+}
+
+/* Hero Text Mobile Styles */
 @media (max-width: 600px) {
   .about__name.hero-title {
     font-size: clamp(2.5rem, 6vw, 3.5rem);
@@ -220,9 +260,25 @@ main {
     margin: 1em auto 0;
     padding: 0 1rem;
   }
+
+  .projects__grid {
+    flex-direction: column;
+  }
+
+  .project {
+    text-align: center;
+  }
+
+  .project__description,
+  .project__stack {
+    text-align: center;
+    justify-content: center;
+  }
 }
 """
 
+# Save the corrected CSS file
 css_path = Path("/mnt/data/styles.css")
 css_path.write_text(corrected_css)
+
 css_path.name
