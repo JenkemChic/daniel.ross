@@ -1,6 +1,6 @@
 from pathlib import Path
 
-# Full corrected CSS with additional mobile and layout fixes
+# Full corrected CSS with hero-title and hero-subtext mobile fixes
 corrected_css = """
 /*===============
   global styles
@@ -412,6 +412,18 @@ section {
   background-color: transparent;
 }
 
+/* Desktop default styles for hero */
+.hero-title {
+  font-size: 5rem;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.hero-subtext {
+  font-size: 2rem;
+  text-align: left;
+}
+
 /*===============
   media queries
 ===============*/
@@ -482,6 +494,24 @@ section {
   .scroll-container {
     display: none;
   }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 3.5rem);
+      text-align: center;
+      line-height: 1.1;
+      word-break: break-word;
+      padding: 0 1rem;
+    }
+
+    .hero-subtext {
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
+      text-align: center;
+      line-height: 1.4;
+      word-break: break-word;
+      margin-top: 1em;
+      padding: 0 1rem;
+    }
+
 }
 
 .image-center-wrapper {
