@@ -199,7 +199,7 @@ main {
   margin: 0 auto;
   text-align: center;
   box-shadow: var(--shadow);
-  background-color: var(--clr-bg-alt);
+  background-color: transparent;
   border-radius: 0.5em;
   transition: transform 0.2s ease-in-out;
 }
