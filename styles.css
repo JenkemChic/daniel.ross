@@ -160,14 +160,14 @@ main {
   margin: 0 auto 1em auto;
   text-transform: uppercase;
   white-space: nowrap;
-  word-break: normal;
+  word-break: keep-all;
   max-width: 100%;
   letter-spacing: 0.05em;
   line-height: 1.1;
 }
 
 .section__title span {
-  transform: translateY(1px);
+  transform: translateY(1.5px);
   display: inline-block;
   text-align: center;
   margin: 0 auto;
