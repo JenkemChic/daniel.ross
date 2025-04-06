@@ -159,9 +159,9 @@ main {
   text-align: center;
   margin-bottom: 1em;
   text-transform: uppercase;
-  white-space: nowrap;
-  word-break: normal;
-  overflow-wrap: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .nav__list {
