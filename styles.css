@@ -193,6 +193,7 @@ main {
 .about__desc {
   font-size: 1rem;
   max-width: 600px;
+  text-align: left;
 }
 .about__desc, .about__contact {
   margin-top: 2.4em;
