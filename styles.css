@@ -21,7 +21,12 @@ body {
   line-height: 1.5;
   color: var(--clr-fg);
   background-color: var(--clr-bg);
+  background-image: url("paperbg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
+
 
 .light {
   --clr-bg: #fcfcfc;
