@@ -223,7 +223,7 @@ main {
 .about__desc {
   font-size: 0.95rem;
   line-height: 1.4;
-  max-width: 500px;
+  max-width: 450px;
   margin: 1.2em auto 0 auto;   /* ⬅ centers the whole text box */
   text-align: left;            /* ⬅ aligns the text inside the box to the left */
   padding: 0 1.2em;            /* ⬅ adds spacing inside the box on left and right */
