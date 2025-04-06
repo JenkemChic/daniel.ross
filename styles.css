@@ -195,15 +195,13 @@ main {
   margin-top: 1.2em;
 }
 
-/* Description remains left-aligned but still centered as a block */
 .about__desc {
   font-size: 1rem;
   max-width: 600px;
-  text-align: left;
+  text-align: center;
   margin-top: 2em;
 }
 
-/* Center contact block (resume + icons) below the content */
 .about__contact {
   display: flex;
   flex-direction: column;
@@ -212,11 +210,19 @@ main {
 }
 
 .about .btn--outline {
-  margin-bottom: 1em; /* adds spacing between button and icons */
+  margin-bottom: 1em;
+  display: inline-block;
+}
+
+.about__contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
 }
 
 .about .link--icon {
-  margin: 0 0.5em;
+  font-size: 1.2rem;
+  color: var(--clr-fg);
 }
 
 .projects__grid {
@@ -268,7 +274,6 @@ main {
   margin: 0 auto 1em auto;
   display: block;
 }
-
 
 .project .link--icon { margin-left: 0.5em; }
 
@@ -332,8 +337,12 @@ main {
     margin-left: 0.8em;
   }
   .about {
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     margin-top: 2em;
+  }
+  .about__desc {
+    text-align: center;
   }
   .footer {
     padding: 2em;
@@ -342,9 +351,4 @@ main {
   .scroll-container {
     display: none;
   }
-  @media (max-width: 600px) {
-  .about__desc {
-    text-align: center;
-  }
 }
-
