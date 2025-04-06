@@ -224,6 +224,15 @@ main {
   color: var(--clr-fg-alt);
 }
 
+.project__logo {
+  width: 100%;
+  max-width: 12rem;
+  height: auto;
+  margin: 0 auto 1em auto;
+  display: block;
+}
+
+
 .project .link--icon { margin-left: 0.5em; }
 
 .skills__list {
