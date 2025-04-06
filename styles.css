@@ -351,4 +351,10 @@ main {
   .scroll-container {
     display: none;
   }
+  .projects__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
 }
+
