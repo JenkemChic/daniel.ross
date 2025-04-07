@@ -416,5 +416,29 @@ main {
     margin: 0;
   }
 
+.nav-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1em 0;
+}
+
+/* Mobile override: center nav and move it above content */
+@media (max-width: 768px) {
+  .nav-wrapper {
+    justify-content: center;
+    order: -1;
+    width: 100%;
+    padding-top: 1em;
+  }
+
+  .nav__list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+  }
+
 }
 

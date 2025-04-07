@@ -15,19 +15,24 @@
 
 <header class="header center">
     <h3><a href="index.html" class="link">DR.</a></h3>
-    <nav class="nav center">
-        <ul class="nav__list center">
+</header>
+
+<!-- Navigation wrapper that moves above hero on mobile -->
+<div class="nav-wrapper">
+    <nav class="nav">
+        <ul class="nav__list">
             <li class="nav__list-item"><a class="link link--nav" href="#projects">Projects</a></li>
             <li class="nav__list-item"><a class="link link--nav" href="#skills">Skills</a></li>
             <li class="nav__list-item"><a class="link link--nav" href="#contact">Contact</a></li>
         </ul>
     </nav>
-</header>
+</div>
 
 <main>
     <div class="about">
         <h1 class="hero-title"><span class="about__name">Daniel Ross</span></h1>
         <h2 class="hero-subtext about__role">UX/UI Designer & Programmer</h2>
+
         <p class="about__desc">
             I focus on frontend development, UX/UI design, and prototyping digital tools, with a background in
             archaeology that supports my work on utilities for field research.
@@ -48,7 +53,6 @@
             </div>
         </div>
 
-
         <!-- Projects -->
         <section id="projects" class="section projects">
             <h2 class="section__title">Projects</h2>
@@ -60,8 +64,7 @@
                     <p class="project__description">
                         A mobile-first app designed to help artists manage art shows by creating a rolling auction
                         system. Patrons can bid using QR codes and payment apps, with bids continuing as shows move to
-                        different
-                        cities.
+                        different cities.
                     </p>
                     <ul class="project__stack">
                         <li class="project__stack-item">Python</li>
