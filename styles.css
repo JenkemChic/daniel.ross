@@ -229,17 +229,18 @@ main {
 
 /* Under Construction Title Fix */
 .under-construction {
-  font-size: clamp(3rem, 10vw, 4rem);
-  color: var(--clr-fg-alt);
+  font-size: clamp(3rem, 10vw, 4rem);     /* Same scaling as hero-title */
+  font-weight: 700;                       /* Bold like hero title */
+  color: var(--clr-primary);             /* Match hero-title accent color */
   text-align: center;
   white-space: nowrap;
-  word-break: keep-all;
-  margin-top: 1em;
+  word-break: normal;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 45vh;
+  min-height: 40vh;                       /* Adjusted for better centering */
+  margin-top: 0.5em;                      /* Tiny margin for balance */
 }
 
 .about__name {
