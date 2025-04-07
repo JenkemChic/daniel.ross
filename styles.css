@@ -228,19 +228,18 @@ main {
 }
 
 .under-construction {
-  font-size: clamp(2.4rem, 8vw, 3rem);
-  color: var(--clr-primary); /* Matches hero-title color */
+  font-size: clamp(2.2rem, 7vw, 3rem); /* Keeps it scalable but not oversized */
+  color: var(--clr-primary);          /* Matches hero-title color */
   text-align: center;
-  white-space: normal;       /* Allows wrapping */
-  word-break: break-word;    /* Prevents overflow */
-  margin: 1em auto;
+  white-space: normal;                /* Allow text to wrap normally */
+  word-break: break-word;            /* Prevents overflow */
+  margin-top: 1.2em;
+  padding: 0 1rem;                    /* Add some horizontal padding */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 45vh;
-  max-width: 90vw;           /* Ensures it fits in mobile */
-  padding: 0 1em;            /* Adds spacing inside */
 }
 
 .about__name {
