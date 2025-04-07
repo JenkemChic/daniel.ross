@@ -60,7 +60,7 @@ ul { list-style-type: none; }
 a { text-decoration: none; }
 button { cursor: pointer; }
 
-/* Buttons and Links */
+/* Links */
 .link {
   color: var(--clr-primary);
   padding: 0 0 0.3em 0;
@@ -90,6 +90,7 @@ button { cursor: pointer; }
   margin: 0 0.4em;
 }
 
+/* Buttons */
 .btn {
   display: block;
   padding: 0.8em 1.4em;
@@ -173,16 +174,29 @@ main {
   margin: 0 auto;
 }
 
-.nav__list {
-  margin-right: 1.5em;
+/* Nav Wrapper */
+.nav-wrapper {
   display: flex;
-}
-.nav__list-item { margin-left: 1.5em; }
-.nav__hamburger {
-  display: none;
-  width: 1em;
+  justify-content: flex-end;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1em 0;
 }
 
+.nav__list {
+  display: flex;
+  gap: 1.5em;
+  list-style: none;
+}
+
+.nav__list-item a {
+  color: var(--clr-fg);
+  font-weight: 500;
+  text-transform: lowercase;
+  text-decoration: none;
+}
+
+/* About Section */
 .about {
   display: flex;
   flex-direction: column;
@@ -201,7 +215,7 @@ main {
 }
 
 .hero-title {
-  font-size: clamp(3rem, 10vw, 4rem); /* Boosted the minimum size */
+  font-size: clamp(3rem, 10vw, 4rem);
   white-space: nowrap;
   text-align: center;
 }
@@ -220,13 +234,14 @@ main {
   margin-top: 0.5em;
 }
 
-.about__desc {
+.about__desc, .description-container {
   font-size: 0.95rem;
   line-height: 1.4;
   max-width: 450px;
-  margin: 1.2em auto 0 auto;   /* ⬅ centers the whole text box */
-  text-align: left;            /* ⬅ aligns the text inside the box to the left */
-  padding: 0 1.2em;            /* ⬅ adds spacing inside the box on left and right */
+  margin: 1.2em auto 0 auto;
+  padding: 0 1.2em;
+  text-align: left;
+  color: var(--clr-fg);
 }
 
 .about__contact {
@@ -236,25 +251,13 @@ main {
   margin-top: 2.4em;
 }
 
-.about .btn--outline {
-  margin-bottom: 1em;
-  display: inline-block;
-}
-
 .about__contact-icons {
   display: flex;
   justify-content: center;
   gap: 1em;
 }
 
-.about .link--icon {
-  font-size: 1.2rem;
-  color: var(--clr-fg);
-}
-
 .projects__grid {
-  max-width: 1100px;
-  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
   gap: 2em;
@@ -262,14 +265,12 @@ main {
 
 .project {
   padding: 2em;
-  margin: 0 auto;
   text-align: center;
   box-shadow: var(--shadow);
   background-color: transparent;
   border-radius: 0.5em;
   transition: transform 0.2s ease-in-out;
 }
-
 .project:hover {
   transform: translateY(-5px);
 }
@@ -303,31 +304,29 @@ main {
   display: block;
 }
 
-.project .link--icon { margin-left: 0.5em; }
-
 .skills__list {
-  max-width: 450px;
-  width: 95%;
-  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 1em;
 }
-.skills__list-item { margin: 0.5em; }
 
 .contact {
   flex-direction: column;
 }
+
 .footer {
   padding: 3em 0;
   margin-top: 4em;
   text-align: center;
 }
+
 .footer__link {
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--clr-fg);
 }
+
 .scroll-top {
   display: none;
   position: fixed;
@@ -339,93 +338,12 @@ main {
 }
 
 /* Responsive */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .header {
-    height: 6em;
-  }
-  .section {
-    margin-top: 4em;
-  }
-  .nav__list {
     flex-direction: column;
-    padding: 4em 0;
-    position: absolute;
-    right: 0;
-    left: 0;
-    top: 5em;
-    background-color: var(--clr-bg);
-    width: 0;
-    overflow: hidden;
-    transition: width 0.2s ease-in-out;
-  }
-  .display-nav-list { width: 100%; }
-  .nav__list-item { margin: 0.5em 0; }
-  .nav__hamburger {
-    display: flex;
-    margin-left: 0.8em;
-  }
-  .about {
     align-items: center;
-    text-align: left;
-    margin-top: 2em;
-  }
-  .about__desc {
-    text-align: left;
-  }
-  .footer {
-    padding: 2em;
-    margin-top: 3em;
-  }
-  .scroll-container {
-    display: none;
-  }
-  .projects__grid {
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
-  }
-  /* Desktop shows top right nav */
-.nav--desktop {
-  display: flex;
-}
-
-/* Mobile nav is hidden on desktop */
-.nav--mobile {
-  display: none;
-}
-
-/* Mobile-specific styling */
-@media (max-width: 768px) {
-  .nav--desktop {
-    display: none;
   }
 
-  .nav--mobile {
-    display: flex;
-    justify-content: center;
-    margin-top: 1em;
-  }
-
-  .nav--mobile .nav__list {
-    flex-direction: row;
-    gap: 1.2em;
-    justify-content: center;
-  }
-
-  .nav__list-item {
-    margin: 0;
-  }
-
-.nav-wrapper {
-  display: flex;
-  justify-content: flex-end;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 1em 0;
-}
-
-/* Mobile override: center nav and move it above content */
-@media (max-width: 768px) {
   .nav-wrapper {
     justify-content: center;
     order: -1;
@@ -440,5 +358,24 @@ main {
     gap: 1em;
   }
 
+  .about {
+    align-items: center;
+    margin-top: 2em;
+  }
+
+  .footer {
+    padding: 2em;
+    margin-top: 3em;
+  }
+
+  .scroll-container {
+    display: none;
+  }
+
+  .projects__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
 }
 
