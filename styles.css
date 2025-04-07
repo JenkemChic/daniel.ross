@@ -236,7 +236,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 60vh;             /* Gives vertical space for centering */
+  min-height: 45vh;             /* Gives vertical space for centering */
 }
 
 .about__name {
