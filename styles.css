@@ -227,21 +227,21 @@ main {
   text-align: center;
 }
 
-/* Under Construction Title Fix */
 .under-construction {
-  font-size: clamp(3rem, 10vw, 4rem);     /* Same scaling as hero-title */
-  font-weight: 700;                       /* Bold like hero title */
-  color: var(--clr-primary);             /* Match hero-title accent color */
+  font-size: clamp(3rem, 10vw, 4rem);     /* Same as hero-title */
+  font-weight: 700;                       /* Matches hero-title boldness */
+  color: var(--clr-primary);             /* Same accent color */
   text-align: center;
   white-space: nowrap;
-  word-break: normal;
+  word-break: keep-all;
+  margin-top: 1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 40vh;                       /* Adjusted for better centering */
-  margin-top: 0.5em;                      /* Tiny margin for balance */
+  min-height: 45vh;
 }
+
 
 .about__name {
   color: var(--clr-primary);
