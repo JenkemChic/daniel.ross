@@ -271,6 +271,7 @@ main {
   display: flex;
   justify-content: center;
   gap: 1em;
+  padding: 0.5em;
 }
 
 .projects__grid {
