@@ -270,7 +270,7 @@ main {
 .about__contact-icons {
   display: flex;
   justify-content: center;
-  gap: 1em;
+  gap: 2em;
   margin-top: 1em;
 }
 
