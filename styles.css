@@ -227,6 +227,15 @@ main {
   text-align: center;
 }
 
+/* Under Construction Title Fix */
+.under-construction {
+  font-size: clamp(2.2rem, 8vw, 3rem);
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  margin-top: 2em;
+}
+
 .about__name {
   color: var(--clr-primary);
 }
