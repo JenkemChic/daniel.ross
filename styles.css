@@ -344,14 +344,14 @@ main {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 1em 1em 0.5em 1em;
+    padding: 1em 1.2em 0.5em 1.2em; /* <-- This adds equal side padding */
   }
 
   .nav-wrapper {
     justify-content: center;
     order: -1;
     width: 100%;
-    padding-top: 0.5em;
+    padding: 0.5em 1.2em 0 1.2em; /* <-- Match this to header padding */
   }
 
   .nav__list {
