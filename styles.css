@@ -275,8 +275,30 @@ main {
 .about__contact-icons {
   display: flex;
   justify-content: center;
-  gap: 2em;
-  padding: 0.5em 0;
+  gap: 2em; /* space between icons */
+  margin-top: 1em;
+}
+
+.about .link--icon {
+  font-size: 1.4rem;
+  color: var(--clr-fg);
+  position: relative;
+  padding-bottom: 0.3em;
+}
+
+.about .link--icon::before {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--clr-primary);
+  transition: width 0.2s ease-in;
+}
+
+.about .link--icon:hover::before {
+  width: 100%;
 }
 
 .projects__grid {
