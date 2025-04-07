@@ -384,5 +384,37 @@ main {
     flex-direction: column;
     gap: 2em;
   }
+  /* Desktop shows top right nav */
+.nav--desktop {
+  display: flex;
+}
+
+/* Mobile nav is hidden on desktop */
+.nav--mobile {
+  display: none;
+}
+
+/* Mobile-specific styling */
+@media (max-width: 768px) {
+  .nav--desktop {
+    display: none;
+  }
+
+  .nav--mobile {
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+  }
+
+  .nav--mobile .nav__list {
+    flex-direction: row;
+    gap: 1.2em;
+    justify-content: center;
+  }
+
+  .nav__list-item {
+    margin: 0;
+  }
+
 }
 
