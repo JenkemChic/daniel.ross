@@ -208,7 +208,7 @@ main {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-top: 3em;  /* ← Increase this value to lower it further if needed */
+  margin-top: 5em;  /* ← Increase this value to lower it further if needed */
   width: 100%;
 }
 
@@ -224,7 +224,7 @@ main {
   font-size: clamp(3rem, 10vw, 4rem);
   white-space: nowrap;
   text-align: center;
-  margin-top: 8em;
+  margin-top: 1em;
 }
 
 .hero-subtext {
