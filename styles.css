@@ -227,13 +227,16 @@ main {
   text-align: center;
 }
 
-/* Under Construction Title Fix */
 .under-construction {
   font-size: clamp(2.2rem, 8vw, 3rem);
   text-align: center;
   white-space: normal;
   word-break: break-word;
-  margin-top: 4em;
+  margin-top: 0;                /* Remove margin pushing it down */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 60vh;             /* Gives vertical space for centering */
 }
 
 .about__name {
