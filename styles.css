@@ -88,6 +88,7 @@ button { cursor: pointer; }
   color: var(--clr-fg);
   font-size: 1.2rem;
   margin: 0 0.4em;
+  padding: 0.5em; /* <-- Add this */
 }
 
 /* Buttons */
