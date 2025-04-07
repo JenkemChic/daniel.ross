@@ -227,16 +227,19 @@ main {
   text-align: center;
 }
 
+/* Under Construction Title Fix */
 .under-construction {
-  font-size: clamp(2.2rem, 8vw, 3rem);
+  font-size: clamp(3rem, 10vw, 4rem);
+  color: var(--clr-fg-alt);
   text-align: center;
-  white-space: normal;
-  word-break: break-word;
-  margin-top: 0;                /* Remove margin pushing it down */
+  white-space: nowrap;
+  word-break: keep-all;
+  margin-top: 1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 45vh;             /* Gives vertical space for centering */
+  align-items: center;
+  min-height: 45vh;
 }
 
 .about__name {
