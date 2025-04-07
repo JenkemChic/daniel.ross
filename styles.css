@@ -224,7 +224,7 @@ main {
   font-size: clamp(3rem, 10vw, 4rem);
   white-space: nowrap;
   text-align: center;
-  margin-top: 3em;
+  margin-top: 8em;
 }
 
 .hero-subtext {
