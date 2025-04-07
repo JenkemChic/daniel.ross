@@ -228,20 +228,20 @@ main {
 }
 
 .under-construction {
-  font-size: clamp(3rem, 10vw, 4rem);     /* Same as hero-title */
-  font-weight: 700;                       /* Matches hero-title boldness */
-  color: var(--clr-primary);             /* Same accent color */
+  font-size: clamp(2.4rem, 8vw, 3rem);
+  color: var(--clr-primary); /* Matches hero-title color */
   text-align: center;
-  white-space: nowrap;
-  word-break: keep-all;
-  margin-top: 1em;
+  white-space: normal;       /* Allows wrapping */
+  word-break: break-word;    /* Prevents overflow */
+  margin: 1em auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 45vh;
+  max-width: 90vw;           /* Ensures it fits in mobile */
+  padding: 0 1em;            /* Adds spacing inside */
 }
-
 
 .about__name {
   color: var(--clr-primary);
