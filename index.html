@@ -10,6 +10,34 @@
     <script src="https://kit.fontawesome.com/fa62c117c7.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css"/>
     <title>Daniel Ross | Portfolio</title>
+    <style>
+        .about__photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 1.5rem auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .about__bio {
+            max-width: 420px;
+            margin: 0 auto;
+            text-align: left;
+            font-size: 1rem;
+            padding: 0 1rem;
+        }
+        .about__bio-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .about__bio .btn {
+            display: block;
+            margin: 1rem auto;
+            text-align: center;
+        }
+    </style>
 </head>
 <body class="light" id="top">
 
@@ -19,7 +47,7 @@
         <ul class="nav__list center">
             <li class="nav__list-item"><a class="link link--nav" href="#projects">Projects</a></li>
             <li class="nav__list-item"><a class="link link--nav" href="#skills">Skills</a></li>
-            <li class="nav__list-item"><a class="link link--nav" href="#contact">Contact</a></li>
+            <li class="nav__list-item"><a class="link link--nav" href="#about">About</a></li>
         </ul>
     </nav>
 </header>
@@ -48,7 +76,6 @@
             </div>
         </div>
 
-
         <!-- Projects -->
         <section id="projects" class="section projects">
             <h2 class="section__title">Projects</h2>
@@ -60,8 +87,7 @@
                     <p class="project__description">
                         A mobile-first app designed to help artists manage art shows by creating a rolling auction
                         system. Patrons can bid using QR codes and payment apps, with bids continuing as shows move to
-                        different
-                        cities.
+                        different cities.
                     </p>
                     <ul class="project__stack">
                         <li class="project__stack-item">Python</li>
@@ -118,18 +144,29 @@
             </ul>
         </section>
 
-        <!-- Contact -->
-        <section class="section contact center" id="contact">
-            <h2 class="section__title"><span>Contact</span></h2>
-            <a href="mailto:arthurpockets@gmail.com">
-                <span class="btn btn--outline">Email me</span>
-            </a>
+        <!-- About Section (Moved to Bottom) -->
+        <section id="about" class="section">
+            <h2 class="section__title">About</h2>
+            <div class="about__bio-wrapper">
+                <img src="1705332704480.jpeg" alt="Daniel Ross" class="about__photo"/>
+                <div class="about__bio">
+                    <p><strong>Location:</strong> Columbus, OH</p>
+                    <br />
+                    <p>
+                        I'm a UX/UI designer and frontend developer with a background in archaeology. My work bridges research and digital tools—designing clean, accessible apps that support real-world needs. From field utilities to mobile-first design, I focus on function, clarity, and user experience.
+                    </p>
+                    <br />
+                    <a href="mailto:arthurpockets@gmail.com">
+                        <span class="btn btn--outline">Email me</span>
+                    </a>
+                </div>
+            </div>
         </section>
     </div>
 </main>
 
 <footer class="footer">
-    <a href="https://github.com/jenkem_chic" class="link footer__link" target="_blank">
+    <a href="https://github.com/JenkemChic" class="link footer__link" target="_blank">
         Created by Daniel Ross
     </a>
 </footer>
