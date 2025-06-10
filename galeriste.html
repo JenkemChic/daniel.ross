@@ -12,23 +12,41 @@
   <title>Galeriste Case Study</title>
 
   <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      background-image: url('paperbg.jpg');
+      background-repeat: repeat;
+      background-size: cover;
+    }
+
+    header,
+    main,
+    footer {
+      background: transparent;
+    }
+
     .about {
       display: flex;
       flex-direction: row;
-      align-items: flex-start;
       justify-content: center;
-      text-align: left;
-      padding: 2em 1em;
+      align-items: flex-start;
+      padding: 5em 1em;
+      gap: 3em;
       flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 0 auto;
+      background: transparent;
     }
 
     .galeriste-img-wrapper {
-      flex: 1;
+      flex: 1 1 300px;
       max-width: 400px;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 1em;
     }
 
     .galeriste-img {
@@ -38,26 +56,26 @@
     }
 
     .about__content {
-      flex: 1;
-      max-width: 300px;
+      flex: 1 1 300px;
+      max-width: 480px;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      justify-content: center;
       text-align: left;
-      margin-left: 2em;
     }
 
     .about__desc {
-      display: block;
-      width: 100%;
-      text-align: justify;
       line-height: 1.6;
-      margin-bottom: 1em;
+      font-size: 1.05rem;
+      max-width: 45ch;
+      margin-bottom: 2em;
     }
 
     .btn-container {
-      margin-top: 5em;
-      margin-left: 2em;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 0.5em;
     }
 
     .btn--outline {
@@ -75,7 +93,6 @@
       color: #fff;
     }
 
-    /* ✅ Mobile-Friendly Layout */
     @media (max-width: 800px) {
       .about {
         flex-direction: column;
@@ -84,7 +101,6 @@
       }
 
       .about__content {
-        margin-left: 0;
         align-items: center;
         text-align: center;
         max-width: 90%;
@@ -92,15 +108,16 @@
 
       .about__desc {
         text-align: justify;
+        max-width: 100%;
       }
 
       .btn-container {
         margin-top: 2em;
-        margin-left: 0;
       }
     }
 
-    .header, .footer {
+    .header,
+    .footer {
       text-align: center;
       padding: 1em;
     }
@@ -136,9 +153,9 @@
     <h3><a href="index.html" class="link">DR.</a></h3>
     <nav class="nav center">
       <ul class="nav__list center">
-        <li class="nav__list-item"><a class="link link--nav" href="index.html#projects">Projects</a></li>
-        <li class="nav__list-item"><a class="link link--nav" href="index.html#skills">Skills</a></li>
-        <li class="nav__list-item"><a class="link link--nav" href="index.html#contact">Contact</a></li>
+        <li><a class="link" href="index.html#projects">Projects</a></li>
+        <li><a class="link" href="index.html#skills">Skills</a></li>
+        <li><a class="link" href="index.html#contact">Contact</a></li>
       </ul>
     </nav>
   </header>
@@ -148,7 +165,6 @@
       <div class="galeriste-img-wrapper">
         <img src="galeristebroad.png" alt="Galeriste mobile mockup" class="galeriste-img" />
       </div>
-
       <div class="about__content">
         <p class="about__desc">
           Galeriste lets artists host art auctions via QR codes, enabling patrons to bid securely through their phones. Auctions can continue across events, with data wiped after each show for privacy and efficiency.
