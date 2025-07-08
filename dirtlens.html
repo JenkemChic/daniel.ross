@@ -21,100 +21,8 @@
       background-size: cover;
     }
 
-    header,
-    main,
-    footer {
+    header, main, footer {
       background: transparent;
-    }
-
-    .about {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 5em 1em;
-      gap: 3em;
-      flex-wrap: wrap;
-      max-width: 1000px;
-      margin: 0 auto;
-      background: transparent;
-    }
-
-    .galeriste-img-wrapper {
-      flex: 1 1 300px;
-      max-width: 400px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .galeriste-img {
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-      /* keep border-radius or remove if you prefer */
-      border-radius: 16px;
-    }
-
-    .about__content {
-      flex: 1 1 300px;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: left;
-    }
-
-    .about__desc {
-      line-height: 1.6;
-      font-size: 1.05rem;
-      max-width: 45ch;
-      margin-bottom: 2em;
-    }
-
-    .btn-container {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 0.5em;
-    }
-
-    .btn--outline {
-      display: inline-block;
-      padding: 10px 20px;
-      border: 2px solid #000;
-      text-decoration: none;
-      color: #000;
-      font-weight: 500;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .btn--outline:hover {
-      background-color: #000;
-      color: #fff;
-    }
-
-    @media (max-width: 800px) {
-      .about {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-
-      .about__content {
-        align-items: center;
-        text-align: center;
-        max-width: 90%;
-      }
-
-      .about__desc {
-        text-align: justify;
-        max-width: 100%;
-      }
-
-      .btn-container {
-        margin-top: 2em;
-      }
     }
 
     .header, .footer {
@@ -145,9 +53,156 @@
       text-decoration: none;
       font-size: 24px;
     }
+
+    /* ✅ Hero section */
+    .project-hero {
+      max-width: 800px;
+      margin: 4em auto;
+      padding: 0 1em;
+      text-align: left;
+    }
+
+    .project-hero__top-image img {
+      width: 100%;
+      height: auto;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 2em;
+    }
+
+    .project-hero__grid {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2em;
+      flex-wrap: wrap;
+      margin-bottom: 2em;
+    }
+
+    .project-hero__logo {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .project-hero__logo img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .project-hero__meta {
+      flex: 1;
+      text-align: left;
+    }
+
+    .project-hero__meta p {
+      margin: 0.2em 0;
+      font-size: 1rem;
+      color: var(--clr-fg);
+    }
+
+    .project-hero__overview h2 {
+      color: var(--clr-primary);
+    }
+
+    .project-hero__overview p {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--clr-fg);
+      margin-top: 1em;
+    }
+
+    .case-study-section {
+      max-width: 800px;
+      margin: 4em auto;
+      padding: 0 1em;
+      line-height: 1.7;
+      color: var(--clr-fg);
+    }
+
+    .case-study-section h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5em;
+      color: var(--clr-primary);
+    }
+
+    .case-study-section p {
+      margin-bottom: 1.5em;
+      font-size: 1.05rem;
+    }
+
+    .case-study-section blockquote {
+      margin: 2em 0;
+      padding: 1em 2em;
+      background: rgba(0, 0, 0, 0.05);
+      border-left: 4px solid var(--clr-primary);
+      font-style: italic;
+    }
+
+    .case-study-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2em;
+      align-items: flex-start;
+    }
+
+    .case-study-text {
+      flex: 1;
+    }
+
+    /* ✅ Single wide rounded rectangle filled with image */
+    .case-study-single {
+      flex: 1;
+      width: 100%;
+      height: 200px;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .case-study-single img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* ✅ fills the container fully */
+    }
+
+    @media (max-width: 800px) {
+      .project-hero__grid {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .project-hero__meta {
+        text-align: center;
+      }
+
+      .case-study-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .case-study-single {
+        width: 100%;
+        height: 160px;
+      }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .fade-in.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body class="light" id="top">
+  <!-- ✅ HEADER -->
   <header class="header center">
     <h3><a href="index.html" class="link">DR.</a></h3>
     <nav class="nav center">
@@ -160,21 +215,67 @@
   </header>
 
   <main>
-    <div class="about">
-      <div class="galeriste-img-wrapper">
-        <img src="dirtlensbroad.png" alt="DirtLENS device mockup" class="galeriste-img" />
+    <!-- ✅ HERO -->
+    <section class="project-hero fade-in">
+      <div class="project-hero__top-image">
+        <img src="dirtlensbroad.png" alt="DirtLENS hero image">
       </div>
-      <div class="about__content">
-        <p class="about__desc">
-          DirtLENS is a compact, handheld device that helps archaeologists capture soil data in the field. It logs real-time color and GPS coordinates to support rapid data collection. All information is formatted for easy export and is erased after each scan to maintain data security and speed.
-        </p>
-        <div class="btn-container">
-          <a href="DirtLENSBroadsheet.pdf" class="btn--outline">Product Design Showcase</a>
+      <div class="project-hero__grid">
+        <div class="project-hero__logo">
+          <img src="dirtlens-logo.png" alt="DirtLENS logo">
+        </div>
+        <div class="project-hero__meta">
+          <p><strong>Role:</strong> Product Designer</p>
+          <p><strong>Date:</strong> 2024</p>
+          <p><strong>Tools:</strong> Python, CAD, Open Source Computer Vision</p>
         </div>
       </div>
-    </div>
+      <div class="project-hero__overview">
+        <h2>Project Overview</h2>
+        <p>
+          DirtLENS is a compact, handheld device that helps field researchers and earth scientists capture accurate soil color and stratigraphy data in real time. It records color readings along with GPS coordinates to support efficient site documentation and sampling across diverse environments. All information is formatted for easy export and is cleared after each scan to ensure data security, speed, and readiness for the next measurement.
+        </p>
+      </div>
+    </section>
+
+    <!-- ✅ CASE STUDY SECTIONS -->
+    <section class="case-study-section fade-in">
+      <h2>Problem & Research</h2>
+      <p>
+        Field archaeologists often rely on manual soil color charts and handwritten notes, which can introduce
+        errors and inefficiencies. Interviews and field observations revealed the need for a single tool to capture,
+        store, and export soil data securely.
+      </p>
+    </section>
+
+    <section class="case-study-section fade-in">
+      <h2>Design & Prototyping</h2>
+      <div class="case-study-grid">
+        <div class="case-study-text">
+          <p>
+            Using rapid prototyping and open-source hardware, we developed a device housing a color sensor,
+            GPS module, and microcontroller. Multiple iterations ensured the device remained ergonomic and robust
+            for field conditions.
+          </p>
+        </div>
+        <div class="case-study-single fade-in">
+          <img src="promo1.png" alt="Prototyping stage image">
+        </div>
+      </div>
+    </section>
+
+    <section class="case-study-section fade-in">
+      <h2>Outcome & Reflection</h2>
+      <p>
+        DirtLENS shows how modern sensor design can enhance field data collection for soil profiles and stratigraphy. By combining precise color measurement with GPS tagging, it improves how researchers document and compare soil horizons across sites. Future versions will expand on secure data export and real-time cloud sharing for multi-site fieldwork.
+      </p>
+      <blockquote>
+        “It’s a game-changer for field data collection — simple, secure, and reliable.” — Field Test User
+      </blockquote>
+    </section>
   </main>
 
+  <!-- ✅ FOOTER -->
   <footer class="footer">
     <a href="index.html" class="link footer__link">Back to Portfolio</a>
   </footer>
@@ -186,5 +287,8 @@
       </a>
     </div>
   </div>
+
+  <!-- ✅ FADE-IN SCRIPT -->
+  <script src="fade-in.js"></script>
 </body>
 </html>
