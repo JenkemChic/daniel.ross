@@ -346,6 +346,11 @@ main {
   gap: 2em;
 }
 
+/* extra space between the first and second project grids */
+#projects .projects__grid + .projects__grid {
+  margin-top: 3rem;
+}
+
 .project {
   padding: 2em;
   text-align: center;
