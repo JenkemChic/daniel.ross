@@ -346,9 +346,9 @@ main {
   gap: 2em;
 }
 
-/* extra space between the first and second project grids */
+/* extra space between the first and second project grids to match gutter */
 #projects .projects__grid + .projects__grid {
-  margin-top: 3rem;
+  margin-top: 2em;
 }
 
 .project {
