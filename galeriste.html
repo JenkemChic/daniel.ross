@@ -8,39 +8,177 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/fa62c117c7.js" crossorigin="anonymous"></script>
+  <!-- Shared site styles -->
   <link rel="stylesheet" href="styles.css" />
   <title>Galeriste Case Study</title>
+
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
+    :root {
+      /* Local neutral palette to echo the index, no blue accents */
+      --cs-bg: #f4f5f7;
+      --cs-surface: rgba(255, 255, 255, 0.96);
+      --cs-border: rgba(209, 213, 219, 0.9);
+      --cs-text-main: #151515;
+      --cs-text-muted: #6a6a6a;
+      --cs-primary: #111111;
+      --cs-radius-lg: 18px;
+      --cs-radius-md: 12px;
+      --cs-shadow-soft: 0 18px 40px rgba(15, 18, 30, 0.08);
+      --cs-shadow-subtle: 0 1px 0 rgba(15, 18, 30, 0.06);
+
+      /* Map into generic tokens so it matches Helio + index behavior */
+      --primary: var(--cs-primary);
+      --clr-primary: var(--cs-primary);
+      --clr-fg: var(--cs-text-main);
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background-color: #f9f9f9;
-      background-image: url('paperbg.jpg');
-      background-repeat: repeat;
-      background-size: cover;
     }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont,
+        'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--cs-text-main);
+
+      background-color: var(--cs-bg);
+      background-image: url('paperbg.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+      background-size: cover;
+
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      margin-inline: auto;
+      padding-inline: 1.5rem;
+    }
+
+    /* HEADER / NAV – match index + Helio */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(
+        to bottom,
+        rgba(244, 245, 247, 0.96),
+        rgba(244, 245, 247, 0.9),
+        rgba(244, 245, 247, 0.82)
+      );
+      border-bottom: 1px solid rgba(209, 213, 219, 0.7);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-block: 0.9rem;
+      gap: 1rem;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #111111;
+      color: #f9fafb;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      font-size: 0.9rem;
+      box-shadow: var(--cs-shadow-subtle);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .nav a {
+      position: relative;
+      padding-block: 0.2rem;
+      color: #4b4f57;
+      font-weight: 500;
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.3rem;
+      width: 0;
+      height: 1.5px;
+      background: #111111;
+      border-radius: 999px;
+      transition: width 0.18s ease-out;
+    }
+
+    .nav a:hover::after,
+    .nav a:focus-visible::after {
+      width: 100%;
+    }
+
+    .nav a:focus-visible {
+      outline: 2px solid #111111;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* BASIC PAGE ELEMENTS */
 
     header, main, footer {
       background: transparent;
     }
 
-    .header, .footer {
+    .footer {
       text-align: center;
-      padding: 1em;
+      padding: 1.5em 1em 2em;
+      font-size: 0.9rem;
+      color: var(--cs-text-muted);
     }
 
-    .nav__list {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      gap: 1em;
-    }
-
-    .link {
-      text-decoration: none;
-      color: inherit;
+    .footer__link {
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
 
     .scroll-container {
@@ -54,11 +192,22 @@
       font-size: 24px;
     }
 
+    /* HERO: now unboxed (no background/border/shadow), just spacing */
+
     .project-hero {
       max-width: 800px;
-      margin: 4em auto;
-      padding: 0 1em;
+      margin: 3.5em auto;
+      padding: 0 2.2rem;
       text-align: left;
+
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .project-hero__top-image {
+      margin: 0 -0.2rem 2rem -0.2rem;
     }
 
     .project-hero__top-image img {
@@ -66,8 +215,7 @@
       height: auto;
       max-height: 400px;
       object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 2em;
+      border-radius: 16px;
     }
 
     .project-hero__grid {
@@ -81,6 +229,7 @@
 
     .project-hero__logo {
       flex: 1;
+      min-width: 180px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -89,56 +238,84 @@
     .project-hero__logo img {
       width: 100%;
       height: auto;
+      max-height: 120px;
       object-fit: contain;
     }
 
     .project-hero__meta {
       flex: 1;
+      min-width: 220px;
       text-align: left;
+      font-size: 0.98rem;
+      color: var(--cs-text-main);
     }
 
     .project-hero__meta p {
       margin: 0.2em 0;
-      font-size: 1rem;
-      color: var(--clr-fg);
     }
 
     .project-hero__overview h2 {
-      color: var(--clr-primary);
+      font-size: 1.4rem;
+      margin-top: 1rem;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
+      color: var(--cs-primary);
     }
 
     .project-hero__overview p {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: var(--clr-fg);
-      margin-top: 1em;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      color: var(--cs-text-muted);
+      margin-top: 0.6em;
+    }
+
+    /* CASE STUDY SECTIONS: text and images only, no boxes */
+
+    .case-study-wrap {
+      max-width: 800px;
+      margin: 0 auto 3.5em auto;
+      padding: 0 1.5rem;
     }
 
     .case-study-section {
-      max-width: 800px;
-      margin: 4em auto;
-      padding: 0 1em;
+      margin-top: 3rem;
+      margin-bottom: 0;
       line-height: 1.7;
-      color: var(--clr-fg);
+      color: var(--cs-text-main);
     }
 
     .case-study-section h2 {
-      font-size: 2rem;
+      font-size: 1.4rem;
       margin-bottom: 0.5em;
-      color: var(--clr-primary);
+      letter-spacing: -0.02em;
+      color: var(--cs-primary);
     }
 
     .case-study-section p {
       margin-bottom: 1.5em;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      color: var(--cs-text-muted);
     }
 
+    /* Accent bar only, no gray background, no blue */
+
     .case-study-section blockquote {
-      margin: 2em 0;
-      padding: 1em 2em;
-      background: rgba(0, 0, 0, 0.05);
-      border-left: 4px solid var(--clr-primary);
+      margin: 2em 0 0.5em 0;
+      padding-left: 1.1rem;
+      border-left: 4px solid var(--cs-primary);
+      background: transparent;
       font-style: italic;
+      font-size: 0.98rem;
+      color: var(--cs-text-main);
+    }
+
+    .case-study-section blockquote .user-line {
+      display: block;
+      margin-top: 0.4rem;
+      font-style: normal;
+      font-size: 0.9rem;
+      color: var(--cs-text-muted);
     }
 
     .case-study-grid {
@@ -155,10 +332,12 @@
     .case-study-single {
       flex: 1;
       width: 100%;
-      height: 200px;
+      height: 220px;
       border-radius: 16px;
       overflow: hidden;
       display: flex;
+      border: none;
+      background: transparent;
     }
 
     .case-study-single img {
@@ -168,6 +347,16 @@
     }
 
     @media (max-width: 800px) {
+      .project-hero {
+        margin: 2.5em auto;
+        padding: 0 1.4rem;
+      }
+
+      .case-study-wrap {
+        margin-bottom: 2.8em;
+        padding: 0 1.3rem;
+      }
+
       .project-hero__grid {
         flex-direction: column;
         text-align: center;
@@ -182,10 +371,11 @@
       }
 
       .case-study-single {
-        width: 100%;
-        height: 160px;
+        height: 180px;
       }
     }
+
+    /* Fade-in animation hooks */
 
     .fade-in {
       opacity: 0;
@@ -199,28 +389,30 @@
     }
   </style>
 </head>
+
 <body class="light" id="top">
-  <!-- ✅ HEADER -->
-  <header class="header center">
-    <h3><a href="index.html" class="link">DR.</a></h3>
-    <nav class="nav center">
-      <ul class="nav__list center">
-        <li><a class="link" href="index.html#projects">Projects</a></li>
-        <li><a class="link" href="index.html#skills">Skills</a></li>
-        <li><a class="link" href="index.html#contact">Contact</a></li>
-      </ul>
-    </nav>
+  <!-- HEADER – same visual pattern as index + Helio, links back to index -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-mark">DR</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#about">About</a>
+      </nav>
+    </div>
   </header>
 
   <main>
-    <!-- ✅ HERO -->
+    <!-- HERO (unboxed, just spaced content) -->
     <section class="project-hero fade-in">
       <div class="project-hero__top-image">
-        <img src="gallerysettingb.png" alt="Galeriste hero image">
+        <img src="gallerysettingb.png" alt="Galeriste hero image" />
       </div>
+
       <div class="project-hero__grid">
         <div class="project-hero__logo">
-          <img src="galeristelog.png" alt="Galeriste logo">
+          <img src="galeristelog.png" alt="Galeriste logo" />
         </div>
         <div class="project-hero__meta">
           <p><strong>Role:</strong> UX Designer, UI Designer</p>
@@ -228,50 +420,63 @@
           <p><strong>Tools:</strong> Figma, QR code integration, Python, KivyMD</p>
         </div>
       </div>
+
       <div class="project-hero__overview">
         <h2>Project Overview</h2>
         <p>
-          Galeriste is a mobile-first tool that helps artists and patrons connect at independent art shows. It lets artists create an onsite auction for pieces by generating a QR code that patrons scan to place bids. This expands audience reach, keeps the auction going after the show, and simplifies the purchase process.
+          Galeriste is a mobile-first tool that helps artists and patrons connect at independent art shows. It lets artists
+          create an onsite auction for pieces by generating a QR code that patrons scan to place bids. This expands audience
+          reach, keeps the auction going after the show, and simplifies the purchase process.
         </p>
       </div>
     </section>
 
-    <!-- ✅ CASE STUDY SECTIONS -->
-    <section class="case-study-section fade-in">
-      <h2>Problem & Research</h2>
-      <p>
-        Independent artists often rely on single-night shows or small local events to sell their work, limiting exposure and potential sales. Patrons who can’t bid in person or need more time lose the chance to buy pieces they want. Interviews and observations with artists and buyers showed the need for an easy way to keep bidding open and accessible.
-      </p>
-    </section>
+    <!-- CASE STUDY CONTENT (no boxes) -->
+    <div class="case-study-wrap">
+      <section class="case-study-section fade-in">
+        <h2>Problem &amp; Research</h2>
+        <p>
+          Independent artists often rely on single-night shows or small local events to sell their work, limiting exposure and
+          potential sales. Patrons who can’t bid in person or need more time lose the chance to buy pieces they want.
+          Interviews and observations with artists and buyers showed the need for an easy way to keep bidding open and
+          accessible.
+        </p>
+      </section>
 
-    <section class="case-study-section fade-in">
-      <h2>Design & Prototyping</h2>
-      <div class="case-study-grid">
-        <div class="case-study-text">
-          <p>
-            I developed wireframes and flows in Figma, focusing on QR code generation, simple onboarding for patrons, and payment integration with PayPal or Venmo. Usability testing and feedback from artists confirmed the need for clear auction timelines, bid notifications, and simple confirmation flows.
-          </p>
+      <section class="case-study-section fade-in">
+        <h2>Design &amp; Prototyping</h2>
+        <div class="case-study-grid">
+          <div class="case-study-text">
+            <p>
+              I developed wireframes and flows in Figma, focusing on QR code generation, simple onboarding for patrons, and
+              payment integration with PayPal or Venmo. Usability testing and feedback from artists confirmed the need for
+              clear auction timelines, bid notifications, and simple confirmation flows.
+            </p>
+          </div>
+          <div class="case-study-single fade-in">
+            <img src="galeristebroad.png" alt="Galeriste prototype image" />
+          </div>
         </div>
-        <div class="case-study-single fade-in">
-          <img src="galeristebroad.png" alt="Galeriste prototype image">
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="case-study-section fade-in">
-      <h2>Outcome & Reflection</h2>
-      <p>
-        Galeriste gives artists a simple tool to extend their shows into a mobile auction marketplace. Patrons can bid with just a scan and continue to compete for art after the event. Future updates will refine payment security and add features for artists to track bids across multiple shows.
-      </p>
-      <blockquote>
-        ““I really like the idea that I could come to the show, browse around, but still bid on something later from home if I keep thinking about it. I don’t always have the money on me or want to commit right away — so being able to leave and still place a bid is really convenient.”
-— Sarah L., Local Artist/Art Enthusiast (Prototype Feedback)”<br>
-        <span class="user-line">Independent Artist</span>
-      </blockquote>
-    </section>
+      <section class="case-study-section fade-in">
+        <h2>Outcome &amp; Reflection</h2>
+        <p>
+          Galeriste gives artists a simple tool to extend their shows into a mobile auction marketplace. Patrons can bid with
+          just a scan and continue to compete for art after the event. Future updates will refine payment security and add
+          features for artists to track bids across multiple shows.
+        </p>
+        <blockquote>
+          “I really like the idea that I could come to the show, browse around, but still bid on something later from home if I
+          keep thinking about it. I don’t always have the money on me or want to commit right away — so being able to leave and
+          still place a bid is really convenient.”
+          <span class="user-line">— Sarah L., Local Artist/Art Enthusiast (Prototype Feedback)</span>
+        </blockquote>
+      </section>
+    </div>
   </main>
 
-  <!-- ✅ FOOTER -->
+  <!-- FOOTER -->
   <footer class="footer">
     <a href="index.html" class="link footer__link">Back to Portfolio</a>
   </footer>
@@ -284,7 +489,7 @@
     </div>
   </div>
 
-  <!-- ✅ FADE-IN SCRIPT -->
+  <!-- FADE-IN SCRIPT -->
   <script src="fade-in.js"></script>
 </body>
 </html>

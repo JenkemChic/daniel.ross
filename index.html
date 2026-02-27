@@ -1,220 +1,1052 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="description" content="Portfolio of Daniel Ross"/>
-    <link rel="icon" type="image/png" href="favicon.png"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet"/>
-    <script src="https://kit.fontawesome.com/fa62c117c7.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="styles.css"/>
+  <head>
+    <meta charset="utf-8" />
     <title>Daniel Ross | Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Portfolio of Daniel Ross – UX/UI designer and programmer focused on frontend development, prototyping, and field utilities."
+    />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-        .about__photo {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            margin: 1.5rem auto;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      :root {
+        --bg: #f4f5f7;
+        --bg-elevated: #ffffff;
+        --text-main: #151515;
+        --text-muted: #6a6a6a;
+        --border-subtle: #e1e3e8;
+        --accent: #111111;
+        --accent-soft: #d6d8de;
+        --radius-lg: 18px;
+        --radius-md: 12px;
+        --radius-pill: 999px;
+        --shadow-soft: 0 18px 40px rgba(15, 18, 30, 0.08);
+        --shadow-subtle: 0 1px 0 rgba(15, 18, 30, 0.06);
+        --container-width: 960px;
+        --section-y: 5rem;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+
+        background-color: var(--bg);
+        background-image: url("paperbg.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;
+
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      .container {
+        width: 100%;
+        max-width: var(--container-width);
+        margin-inline: auto;
+        padding-inline: 1.5rem;
+      }
+
+      /* HEADER / NAV */
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(16px);
+        background: linear-gradient(
+          to bottom,
+          rgba(244, 245, 247, 0.96),
+          rgba(244, 245, 247, 0.9),
+          rgba(244, 245, 247, 0.82)
+        );
+        border-bottom: 1px solid rgba(209, 213, 219, 0.7);
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-block: 0.9rem;
+        gap: 1rem;
+      }
+
+      .brand-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: #111111;
+        color: #f9fafb;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        font-size: 0.9rem;
+        box-shadow: var(--shadow-subtle);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        font-size: 0.9rem;
+      }
+
+      .nav a {
+        position: relative;
+        padding-block: 0.2rem;
+        color: #4b4f57;
+        font-weight: 500;
+      }
+
+      .nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -0.3rem;
+        width: 0;
+        height: 1.5px;
+        background: #111111;
+        border-radius: 999px;
+        transition: width 0.18s ease-out;
+      }
+
+      .nav a:hover::after,
+      .nav a:focus-visible::after {
+        width: 100%;
+      }
+
+      .nav a:focus-visible {
+        outline: 2px solid #111111;
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      /* HERO */
+
+      main {
+        flex: 1;
+      }
+
+      .hero {
+        padding-block: 3.5rem 3rem;
+      }
+
+      .hero-inner {
+        display: grid;
+        grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.4fr);
+        gap: 3.5rem;
+        align-items: center;
+      }
+
+      .eyebrow {
+        font-size: 0.8rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+      }
+
+      .hero-title {
+        font-size: clamp(2.4rem, 3.1vw + 1.4rem, 3.1rem);
+        letter-spacing: -0.05em;
+        line-height: 1.05;
+        margin-bottom: 0.6rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: #363a44;
+        margin-bottom: 1.4rem;
+      }
+
+      .hero-body {
+        font-size: 0.97rem;
+        line-height: 1.7;
+        color: var(--text-muted);
+        max-width: 34rem;
+        margin-bottom: 2rem;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-pill);
+        padding: 0.55rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: 1px solid transparent;
+        cursor: pointer;
+        text-decoration: none;
+        transition:
+          transform 0.14s ease-out,
+          box-shadow 0.14s ease-out,
+          background-color 0.12s ease-out,
+          border-color 0.12s ease-out;
+        white-space: nowrap;
+        gap: 0.4rem;
+      }
+
+      .btn-primary {
+        background: #111111;
+        color: #f9fafb;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 22px 50px rgba(15, 18, 30, 0.12);
+      }
+
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.9);
+        color: #1f2933;
+        border-color: var(--border-subtle);
+      }
+
+      .btn-ghost:hover {
+        background: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 26px rgba(15, 18, 30, 0.06);
+      }
+
+      .btn-icon {
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+        border-radius: 999px;
+        border-color: var(--border-subtle);
+        background: rgba(255, 255, 255, 0.9);
+        font-size: 0.85rem;
+      }
+
+      .btn-icon span {
+        font-size: 0.9rem;
+      }
+
+      .btn-icon:hover {
+        background: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(15, 18, 30, 0.08);
+      }
+
+      .hero-pane {
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: var(--radius-lg);
+        padding: 1.6rem 1.7rem;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(209, 213, 219, 0.7);
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .hero-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.9rem;
+        border-radius: var(--radius-pill);
+        border: 1px dashed rgba(148, 163, 184, 0.9);
+        font-size: 0.75rem;
+        color: #4b5563;
+        background: #f9fafb;
+      }
+
+      .hero-pane-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .hero-pane-text {
+        font-size: 0.86rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      .hero-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      .pill {
+        padding: 0.2rem 0.7rem;
+        border-radius: var(--radius-pill);
+        background: #f3f4f6;
+        font-size: 0.75rem;
+        color: #4b4f57;
+        border: 1px solid rgba(229, 231, 235, 0.9);
+      }
+
+      /* SECTIONS */
+
+      .section {
+        padding-block: var(--section-y);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 2.2rem;
+        gap: 1.5rem;
+      }
+
+      .section-kicker {
+        font-size: 0.8rem;
+        letter-spacing: 0.19em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-bottom: 0.4rem;
+      }
+
+      .section-title {
+        font-size: 1.3rem;
+        letter-spacing: -0.02em;
+      }
+
+      /* PROJECTS */
+
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2.4rem 2.1rem;
+      }
+
+      .project-card {
+        background: var(--bg-elevated);
+        border-radius: var(--radius-lg);
+        padding: 1.35rem 1.45rem 1.5rem;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: var(--shadow-soft);
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        transition:
+          transform 0.15s ease-out,
+          box-shadow 0.15s ease-out,
+          border-color 0.15s ease-out,
+          background-color 0.15s ease-out;
+      }
+
+      .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 22px 50px rgba(15, 18, 30, 0.12);
+        border-color: rgba(148, 163, 184, 0.9);
+      }
+
+      .project-logo {
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        padding: 0.55rem 0.9rem;
+        background: #f9fafb;
+        border: 1px solid rgba(229, 231, 235, 0.9);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .project-logo img {
+        max-height: 40px;
+        object-fit: contain;
+      }
+
+      .project-name {
+        font-size: 1.02rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .project-tagline {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      .project-meta-label {
+        font-size: 0.8rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #9ca3af;
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+      }
+
+      .project-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .stack-pill {
+        padding: 0.16rem 0.65rem;
+        border-radius: var(--radius-pill);
+        background: #f3f4f6;
+        border: 1px solid rgba(229, 231, 235, 0.95);
+        font-size: 0.75rem;
+        color: #4b4f57;
+      }
+
+      .project-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-top: 0.3rem;
+      }
+
+      .project-link {
+        font-size: 0.86rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .project-link-arrow {
+        font-size: 0.9rem;
+        transform: translateY(1px);
+        transition: transform 0.15s ease-out;
+      }
+
+      .project-card:hover .project-link-arrow {
+        transform: translate(3px, 1px);
+      }
+
+      .project-status {
+        font-size: 0.78rem;
+        color: #9ca3af;
+      }
+
+      /* SKILLS */
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.3rem 2rem;
+      }
+
+      .skills-column-title {
+        font-size: 0.82rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 0.6rem;
+        font-weight: 500;
+      }
+
+      .skills-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        font-size: 0.9rem;
+        color: #3f444e;
+      }
+
+      /* ABOUT */
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr);
+        gap: 2.8rem;
+        align-items: center;
+      }
+
+      .about-photo-card {
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: var(--radius-lg);
+        padding: 1rem;
+        border: 1px solid rgba(209, 213, 219, 0.9);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .about-photo-frame {
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        aspect-ratio: 1 / 1;
+        background: #111111;
+      }
+
+      .about-photo-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .about-meta {
+        margin-top: 0.7rem;
+        font-size: 0.86rem;
+        color: var(--text-muted);
+      }
+
+      .about-meta strong {
+        color: #374151;
+        font-weight: 600;
+      }
+
+      .about-copy {
+        font-size: 0.95rem;
+        line-height: 1.8;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+      }
+
+      .about-contact {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        align-items: center;
+      }
+
+      .email-link {
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 2px;
+      }
+
+      .about-credit {
+        font-size: 0.8rem;
+        color: #9ca3af;
+      }
+
+      /* FOOTER */
+
+      .site-footer {
+        padding-block: 1.8rem 2.4rem;
+        border-top: 1px solid rgba(209, 213, 219, 0.7);
+        background: linear-gradient(
+          to top,
+          rgba(243, 244, 246, 0.96),
+          rgba(243, 244, 246, 0.9)
+        );
+      }
+
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.4rem;
+        font-size: 0.8rem;
+        color: #6b7280;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 0.9rem;
+        flex-wrap: wrap;
+      }
+
+      .footer-links a {
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 2px;
+      }
+
+      /* RESPONSIVE */
+
+      @media (max-width: 900px) {
+        .hero-inner {
+          grid-template-columns: minmax(0, 1fr);
         }
-        .about__bio {
-            max-width: 420px;
-            margin: 0 auto;
-            text-align: left;
-            font-size: 1rem;
-            padding: 0 1rem;
+
+        .hero-pane {
+          order: -1;
         }
-        .about__bio-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+
+        .section {
+          padding-block: 3.5rem;
         }
-        .about__bio .btn {
-            display: block;
-            margin: 1rem auto;
-            text-align: center;
+
+        .projects-grid {
+          grid-template-columns: minmax(0, 1fr);
         }
+
+        .skills-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .about-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .header-inner {
+          padding-inline: 1.1rem;
+        }
+
+        .container {
+          padding-inline: 1.1rem;
+        }
+
+        .nav {
+          gap: 1rem;
+          font-size: 0.85rem;
+        }
+
+        .hero {
+          padding-block: 2.2rem 2.4rem;
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .skills-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .footer-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
     </style>
-</head>
-<body class="light" id="top">
+  </head>
 
-<header class="header center">
-    <h3><a href="index.html" class="link">DR</a></h3>
-    <nav class="nav center">
-        <ul class="nav__list center">
-            <li class="nav__list-item"><a class="link link--nav" href="#projects">Projects</a></li>
-            <li class="nav__list-item"><a class="link link--nav" href="#skills">Skills</a></li>
-            <li class="nav__list-item"><a class="link link--nav" href="#about">About</a></li>
-        </ul>
-    </nav>
-</header>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="#top" class="brand-mark">DR</a>
+        <nav class="nav" aria-label="Primary">
+          <a href="#projects">Projects</a>
+          <a href="#skills">Skills</a>
+          <a href="#about">About</a>
+        </nav>
+      </div>
+    </header>
 
-<main>
-    <div class="about">
-        <h1 class="hero-title"><span class="about__name">Daniel Ross</span></h1>
-        <h2 class="hero-subtext about__role">UX/UI Designer & Programmer</h2>
-        <p class="about__desc">
-            I focus on frontend development, UX/UI design, and prototyping digital tools, drawing on my background in
-            archaeology to develop utilities tailored for field research environments.
-        </p>
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="container hero-inner">
+          <div>
+            <p class="eyebrow">UX/UI · Frontend · Field Tools</p>
+            <h1 id="hero-title" class="hero-title">Daniel Ross</h1>
+            <p class="hero-subtitle">UX/UI Designer &amp; Programmer</p>
+            <p class="hero-body">
+              I focus on frontend development, UX/UI design, and prototyping
+              digital tools, drawing on my background in archaeology to develop
+              utilities tailored for field research environments.
+            </p>
 
-        <div class="about__contact center" style="flex-direction: column;">
-            <a href="DanielLRossCV.pdf">
-                <span class="btn btn--outline">resume</span>
-            </a>
-
-            <div class="about__social-icons center">
-                <a href="https://github.com/JenkemChic" aria-label="github" class="link link--icon">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/daniellross/" aria-label="linkedin" class="link link--icon">
-                    <i class="fab fa-linkedin"></i>
-                </a>
+            <div class="hero-actions">
+              <a
+                href="DanielLRossCV.pdf"
+                class="btn btn-primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View résumé
+              </a>
+              <a href="#projects" class="btn btn-ghost">View projects</a>
+              <a
+                href="https://github.com/JenkemChic"
+                class="btn btn-icon"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                  role="img"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.757-1.333-1.757-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.605-2.665-.305-5.467-1.332-5.467-5.93 0-1.31.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.5 11.5 0 0 1 3.003-.404c1.018.005 2.045.138 3.003.404 2.291-1.552 3.297-1.23 3.297-1.23.655 1.652.243 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.48 5.921.43.372.823 1.103.823 2.222v3.293c0 .319.19.694.801.576C20.565 21.796 24 17.298 24 12c0-6.627-5.373-12-12-12Z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/daniellross/"
+                class="btn btn-icon"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                  role="img"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M4.98 3.5C4.98 4.88 3.9 6 2.5 6S0 4.88 0 3.5 1.08 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8.25h4.52V23H.24V8.25zM8.34 8.25h4.33v2.01h.06c.6-1.13 2.06-2.32 4.25-2.32 4.55 0 5.39 3 5.39 6.89V23h-4.52v-7.1c0-1.69-.03-3.86-2.35-3.86-2.35 0-2.71 1.83-2.71 3.73V23H8.34V8.25z"
+                  />
+                </svg>
+              </a>
             </div>
-        </div>
-
-        <!-- Projects -->
-    <section id="projects" class="section projects">
-      <h2 class="section__title">Projects</h2>
-
-      <div class="projects__grid">
-        <div class="project">
-          <div class="project__title-img">
-            <img src="galeristehl.png" alt="Galeriste Logo" class="project__logo"/>
           </div>
-          <p class="project__description">
-            A mobile-first app designed to help artists manage art shows by creating a rolling auction
-            system. Patrons can bid using QR codes and payment apps, with bids continuing as shows move to
-            different cities.
-          </p>
-          <ul class="project__stack">
-            <li class="project__stack-item">Python</li>
-            <li class="project__stack-item">Django</li>
-            <li class="project__stack-item">Penpot</li>
-            <li class="project__stack-item">Figma</li>
-            <li class="project__stack-item">UX/UI</li>
-          </ul>
-          <a href="galeriste.html" class="btn btn--outline">View Project</a>
+
+          <aside class="hero-pane" aria-label="Current focus">
+            <div class="hero-pill">
+              <span>Currently exploring</span>
+            </div>
+            <div>
+              <p class="hero-pane-title">
+                UX roles at the intersection of research &amp; tools
+              </p>
+              <p class="hero-pane-text">
+                Blending field experience, data, and design to build practical
+                utilities: mobile apps, route-aware weather, and hardware-backed
+                tools for on-site decision making.
+              </p>
+            </div>
+            <div>
+              <p class="project-meta-label">Tooling &amp; focus</p>
+              <div class="hero-tags">
+                <span class="pill">UX/UI design</span>
+                <span class="pill">Frontend engineering</span>
+                <span class="pill">Python utilities</span>
+                <span class="pill">Field research tools</span>
+              </div>
+            </div>
+          </aside>
         </div>
+      </section>
 
-        <div class="project">
-          <div class="project__title-img">
-            <img src="dirtlens-logo.png" alt="DirtLENS Logo" class="project__logo"/>
-          </div>
-          <p class="project__description">
-            A digital tool developed for archaeological fieldwork, enabling the recording and analysis of
-            site data through custom hardware and intuitive software interfaces.
-          </p>
-          <ul class="project__stack">
-            <li class="project__stack-item">Python</li>
-            <li class="project__stack-item">Raspberry Pi</li>
-            <li class="project__stack-item">UX/UI</li>
-            <li class="project__stack-item">Computer Vision</li>
-          </ul>
-          <a href="dirtlens.html" class="btn btn--outline">View Project</a>
-        </div>
-      </div>
+      <!-- PROJECTS -->
+      <section
+        id="projects"
+        class="section"
+        aria-labelledby="projects-heading"
+      >
+        <div class="container">
+          <header class="section-header">
+            <div>
+              <p class="section-kicker">Projects</p>
+              <h2 id="projects-heading" class="section-title">
+                Selected UX/UI and tooling work
+              </h2>
+            </div>
+          </header>
 
-      <div class="projects__grid">
-        <div class="project">
-          <div class="project__title-img">
-            <img src="heliologotitle.png" alt="Helio Logo" class="project__logo"/>
-          </div>
-          <p class="project__description">
-            A weather-focused mobile app designed for travelers and commuters. Helio displays real-time weather
-            conditions along a user’s route, with emergency alerts and intuitive UI for rerouting around hazards.
-          </p>
-          <ul class="project__stack">
-            <li class="project__stack-item">Figma</li>
-            <li class="project__stack-item">UX/UI</li>
-            <li class="project__stack-item">Material Design</li>
-            <li class="project__stack-item">Prototyping</li>
-          </ul>
-          <a href="helio.html" class="btn btn--outline">View Project</a>
-        </div>
-
-        <div class="project">
-          <div class="project__title-img">
-            <img src="wellerlogo.png" alt="Weller & Assc." class="project__logo"/>
-          </div>
-          <p class="project__description">
-A mobile-first redesign of a company webpage for a CRM archaeology firm. The new design improves usability, ensures accessibility across devices, and better communicates the firm's values and services to both clients and partners.
-          </p>
-          <ul class="project__stack">
-            <li class="project__stack-item">Coming Soon</li>
-          </ul>
-          <a href="#" class="btn btn--outline">View Project</a>
-        </div>
-      </div>
-    </section>
-        <!-- Skills -->
-<section class="section skills" id="skills">
-  <h2 class="section__title">Skills</h2>
-  <ul class="skills__list">
-    <li class="skills__list-item btn btn--plain">UX/UI Design</li>
-    <li class="skills__list-item btn btn--plain">HTML</li>
-    <li class="skills__list-item btn btn--plain">CSS/SCSS</li>
-    <li class="skills__list-item btn btn--plain">JavaScript</li>
-    <li class="skills__list-item btn btn--plain">Python</li>
-    <li class="skills__list-item btn btn--plain">Django</li>
-    <li class="skills__list-item btn btn--plain">Figma</li>
-    <li class="skills__list-item btn btn--plain">Penpot</li>
-    <li class="skills__list-item btn btn--plain">PyCharm</li>
-    <li class="skills__list-item btn btn--plain">Git</li>
-    <li class="skills__list-item btn btn--plain">Open Source Development</li>
-    <li class="skills__list-item btn btn--plain">Linux System Design</li>
-    <li class="skills__list-item btn btn--plain">Terminal-Based Tools</li>
-    <li class="skills__list-item btn btn--plain">Frontend Debugging</li>
-    <li class="skills__list-item btn btn--plain">Rapid Prototyping</li>
-    <li class="skills__list-item btn btn--plain">Accessibility-First Design</li>
-    <li class="skills__list-item btn btn--plain">Design Systems Thinking</li>
-    <li class="skills__list-item btn btn--plain">Minimalist Design</li>
-    <li class="skills__list-item btn btn--plain">Cross-Platform UI Design</li>
-  </ul>
-</section>
-
-
-
-
-
-        <!-- About Section (Moved to Bottom) -->
-        <section id="about" class="section">
-            <h2 class="section__title">About</h2>
-            <div class="about__bio-wrapper">
-                <img src="1705332704480.jpeg" alt="Daniel Ross" class="about__photo"/>
-                <div class="about__bio">
-                    <p><strong>Location:</strong> Columbus, OH</p>
-                    <br />
-                    <p>
-                        I'm a UX/UI designer and frontend developer with a background in archaeology. My work bridges research and digital tools—designing clean, accessible apps that support real-world needs. From field utilities to mobile-first design, I focus on function, clarity, and user experience.
-                    </p>
-                    <br />
-                    <a href="mailto:arthurpockets@gmail.com?subject=UX/UI%20Programmer%20Inquiry">
-                        <span class="btn btn--outline">Email me</span>
-                    </a>
+          <div class="projects-grid">
+            <!-- GALERISTE -->
+            <article class="project-card">
+              <div class="project-logo">
+                <img
+                  src="galeristehl.png"
+                  alt="Galeriste wordmark logo"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <h3 class="project-name">Galeriste</h3>
+                <p class="project-tagline">
+                  A mobile-first app designed to help artists manage art shows
+                  by creating a rolling auction system. Patrons can bid using QR
+                  codes and payment apps, with bids continuing as shows move to
+                  different cities.
+                </p>
+              </div>
+              <div>
+                <p class="project-meta-label">Stack</p>
+                <div class="project-stack">
+                  <span class="stack-pill">Python</span>
+                  <span class="stack-pill">Django</span>
+                  <span class="stack-pill">Penpot</span>
+                  <span class="stack-pill">Figma</span>
+                  <span class="stack-pill">UX/UI</span>
                 </div>
+              </div>
+              <footer class="project-footer">
+                <a href="galeriste.html" class="project-link">
+                  View project
+                  <span class="project-link-arrow">↗</span>
+                </a>
+              </footer>
+            </article>
+
+            <!-- DIRTLENS -->
+            <article class="project-card">
+              <div class="project-logo">
+                <img
+                  src="dirtlens-logo.png"
+                  alt="DirtLENS logo"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <h3 class="project-name">DirtLENS</h3>
+                <p class="project-tagline">
+                  A digital tool developed for archaeological fieldwork,
+                  enabling the recording and analysis of site data through
+                  custom hardware and intuitive software interfaces.
+                </p>
+              </div>
+              <div>
+                <p class="project-meta-label">Stack</p>
+                <div class="project-stack">
+                  <span class="stack-pill">Python</span>
+                  <span class="stack-pill">Raspberry Pi</span>
+                  <span class="stack-pill">UX/UI</span>
+                  <span class="stack-pill">Computer vision</span>
+                </div>
+              </div>
+              <footer class="project-footer">
+                <a href="dirtlens.html" class="project-link">
+                  View project
+                  <span class="project-link-arrow">↗</span>
+                </a>
+              </footer>
+            </article>
+
+            <!-- HELIO -->
+            <article class="project-card">
+              <div class="project-logo">
+                <img
+                  src="heliologotitle.png"
+                  alt="Helio logo"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <h3 class="project-name">Helio</h3>
+                <p class="project-tagline">
+                  A weather-focused mobile app designed for travelers and
+                  commuters. Helio displays real-time weather conditions along a
+                  user’s route, with emergency alerts and intuitive UI for
+                  rerouting around hazards.
+                </p>
+              </div>
+              <div>
+                <p class="project-meta-label">Stack</p>
+                <div class="project-stack">
+                  <span class="stack-pill">Figma</span>
+                  <span class="stack-pill">UX/UI</span>
+                  <span class="stack-pill">Material Design</span>
+                  <span class="stack-pill">Prototyping</span>
+                </div>
+              </div>
+              <footer class="project-footer">
+                <a href="helio.html" class="project-link">
+                  View project
+                  <span class="project-link-arrow">↗</span>
+                </a>
+              </footer>
+            </article>
+
+            <!-- WELLER -->
+            <article class="project-card">
+              <div class="project-logo">
+                <img
+                  src="wellerlogo.png"
+                  alt="Weller &amp; Associates logo"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <h3 class="project-name">Weller &amp; Associates</h3>
+                <p class="project-tagline">
+                  A mobile-first redesign of a company webpage for a CRM
+                  archaeology firm. The new design improves usability, ensures
+                  accessibility across devices, and better communicates the
+                  firm's values and services to both clients and partners.
+                </p>
+              </div>
+              <div>
+                <p class="project-meta-label">Status</p>
+                <div class="project-stack">
+                  <span class="stack-pill">Coming soon</span>
+                </div>
+              </div>
+              <footer class="project-footer">
+                <span class="project-status">Case study in progress</span>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills" class="section" aria-labelledby="skills-heading">
+        <div class="container">
+          <header class="section-header">
+            <div>
+              <p class="section-kicker">Skills</p>
+              <h2 id="skills-heading" class="section-title">
+                Design, code, and tooling
+              </h2>
             </div>
-        </section>
-    </div>
-</main>
+          </header>
 
-<footer class="footer">
-    <a href="https://github.com/JenkemChic" class="link footer__link" target="_blank">
-        Created by Daniel Ross
-    </a>
-</footer>
+          <div class="skills-grid">
+            <div>
+              <p class="skills-column-title">Design</p>
+              <div class="skills-list">
+                <span>UX/UI Design</span>
+                <span>Accessibility-first design</span>
+                <span>Design systems thinking</span>
+                <span>Minimalist design</span>
+                <span>Cross-platform UI design</span>
+                <span>Rapid prototyping</span>
+              </div>
+            </div>
 
-<div class="scroll-container">
-    <div class="scroll-top">
-        <a aria-label="Scroll up" href="#top">
-            <i class="fas fa-arrow-up" aria-hidden="true"></i>
-        </a>
-    </div>
-</div>
+            <div>
+              <p class="skills-column-title">Frontend &amp; code</p>
+              <div class="skills-list">
+                <span>HTML</span>
+                <span>CSS / SCSS</span>
+                <span>JavaScript</span>
+                <span>Python</span>
+                <span>Django</span>
+                <span>Open source development</span>
+              </div>
+            </div>
 
-</body>
+            <div>
+              <p class="skills-column-title">Tools &amp; systems</p>
+              <div class="skills-list">
+                <span>Figma</span>
+                <span>Penpot</span>
+                <span>PyCharm</span>
+                <span>Git</span>
+                <span>Linux system design</span>
+                <span>Terminal-based tools</span>
+                <span>Frontend debugging</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="section" aria-labelledby="about-heading">
+        <div class="container">
+          <header class="section-header">
+            <div>
+              <p class="section-kicker">About</p>
+              <h2 id="about-heading" class="section-title">
+                Archaeology, tools, and UX
+              </h2>
+            </div>
+          </header>
+
+          <div class="about-grid">
+            <div class="about-photo-card">
+              <div class="about-photo-frame">
+                <img
+                  src="1705332704480.jpeg"
+                  alt="Portrait of Daniel Ross"
+                  loading="lazy"
+                />
+              </div>
+              <p class="about-meta">
+                <strong>Location:</strong> Columbus, OH
+              </p>
+            </div>
+
+            <div>
+              <p class="about-copy">
+                I'm a UX/UI designer and frontend developer with a background in
+                archaeology. My work bridges research and digital tools—designing
+                clean, accessible apps that support real-world needs. From field
+                utilities to mobile-first design, I focus on function, clarity,
+                and user experience.
+              </p>
+
+              <div class="about-contact">
+                <a href="mailto:arthurpockets@gmail.com" class="email-link">
+                  Email me
+                </a>
+              </div>
+
+              <p class="about-credit" style="margin-top: 1.1rem">
+                Created by Daniel Ross
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© <span id="year">2026</span> Daniel Ross. All rights reserved.</p>
+        <div class="footer-links">
+          <a
+            href="https://github.com/JenkemChic"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://www.linkedin.com/in/daniellross/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
+          <a href="DanielLRossCV.pdf" target="_blank" rel="noopener noreferrer">
+            Résumé
+          </a>
+        </div>
+      </div>
+      <script>
+        // keep year current without changing content
+        document.getElementById("year").textContent = new Date().getFullYear();
+      </script>
+    </footer>
+  </body>
 </html>

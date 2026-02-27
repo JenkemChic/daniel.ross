@@ -8,39 +8,177 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/fa62c117c7.js" crossorigin="anonymous"></script>
+  <!-- Shared site styles -->
   <link rel="stylesheet" href="styles.css" />
   <title>DirtLENS Case Study</title>
+
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
+    :root {
+      /* Local neutral palette to echo the index, no blue accents */
+      --cs-bg: #f4f5f7;
+      --cs-surface: rgba(255, 255, 255, 0.96);
+      --cs-border: rgba(209, 213, 219, 0.9);
+      --cs-text-main: #151515;
+      --cs-text-muted: #6a6a6a;
+      --cs-primary: #111111;
+      --cs-radius-lg: 18px;
+      --cs-radius-md: 12px;
+      --cs-shadow-soft: 0 18px 40px rgba(15, 18, 30, 0.08);
+      --cs-shadow-subtle: 0 1px 0 rgba(15, 18, 30, 0.06);
+
+      /* Map into generic tokens so it matches the index/case-study behavior */
+      --primary: var(--cs-primary);
+      --clr-primary: var(--cs-primary);
+      --clr-fg: var(--cs-text-main);
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background-color: #f9f9f9;
-      background-image: url('paperbg.jpg');
-      background-repeat: repeat;
-      background-size: cover;
     }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont,
+        'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--cs-text-main);
+
+      background-color: var(--cs-bg);
+      background-image: url('paperbg.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+      background-size: cover;
+
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      margin-inline: auto;
+      padding-inline: 1.5rem;
+    }
+
+    /* HEADER / NAV – match index + other case studies */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(
+        to bottom,
+        rgba(244, 245, 247, 0.96),
+        rgba(244, 245, 247, 0.9),
+        rgba(244, 245, 247, 0.82)
+      );
+      border-bottom: 1px solid rgba(209, 213, 219, 0.7);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-block: 0.9rem;
+      gap: 1rem;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #111111;
+      color: #f9fafb;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      font-size: 0.9rem;
+      box-shadow: var(--cs-shadow-subtle);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .nav a {
+      position: relative;
+      padding-block: 0.2rem;
+      color: #4b4f57;
+      font-weight: 500;
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.3rem;
+      width: 0;
+      height: 1.5px;
+      background: #111111;
+      border-radius: 999px;
+      transition: width 0.18s ease-out;
+    }
+
+    .nav a:hover::after,
+    .nav a:focus-visible::after {
+      width: 100%;
+    }
+
+    .nav a:focus-visible {
+      outline: 2px solid #111111;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* BASIC PAGE ELEMENTS */
 
     header, main, footer {
       background: transparent;
     }
 
-    .header, .footer {
+    .footer {
       text-align: center;
-      padding: 1em;
+      padding: 1.5em 1em 2em;
+      font-size: 0.9rem;
+      color: var(--cs-text-muted);
     }
 
-    .nav__list {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      gap: 1em;
-    }
-
-    .link {
-      text-decoration: none;
-      color: inherit;
+    .footer__link {
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
 
     .scroll-container {
@@ -54,21 +192,32 @@
       font-size: 24px;
     }
 
-    /* ✅ Hero section */
+    /* HERO: unboxed, just spaced content (no card/border/shadow) */
+
     .project-hero {
       max-width: 800px;
-      margin: 4em auto;
-      padding: 0 1em;
+      margin: 3.5em auto;
+      padding: 0 2.2rem;
       text-align: left;
+
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .project-hero__top-image {
+      margin: 0 -0.2rem 2rem -0.2rem;
+      height: 320px;              /* fixed height for consistent crop */
+      border-radius: 16px;
+      overflow: hidden;           /* crop anything beyond 320px */
     }
 
     .project-hero__top-image img {
       width: 100%;
-      height: auto;
-      max-height: 400px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 2em;
+      height: 100%;               /* fill the wrapper height */
+      object-fit: cover;          /* crop to fill */
+      border-radius: 16px;
     }
 
     .project-hero__grid {
@@ -82,6 +231,7 @@
 
     .project-hero__logo {
       flex: 1;
+      min-width: 180px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -90,56 +240,84 @@
     .project-hero__logo img {
       width: 100%;
       height: auto;
+      max-height: 120px;
       object-fit: contain;
     }
 
     .project-hero__meta {
       flex: 1;
+      min-width: 220px;
       text-align: left;
+      font-size: 0.98rem;
+      color: var(--cs-text-main);
     }
 
     .project-hero__meta p {
       margin: 0.2em 0;
-      font-size: 1rem;
-      color: var(--clr-fg);
     }
 
     .project-hero__overview h2 {
-      color: var(--clr-primary);
+      font-size: 1.4rem;
+      margin-top: 1rem;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
+      color: var(--cs-primary);
     }
 
     .project-hero__overview p {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: var(--clr-fg);
-      margin-top: 1em;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      color: var(--cs-text-muted);
+      margin-top: 0.6em;
+    }
+
+    /* CASE STUDY SECTIONS: text and images only, no boxes */
+
+    .case-study-wrap {
+      max-width: 800px;
+      margin: 0 auto 3.5em auto;
+      padding: 0 1.5rem;
     }
 
     .case-study-section {
-      max-width: 800px;
-      margin: 4em auto;
-      padding: 0 1em;
+      margin-top: 3rem;
+      margin-bottom: 0;
       line-height: 1.7;
-      color: var(--clr-fg);
+      color: var(--cs-text-main);
     }
 
     .case-study-section h2 {
-      font-size: 2rem;
+      font-size: 1.4rem;
       margin-bottom: 0.5em;
-      color: var(--clr-primary);
+      letter-spacing: -0.02em;
+      color: var(--cs-primary);
     }
 
     .case-study-section p {
       margin-bottom: 1.5em;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      color: var(--cs-text-muted);
     }
 
+    /* Accent bar only, neutral (no blue), no gray background */
+
     .case-study-section blockquote {
-      margin: 2em 0;
-      padding: 1em 2em;
-      background: rgba(0, 0, 0, 0.05);
-      border-left: 4px solid var(--clr-primary);
+      margin: 2em 0 0.5em 0;
+      padding-left: 1.1rem;
+      border-left: 4px solid var(--cs-primary);
+      background: transparent;
       font-style: italic;
+      font-size: 0.98rem;
+      color: var(--cs-text-main);
+    }
+
+    .case-study-section blockquote .user-line {
+      display: block;
+      margin-top: 0.4rem;
+      font-style: normal;
+      font-size: 0.9rem;
+      color: var(--cs-text-muted);
     }
 
     .case-study-grid {
@@ -153,23 +331,38 @@
       flex: 1;
     }
 
-    /* ✅ Single wide rounded rectangle filled with image */
     .case-study-single {
       flex: 1;
       width: 100%;
-      height: 200px;
+      height: 220px;
       border-radius: 16px;
       overflow: hidden;
       display: flex;
+      border: none;
+      background: transparent;
     }
 
     .case-study-single img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* ✅ fills the container fully */
+      object-fit: cover;
     }
 
     @media (max-width: 800px) {
+      .project-hero {
+        margin: 2.5em auto;
+        padding: 0 1.4rem;
+      }
+
+      .project-hero__top-image {
+        height: 240px; /* slightly shorter on mobile */
+      }
+
+      .case-study-wrap {
+        margin-bottom: 2.8em;
+        padding: 0 1.3rem;
+      }
+
       .project-hero__grid {
         flex-direction: column;
         text-align: center;
@@ -184,10 +377,11 @@
       }
 
       .case-study-single {
-        width: 100%;
-        height: 160px;
+        height: 180px;
       }
     }
+
+    /* Fade-in animation hooks */
 
     .fade-in {
       opacity: 0;
@@ -201,28 +395,30 @@
     }
   </style>
 </head>
+
 <body class="light" id="top">
-  <!-- ✅ HEADER -->
-  <header class="header center">
-    <h3><a href="index.html" class="link">DR.</a></h3>
-    <nav class="nav center">
-      <ul class="nav__list center">
-        <li><a class="link" href="index.html#projects">Projects</a></li>
-        <li><a class="link" href="index.html#skills">Skills</a></li>
-        <li><a class="link" href="index.html#contact">Contact</a></li>
-      </ul>
-    </nav>
+  <!-- HEADER – same as index + other case-study pages -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-mark">DR</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#about">About</a>
+      </nav>
+    </div>
   </header>
 
   <main>
-    <!-- ✅ HERO -->
+    <!-- HERO (unboxed, just spaced content) -->
     <section class="project-hero fade-in">
       <div class="project-hero__top-image">
-        <img src="dirtlensbroad.png" alt="DirtLENS hero image">
+        <img src="dirtlensbroad.png" alt="DirtLENS hero image" />
       </div>
+
       <div class="project-hero__grid">
         <div class="project-hero__logo">
-          <img src="dirtlens-logo.png" alt="DirtLENS logo">
+          <img src="dirtlens-logo.png" alt="DirtLENS logo" />
         </div>
         <div class="project-hero__meta">
           <p><strong>Role:</strong> Product Designer</p>
@@ -230,52 +426,65 @@
           <p><strong>Tools:</strong> Python, CAD, Open Source Computer Vision</p>
         </div>
       </div>
+
       <div class="project-hero__overview">
         <h2>Project Overview</h2>
         <p>
-          DirtLENS is a compact, handheld device that helps field researchers and earth scientists capture accurate soil color and stratigraphy data in real time. It records color readings along with GPS coordinates to support efficient site documentation and sampling across diverse environments. All information is formatted for easy export and is cleared after each scan to ensure data security, speed, and readiness for the next measurement.
+          DirtLENS is a compact, handheld device that helps field researchers and earth scientists capture
+          accurate soil color and stratigraphy data in real time. It records color readings along with GPS
+          coordinates to support efficient site documentation and sampling across diverse environments. All
+          information is formatted for easy export and is cleared after each scan to ensure data security,
+          speed, and readiness for the next measurement.
         </p>
       </div>
     </section>
 
-    <!-- ✅ CASE STUDY SECTIONS -->
-    <section class="case-study-section fade-in">
-      <h2>Problem & Research</h2>
-      <p>
-        Field archaeologists often rely on manual soil color charts and handwritten notes, which can introduce
-        errors and inefficiencies. Interviews and field observations revealed the need for a single tool to capture,
-        store, and export soil data securely.
-      </p>
-    </section>
+    <!-- CASE STUDY CONTENT (no boxes) -->
+    <div class="case-study-wrap">
+      <section class="case-study-section fade-in">
+        <h2>Problem &amp; Research</h2>
+        <p>
+          Field archaeologists often rely on manual soil color charts and handwritten notes, which can introduce
+          errors and inefficiencies. Interviews and field observations revealed the need for a single tool to
+          capture, store, and export soil data securely, without slowing down on-site work.
+        </p>
+      </section>
 
-    <section class="case-study-section fade-in">
-      <h2>Design & Prototyping</h2>
-      <div class="case-study-grid">
-        <div class="case-study-text">
-          <p>
-            Using rapid prototyping and open-source hardware, we developed a device housing a color sensor,
-            GPS module, and microcontroller. Multiple iterations ensured the device remained ergonomic and robust
-            for field conditions.
-          </p>
+      <section class="case-study-section fade-in">
+        <h2>Design &amp; Prototyping</h2>
+        <div class="case-study-grid">
+          <div class="case-study-text">
+            <p>
+              Using rapid prototyping and open-source hardware, I developed a device housing a color sensor,
+              GPS module, and microcontroller in a compact body. Multiple iterations focused on keeping the
+              device ergonomic, simple to operate with one hand, and rugged enough to withstand field
+              conditions like dust, moisture, and variable light.
+            </p>
+          </div>
+          <div class="case-study-single fade-in">
+            <img src="promo1.png" alt="DirtLENS prototyping stage image" />
+          </div>
         </div>
-        <div class="case-study-single fade-in">
-          <img src="promo1.png" alt="Prototyping stage image">
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="case-study-section fade-in">
-      <h2>Outcome & Reflection</h2>
-      <p>
-        DirtLENS demonstrates how a handheld soil color sensor can improve field data collection by delivering immediate, accurate Munsell readings. The device helps researchers identify and compare soil horizons and stratigraphic boundaries on site without manual charts. Future updates will focus on secure data export and streamlined workflows to support larger field teams and repeat measurements.
-      </p>
-      <blockquote>
-        “It’s a game-changer for field data collection — simple, secure, and reliable.” - Jesse Heinrich, 23 - Archaeologist
-      </blockquote>
-    </section>
+      <section class="case-study-section fade-in">
+        <h2>Outcome &amp; Reflection</h2>
+        <p>
+          DirtLENS demonstrates how a handheld soil color sensor can improve field data collection by delivering
+          immediate, accurate Munsell readings tied to GPS coordinates. The device helps researchers identify and
+          compare soil horizons and stratigraphic boundaries on site without juggling charts and notebooks. Future
+          updates will focus on secure data export formats, batch processing, and streamlined workflows to support
+          larger field teams and repeat measurements across multiple sites.
+        </p>
+        <blockquote>
+          “It’s a game-changer for field data collection — simple, secure, and reliable.”
+          <span class="user-line">— Jesse Heinrich, 23 — Archaeologist</span>
+        </blockquote>
+      </section>
+    </div>
   </main>
 
-  <!-- ✅ FOOTER -->
+  <!-- FOOTER -->
   <footer class="footer">
     <a href="index.html" class="link footer__link">Back to Portfolio</a>
   </footer>
@@ -288,7 +497,7 @@
     </div>
   </div>
 
-  <!-- ✅ FADE-IN SCRIPT -->
+  <!-- FADE-IN SCRIPT -->
   <script src="fade-in.js"></script>
 </body>
 </html>
