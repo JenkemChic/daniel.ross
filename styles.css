@@ -409,6 +409,20 @@ main {
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--clr-fg);
+  text-decoration: none;
+}
+
+/* Prevent blue hover / visited behavior */
+.footer__link:visited {
+  color: var(--clr-fg);
+}
+
+.footer__link:hover,
+.footer__link:focus {
+  color: var(--clr-fg);                 /* stays neutral */
+  text-decoration: underline;
+  text-decoration-color: currentColor;  /* ensures underline is not blue */
+  text-underline-offset: 2px;
 }
 
 .scroll-top {
