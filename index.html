@@ -598,11 +598,12 @@
 
       @media (max-width: 900px) {
         .hero-inner {
-          grid-template-columns: minmax(0, 1fr);
+          grid-template-columns: minmax(0, 1fr); /* single column */
         }
 
+        /* Ensure aside appears after main hero text on mobile */
         .hero-pane {
-          order: 0;
+          order: 1;
         }
 
         .section {
@@ -745,7 +746,10 @@
                 UX roles at the intersection of research &amp; tools
               </p>
               <p class="hero-pane-text">
-                Translating research, field insight, and systems thinking into practical, decision-support technologies across digital and physical environments.
+                Blending field experience, data, and design to build practical
+                utilities across products and platforms, from mobile interfaces
+                to hardware-backed tools that support clear, confident
+                decision-making.
               </p>
             </div>
             <div>
@@ -997,10 +1001,10 @@
             <div>
               <p class="about-copy">
                 I'm a UX/UI designer and frontend developer with a background in
-                archaeology. My work bridges research and digital tools—designing
-                clean, accessible apps that support real-world needs. From field
-                utilities to mobile-first design, I focus on function, clarity,
-                and user experience.
+                archaeology. My work bridges research and digital tools—
+                designing clean, accessible apps that support real-world needs.
+                From field utilities to mobile-first design, I focus on
+                function, clarity, and user experience.
               </p>
 
               <div class="about-contact">
