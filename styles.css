@@ -35,7 +35,7 @@ body {
   --clr-bg-alt: transparent;
   --clr-fg: #555;
   --clr-fg-alt: #444;
-  --clr-primary: #2978b5; /* ✅ YOUR BLUE ACCENT */
+  --clr-primary: #222; /* ✅ YOUR BLUE ACCENT */
   --shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
@@ -344,11 +344,6 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
   gap: 2em;
-}
-
-/* extra space between the first and second project grids to match gutter */
-#projects .projects__grid + .projects__grid {
-  margin-top: 2em;
 }
 
 .project {
