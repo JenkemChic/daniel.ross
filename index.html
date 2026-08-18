@@ -710,6 +710,36 @@ button[aria-label*="audio" i]{
 }
 </style>
 
+
+<style id="intro-cursor-line-fix">
+@media (min-width: 768px) {
+  .typing-wrap {
+    max-width: none !important;
+    width: max-content;
+  }
+
+  .typing-wrap h1 {
+    white-space: nowrap;
+  }
+
+  #typed-text,
+  #type-cursor {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 767px) {
+  .typing-wrap {
+    width: auto;
+    max-width: 100%;
+  }
+
+  .typing-wrap h1 {
+    white-space: normal;
+  }
+}
+</style>
+
 </head>
 <body>
   <nav class="nav-shell" aria-label="Primary navigation">
