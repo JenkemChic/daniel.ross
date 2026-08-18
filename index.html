@@ -446,28 +446,10 @@
     .footer-links a:hover { color: var(--foreground); }
     .copyright { color: rgba(26,26,26,.4); text-transform: none; }
 
-    /* ---------- CUSTOM CURSOR ---------- */
-    .cursor-dot {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 9999;
-      pointer-events: none;
-      display: none;
-      transform: translate3d(-100px,-100px,0);
-    }
-    .cursor-dot > div {
-      width: 10px;
-      height: 10px;
-      margin: -5px 0 0 -5px;
-      background: #000;
-      transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s cubic-bezier(.4,0,.2,1);
-    }
-
-    @media (hover:hover) and (min-width:768px) {
-      html, body, a, button { cursor: none; }
-      .cursor-dot { display: block; }
-    }
+    /* ---------- SYSTEM CURSOR ---------- */
+    .cursor-dot { display:none !important; }
+    html, body { cursor:auto !important; }
+    a, button { cursor:pointer !important; }
 
     /* ---------- MOBILE ---------- */
     .mobile-menu { display: none; }
@@ -850,12 +832,6 @@ button[aria-label*="audio" i]{
       </div>
     </div>
   </div>
-
-  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"><div></div></div>
-
-  
-
-
 <script id="index-typing-animation">
 (() => {
   const text = 'Designing research-driven products that simplify complex workflows';
