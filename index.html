@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Daniel Ross — UX/UI designer, researcher, and developer" />
+  <title>Daniel Ross — UX/UI Designer</title>
+  <style>
+    :root {
+      /* Change these later without touching layout */
+      --background: #f7f5f0;
+      --foreground: #3d342e;
+      --muted: #866343;
+      --border: #ded7cf;
+      --footer: #c6c9a3;
+      --accent: #7d8251;
+      --font-ui: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --font-brand: Arial, Helvetica, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    html { background: transparent; }
+    body {
+      color: var(--foreground);
+      background: transparent;
+      font-family: var(--font-ui);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    /* fine grain from the reference page */
+    body::after {
+      content: "";
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      opacity: .015;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ---------- NAV ---------- */
+    .nav-shell {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--border);
+      background: var(--background);
+    }
+
+    .nav-inner {
+      width: 100%;
+      height: 57px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      position: relative;
+      z-index: 70;
+      font-family: var(--font-brand);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-link {
+      --nav-hover: var(--accent);
+      position: relative;
+      display: block;
+      overflow: hidden;
+      font-size: 12px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .nav-link span {
+      display: block;
+      transition: transform .3s cubic-bezier(.76,0,.24,1), color .2s ease;
+    }
+
+    .nav-link .hover-copy {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      color: var(--nav-hover);
+    }
+
+    /* Match the project color lineup, in menu order. */
+    .nav-link:nth-child(1) { --nav-hover: #7d8251; } /* WORK — grass */
+    .nav-link:nth-child(2) { --nav-hover: #68472f; } /* ABOUT — B horizon */
+    .nav-link:nth-child(3) { --nav-hover: #4d3b2e; } /* CONTACT — topsoil */
+
+    .nav-link:hover .base-copy { transform: translateY(-100%); }
+    .nav-link:hover .hover-copy { transform: translateY(-100%); }
+
+    .sound-toggle {
+      border: 0;
+      background: transparent;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      color: rgba(26,26,26,.5);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+    .sound-toggle:hover { color: var(--accent); }
+
+    /* ---------- HOME / WORK ---------- */
+    .home {
+      position: relative;
+      z-index: 10;
+      height: 82vh;
+      min-height: 620px;
+      padding: 112px 80px 56px;
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
+    }
+
+    .home-plane {
+      position: absolute;
+      inset: 0;
+      background: var(--background);
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 50px), calc(100% - 50px) 100%, 0 100%);
+    }
+
+    .linework {
+      position: absolute;
+      pointer-events: none;
+      overflow: hidden;
+      top: -60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      color: var(--foreground);
+    }
+
+    .orbit {
+      position: absolute;
+      top: 50%;
+      width: 60vw;
+      height: 60vw;
+      margin-top: -30vw;
+      fill: none;
+    }
+    .orbit-left {
+      left: 35%;
+      margin-left: -30vw;
+      animation: spin 90s linear infinite;
+    }
+    .orbit-right {
+      right: 35%;
+      margin-right: -30vw;
+      animation: spinReverse 75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spinReverse { to { transform: rotate(-360deg); } }
+
+    .home-inner {
+      position: relative;
+      z-index: 10;
+      max-width: 1536px;
+      width: 100%;
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      opacity: 0;
+      animation: fadeIn .7s ease-out .1s forwards;
+    }
+
+    .meta-top {
+      margin: 0 0 4px;
+      font-size: 11px;
+      line-height: 1.25;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+      color: rgba(26,26,26,.6);
+    }
+    .meta-bottom {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.25;
+      color: rgba(26,26,26,.4);
+    }
+    .meta-right { text-align: right; }
+
+    .typing-wrap {
+      margin-top: auto;
+      margin-bottom: 48px;
+      max-width: 672px;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: fadeUp .5s ease-out .3s forwards;
+    }
+
+    .typing-wrap h1 {
+      margin: 0;
+      font-family: var(--font-ui);
+      font-size: 20px;
+      line-height: 1.625;
+      font-weight: 400;
+      letter-spacing: 0;
+      color: rgba(26,26,26,.8);
+    }
+
+    .type-cursor {
+      display: inline-block;
+      width: .55em;
+      height: 1.1em;
+      margin-left: 2px;
+      background: var(--foreground);
+      opacity: .8;
+      vertical-align: text-bottom;
+      transition: background .05s;
+    }
+
+    .work-table {
+      width: 100%;
+      margin-top: auto;
+    }
+
+    .work-head,
+    .work-row {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0,1fr));
+      gap: 16px;
+      align-items: center;
+    }
+
+    .work-head {
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(26,26,26,.10);
+      opacity: 0;
+      animation: fadeIn .7s ease-out .5s forwards;
+    }
+
+    .head-cell {
+      font-size: 10px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: rgba(26,26,26,.5);
+    }
+
+    .col-project { grid-column: span 4; }
+    .col-category { grid-column: span 3; }
+    .col-type { grid-column: span 2; }
+    .col-year { grid-column: span 1; }
+    .col-status { grid-column: span 2; text-align: right; }
+
+    .row-wrap {
+      opacity: 0;
+      transform: translateY(8px);
+      animation: fadeUp .5s ease-out forwards;
+    }
+    .row-wrap:nth-child(2) { animation-delay: .6s; }
+    .row-wrap:nth-child(3) { animation-delay: .7s; }
+    .row-wrap:nth-child(4) { animation-delay: .8s; }
+    .row-wrap:nth-child(5) { animation-delay: .9s; }
+
+    .work-row {
+      /* Per-project scheme. Override these variables on each row below. */
+      --project-primary: #1a1a1a;
+      --project-secondary: #5f5f5f;
+      --project-on-primary: #ffffff;
+      --project-on-secondary: #ffffff;
+      --scheme-split: 83.333%;
+
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      margin: 0 -12px;
+      padding: 12px;
+      min-height: 49px;
+      border-bottom: 1px solid rgba(26,26,26,.10);
+      border-radius: 4px;
+      transition: border-color .25s ease;
+    }
+
+    /* The color field starts at zero width, then fills the complete row. */
+    .work-row::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        90deg,
+        var(--project-primary) 0,
+        var(--project-primary) var(--scheme-split),
+        var(--project-secondary) var(--scheme-split),
+        var(--project-secondary) 100%
+      );
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform .42s cubic-bezier(.76,0,.24,1);
+    }
+
+    .work-row:hover::before,
+    .work-row:focus-visible::before {
+      transform: scaleX(1);
+    }
+
+    .row-wrap:last-child .work-row { border-bottom-color: transparent; }
+    .work-row:hover,
+    .work-row:focus-visible { border-bottom-color: transparent; }
+
+    .project-main { grid-column: span 4; min-width: 0; }
+    .project-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(26,26,26,.72);
+      transition: color .24s ease;
+    }
+    .project-subtitle {
+      margin-left: 12px;
+      font-size: 14px;
+      color: rgba(26,26,26,.38);
+      transition: color .24s ease;
+    }
+
+    .work-row:hover .project-title,
+    .work-row:hover .project-subtitle,
+    .work-row:hover .cell-category,
+    .work-row:hover .cell-type,
+    .work-row:hover .cell-year,
+    .work-row:focus-visible .project-title,
+    .work-row:focus-visible .project-subtitle,
+    .work-row:focus-visible .cell-category,
+    .work-row:focus-visible .cell-type,
+    .work-row:focus-visible .cell-year {
+      color: var(--project-on-primary);
+    }
+
+    .work-row:hover .cell-status,
+    .work-row:focus-visible .cell-status {
+      color: var(--project-on-secondary);
+    }
+
+    .cell-category { grid-column: span 3; }
+    .cell-type { grid-column: span 2; }
+    .cell-year { grid-column: span 1; }
+    .cell-status { grid-column: span 2; text-align: right; }
+
+    .cell-category,
+    .cell-type,
+    .cell-year {
+      font-size: 12px;
+      color: rgba(26,26,26,.40);
+      transition: color .24s ease;
+    }
+    .cell-status {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: rgba(26,26,26,.45);
+      white-space: nowrap;
+      transition: color .24s ease;
+    }
+    .arrow {
+      display: inline-block;
+      margin-left: 5px;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .work-row:hover .arrow { opacity: 1; transform: translateX(0); }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* ---------- FOOTER ---------- */
+    .footer-shell {
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+      height: calc(18vh + 50px);
+      margin-top: -50px;
+      display: flex;
+      flex-direction: column;
+      background: var(--footer);
+    }
+
+    .footer-art {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      background: var(--footer);
+    }
+    #footer-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+    }
+
+    .footer-base {
+      flex: 0 0 50px;
+      height: 50px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      background: var(--footer);
+    }
+    .footer-base-inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a,
+    .copyright {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: rgba(26,26,26,.5);
+      white-space: nowrap;
+    }
+    .footer-links a:hover { color: var(--foreground); }
+    .copyright { color: rgba(26,26,26,.4); text-transform: none; }
+
+    /* ---------- CUSTOM CURSOR ---------- */
+    .cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      pointer-events: none;
+      display: none;
+      transform: translate3d(-100px,-100px,0);
+    }
+    .cursor-dot > div {
+      width: 10px;
+      height: 10px;
+      margin: -5px 0 0 -5px;
+      background: #000;
+      transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s cubic-bezier(.4,0,.2,1);
+    }
+
+    @media (hover:hover) and (min-width:768px) {
+      html, body, a, button { cursor: none; }
+      .cursor-dot { display: block; }
+    }
+
+    /* ---------- MOBILE ---------- */
+    .mobile-menu { display: none; }
+
+    @media (max-width: 767px) {
+      body { overflow: auto; }
+      .nav-inner { height: 57px; padding: 0 20px; }
+      .nav-links { display: none; }
+      .mobile-menu {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        margin-right: -8px;
+        border: 0;
+        background: transparent;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+      }
+      .mobile-menu span { width: 20px; height: 1.5px; background: var(--foreground); }
+
+      .home {
+        height: auto;
+        min-height: 82vh;
+        padding: 96px 20px 40px;
+      }
+      .home-plane { clip-path: none; }
+      .meta-row { align-items: flex-start; }
+      .meta-right { display: none; }
+      .typing-wrap { margin: 72px 0 34px; }
+      .typing-wrap h1 { font-size: 18px; }
+      .work-table { margin-top: 0; }
+
+      .col-project,
+      .project-main { grid-column: span 7; }
+      .col-status,
+      .cell-status { grid-column: span 5; }
+      .col-category,
+      .col-type,
+      .col-year,
+      .cell-category,
+      .cell-type,
+      .cell-year { display: none; }
+      .project-subtitle { margin-left: 8px; }
+      .work-row {
+        min-height: 50px;
+        --scheme-split: 58.333%;
+      }
+
+      .footer-shell {
+        position: relative;
+        height: 33vh;
+        min-height: 200px;
+        margin-top: 0;
+      }
+      .footer-base { padding: 0 20px; }
+      .footer-links { gap: 12px; }
+      .footer-links a,
+      .copyright { font-size: 10px; }
+    }
+
+    @media (min-width:768px) and (max-width:1023px) {
+      .home { padding-left: 48px; padding-right: 48px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+
+<style id="soil-index-v2">
+/* Soil-derived homepage refinements */
+.home-plane,
+.nav-shell {
+  background: var(--background);
+}
+
+.work-head,
+.work-row {
+  border-color: rgba(77,59,46,.14);
+}
+
+.meta-top,
+.head-cell {
+  color: rgba(77,59,46,.62);
+}
+
+.meta-bottom,
+.cell-category,
+.cell-type,
+.cell-year {
+  color: rgba(77,59,46,.48);
+}
+
+.project-title {
+  color: rgba(61,52,46,.82);
+}
+
+.project-subtitle {
+  color: rgba(104,71,47,.58);
+}
+
+.cell-status {
+  color: rgba(77,59,46,.52);
+}
+
+.footer-shell,
+.footer-art,
+.footer-base {
+  background: var(--footer);
+}
+
+.footer-links a:hover {
+  color: #4d3b2e;
+}
+</style>
+
+
+<style id="index-mobile-nav-fix">
+.index-mobile-panel{
+  display:none;
+}
+
+@media(max-width:767px){
+  .index-mobile-panel{
+    position:fixed;
+    z-index:1001;
+    top:57px;
+    left:0;
+    right:0;
+    padding:8px 20px 16px;
+    background:var(--background);
+    border-bottom:1px solid var(--border);
+  }
+
+  .index-mobile-panel[data-open="true"]{
+    display:grid;
+    gap:2px;
+  }
+
+  .index-mobile-panel a{
+    display:flex;
+    align-items:center;
+    min-height:44px;
+    color:var(--foreground);
+    text-decoration:none;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    border-bottom:1px solid rgba(77,59,46,.10);
+  }
+}
+</style>
+
+
+<style id="static-grey-footer-v3">
+/* Static footer only */
+footer,
+.footer,
+.footer-shell,
+.footer-base,
+.site-footer,
+.home-footer {
+  background:#d2d2d2 !important;
+  color:#3f3f3f !important;
+}
+
+footer canvas,
+.footer canvas,
+.footer-shell canvas,
+.footer-base canvas,
+.site-footer canvas,
+.home-footer canvas,
+.footer-animation,
+.signal-field,
+.contour-field,
+.footer-field,
+.footer-visual,
+.footer-points,
+.footer-grid {
+  display:none !important;
+}
+
+footer *,
+.footer *,
+.footer-shell *,
+.footer-base *,
+.site-footer *,
+.home-footer * {
+  animation:none !important;
+  transition:none !important;
+}
+
+footer a,
+.footer a,
+.footer-shell a,
+.footer-base a,
+.site-footer a,
+.home-footer a {
+  color:#3f3f3f !important;
+}
+</style>
+
+
+<style id="index-cleanup-v5">
+/* Remove speaker / volume controls if any legacy markup remains. */
+.volume-toggle,
+.sound-toggle,
+.audio-toggle,
+.volume-icon,
+.sound-icon,
+.audio-icon,
+.speaker,
+.speaker-icon,
+button[aria-label*="volume" i],
+button[aria-label*="sound" i],
+button[aria-label*="audio" i]{
+  display:none !important;
+}
+
+/* Remove bottom-right folded-corner treatment. */
+.home-plane::after,
+.home-plane::before,
+.home-shell::after,
+.home-shell::before,
+.paper-frame::after,
+.paper-frame::before,
+.frame::after,
+.frame::before,
+.page-frame::after,
+.page-frame::before{
+  content:none !important;
+  display:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  background:none !important;
+  clip-path:none !important;
+}
+
+.corner-fold,
+.page-fold,
+.fold-corner,
+.fold{
+  display:none !important;
+}
+</style>
+
+
+<style id="remove-home-plane-fold-v6">
+.home-plane{
+  clip-path:none !important;
+  -webkit-clip-path:none !important;
+}
+
+.home{
+  overflow:visible !important;
+}
+</style>
+
+</head>
+<body>
+  <nav class="nav-shell" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="brand" href="#work">DANIEL ROSS</a>
+
+      <div class="nav-links">
+        <a class="nav-link" href="#work"><span class="base-copy">WORK</span><span class="hover-copy">WORK</span></a>
+        
+        <a class="nav-link" href="#"><span class="base-copy">ABOUT</span><span class="hover-copy">ABOUT</span></a>
+        <a class="nav-link" href="mailto:arthurpockets@gmail.com"><span class="base-copy">CONTACT</span><span class="hover-copy">CONTACT</span></a>
+        
+      </div>
+
+      <button class="mobile-menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="index-mobile-navigation"><span></span><span></span></button>
+    </div>
+
+    <div class="index-mobile-panel" id="index-mobile-navigation" data-open="false">
+      <a href="#work">Work</a>
+      <a href="DanielLRossCV.pdf">CV</a>
+      <a href="mailto:arthurpockets@gmail.com">Contact</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="home" id="work">
+      <div class="home-plane"></div>
+
+      <div class="linework" aria-hidden="true">
+        <svg class="orbit orbit-left" viewBox="0 0 800 800">
+          <circle cx="400" cy="400" r="380" stroke="currentColor" stroke-width="0.8" stroke-dasharray="120 60 200 60 120 60 200 60" opacity="0.12"></circle>
+        </svg>
+        <svg class="orbit orbit-right" viewBox="0 0 800 800">
+          <circle cx="400" cy="400" r="380" stroke="currentColor" stroke-width="0.8" stroke-dasharray="160 80 160 80 160 80" opacity="0.10"></circle>
+        </svg>
+      </div>
+
+      <div class="home-inner">
+        <div class="meta-row">
+          <div>
+            <p class="meta-top">UX/UI Designer, Research &amp; Development</p>
+            <p class="meta-bottom">Columbus, Ohio</p>
+          </div>
+          <div class="meta-right">
+            <p class="meta-top">Portfolio 2026</p>
+            <p class="meta-bottom">danielross.dev</p>
+          </div>
+        </div>
+
+        <div class="typing-wrap">
+          <h1><span id="typed-text"></span><span id="type-cursor" class="type-cursor" aria-hidden="true"></span></h1>
+        </div>
+
+        <div class="work-table" role="table" aria-label="Selected work">
+          <div class="work-head" role="row">
+            <span class="head-cell col-project" role="columnheader">Project</span>
+            <span class="head-cell col-category" role="columnheader">Category</span>
+            <span class="head-cell col-type" role="columnheader">Type</span>
+            <span class="head-cell col-year" role="columnheader">Year</span>
+            <span class="head-cell col-status" role="columnheader">&nbsp;</span>
+          </div>
+
+          <div class="row-wrap">
+            <a class="work-row" href="galeriste.html" role="row"
+               style="--project-primary:#d4d2cd; --project-secondary:#242421; --project-on-primary:#242421; --project-on-secondary:#f5f4ef;">
+              <span class="project-main" role="cell"><span class="project-title">Galeriste</span><span class="project-subtitle">Auction Platform</span></span>
+              <span class="cell-category" role="cell">Product Design</span>
+              <span class="cell-type" role="cell">Web App</span>
+              <span class="cell-year" role="cell">2026</span>
+              <span class="cell-status" role="cell">Case Study <span class="arrow">→</span></span>
+            </a>
+          </div>
+
+          <div class="row-wrap">
+            <a class="work-row" href="dirtlens.html" role="row"
+               style="--project-primary:#7d8251; --project-secondary:#866343;">
+              <span class="project-main" role="cell"><span class="project-title">DirtLENS</span><span class="project-subtitle">Soil Scanner</span></span>
+              <span class="cell-category" role="cell">UX / Product</span>
+              <span class="cell-type" role="cell">Device + App</span>
+              <span class="cell-year" role="cell">2026</span>
+              <span class="cell-status" role="cell">Case Study <span class="arrow">→</span></span>
+            </a>
+          </div>
+
+          <div class="row-wrap">
+            <a class="work-row" href="union-cemetery.html" role="row"
+               style="--project-primary:#e7e2d7; --project-secondary:#7b8067; --project-on-primary:#31332e; --project-on-secondary:#f7f4ec;">
+              <span class="project-main" role="cell"><span class="project-title">Union Cemetery</span><span class="project-subtitle">Visualization</span></span>
+              <span class="cell-category" role="cell">Data / UX</span>
+              <span class="cell-type" role="cell">Visualization</span>
+              <span class="cell-year" role="cell">2026</span>
+              <span class="cell-status" role="cell">In Progress <span class="arrow">→</span></span>
+            </a>
+          </div>
+
+          <div class="row-wrap">
+            <a class="work-row" href="DanielLRossCV.pdf" role="row" style="--project-primary:#315f7d; --project-secondary:#a9c8d9; --project-on-primary:#ffffff; --project-on-secondary:#1f2a30;">
+              <span class="project-main" role="cell"><span class="project-title">Selected Work</span><span class="project-subtitle">Résumé + Archive</span></span>
+              <span class="cell-category" role="cell">UX / Development</span>
+              <span class="cell-type" role="cell">Archive</span>
+              <span class="cell-year" role="cell">2026</span>
+              <span class="cell-status" role="cell">View <span class="arrow">→</span></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-shell">
+    <footer class="footer-art"></footer>
+    <div class="footer-base">
+      <div class="footer-base-inner">
+        <div class="footer-links">
+          <a href="https://www.linkedin.com/in/daniellross">LinkedIn</a>
+          <a href="mailto:arthurpockets@gmail.com">Email</a>
+          <a href="DanielLRossCV.pdf">Résumé</a>
+        </div>
+        <p class="copyright">© 2026 Daniel Ross</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"><div></div></div>
+
+  
+
+
+<script id="index-typing-animation">
+(() => {
+  const text = 'Designing research-driven products that simplify complex workflows';
+  const target = document.getElementById('typed-text');
+  const cursor = document.getElementById('type-cursor');
+
+  if (!target || !cursor) return;
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reduced) {
+    target.textContent = text;
+    return;
+  }
+
+  let index = 0;
+  let done = false;
+  let visible = true;
+
+  setTimeout(function typeNext() {
+    if (index < text.length) {
+      target.textContent = text.slice(0, index + 1);
+      index += 1;
+      setTimeout(typeNext, 30);
+    } else {
+      done = true;
+    }
+  }, 800);
+
+  setInterval(() => {
+    if (!done) return;
+    visible = !visible;
+    cursor.style.background = visible ? 'var(--foreground)' : 'transparent';
+    cursor.style.opacity = '.6';
+  }, 530);
+})();
+</script>
+
+<script id="index-mobile-nav-script">
+(() => {
+  const button = document.querySelector(".mobile-menu");
+  const panel = document.getElementById("index-mobile-navigation");
+  if (!button || !panel) return;
+
+  const close = () => {
+    panel.dataset.open = "false";
+    button.setAttribute("aria-expanded", "false");
+  };
+
+  button.addEventListener("click", () => {
+    const open = panel.dataset.open !== "true";
+    panel.dataset.open = open ? "true" : "false";
+    button.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  panel.querySelectorAll("a").forEach(link => link.addEventListener("click", close));
+  window.addEventListener("keydown", e => {
+    if (e.key === "Escape") close();
+  });
+})();
+</script>
+
+</body>
+</html>

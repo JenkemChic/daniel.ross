@@ -1,0 +1,5906 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="description" content="Union Cemetery — data visualization and historical mapping project by Daniel Ross" />
+  <title>Union Cemetery — Daniel Ross</title>
+
+  <style>
+    :root {
+      /* =========================================================
+         PROJECT CONFIGURATION
+         Change these values for each project.
+         Keep primary + secondary within the SAME hue family.
+         ========================================================= */
+      --project-primary: #4d3b2e;
+      --project-secondary: #866343;
+      --project-on-primary: #ffffff;
+      --project-on-secondary: #ffffff;
+
+      /* Site-wide values */
+      --background: #ffffff;
+      --foreground: #1a1a1a;
+      --muted: #94918a;
+      --border: #e8e6e1;
+      --footer: #d4d4d4;
+      --font-ui: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --font-brand: Arial, Helvetica, sans-serif;
+
+      --page-x: 80px;
+      --content-max: 1536px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      background: var(--background);
+      color: var(--foreground);
+      font-family: var(--font-ui);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      pointer-events: none;
+      opacity: .015;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    img, video { display: block; width: 100%; }
+
+    /* ---------- NAV ---------- */
+    .nav-shell {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.96);
+    }
+
+    .nav-inner {
+      width: 100%;
+      height: 57px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-family: var(--font-brand);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-link {
+      --nav-hover: var(--project-primary);
+      position: relative;
+      display: block;
+      overflow: hidden;
+      font-size: 12px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .nav-link span {
+      display: block;
+      transition: transform .3s cubic-bezier(.76,0,.24,1), color .2s ease;
+    }
+
+    .nav-link .hover-copy {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      color: var(--nav-hover);
+    }
+
+    .nav-link:nth-child(1) { --nav-hover: #c5161d; }
+    .nav-link:nth-child(2) { --nav-hover: #4d3b2e; }
+    .nav-link:nth-child(3) { --nav-hover: #e0aa00; }
+    .nav-link:nth-child(4) { --nav-hover: #148238; }
+
+    .nav-link:hover .base-copy { transform: translateY(-100%); }
+    .nav-link:hover .hover-copy { transform: translateY(-100%); }
+
+    .mobile-menu { display: none; }
+
+
+    /* ---------- DIRTLENS SOIL STRATA HERO ---------- */
+    .project-hero {
+      position: relative;
+      min-height: 82vh;
+      padding: 96px var(--page-x) 0;
+      display: flex;
+      overflow: hidden;
+      isolation: isolate;
+      background: #fff;
+    }
+
+    .soil-strata {
+      position: absolute;
+      inset: 57px 0 0 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .soil-strata svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .soil-strata .strata-label {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      fill: rgba(255,255,255,.68);
+    }
+
+    .soil-strata .strata-label.dark {
+      fill: rgba(26,26,26,.54);
+    }
+
+    .soil-strata .guide {
+      stroke: rgba(255,255,255,.24);
+      stroke-width: 1;
+      stroke-dasharray: 4 6;
+    }
+
+    .soil-strata .grass-stem {
+      stroke: #687044;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      opacity: .9;
+    }
+
+    .hero-linework {
+      z-index: 1;
+      mix-blend-mode: multiply;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: calc(82vh - 96px);
+    }
+
+    .project-kicker {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .hero-back {
+      background: transparent;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: rgba(17,17,17,.68);
+      text-shadow: 0 1px 1px rgba(255,255,255,.85);
+    }
+
+    .hero-main {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0,1fr));
+      gap: 16px;
+      align-items: center;
+      padding: 48px 0 34px;
+    }
+
+    .hero-title-block {
+      grid-column: 1 / span 7;
+      margin: 0;
+      padding: 0;
+      align-self: center;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .project-number {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      color: rgba(17,17,17,.72);
+      text-shadow: 0 1px 2px rgba(255,255,255,.7);
+    }
+
+    .project-title {
+      max-width: none;
+      margin: 16px 0 0;
+      font-family: var(--font-brand);
+      font-size: clamp(72px, 10.2vw, 160px);
+      line-height: .84;
+      letter-spacing: -.07em;
+      font-weight: 700;
+      color: #111111;
+      text-shadow:
+        -2px -2px 0 rgba(255,255,255,.72),
+         2px -2px 0 rgba(255,255,255,.72),
+        -2px  2px 0 rgba(255,255,255,.72),
+         2px  2px 0 rgba(255,255,255,.72),
+         0 4px 18px rgba(0,0,0,.16);
+    }
+
+    .hero-description {
+      grid-column: 9 / span 4;
+      align-self: center;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      color: #111111;
+    }
+
+    .hero-description {
+      position: relative;
+    }
+
+    .hero-description .micro-label {
+      margin-bottom: 12px;
+      color: rgba(17,17,17,.68);
+      text-shadow: 0 1px 1px rgba(255,255,255,.85);
+    }
+
+    .hero-description p:last-child {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.75;
+      color: #161616;
+      text-shadow:
+        0 1px 0 rgba(255,255,255,.95),
+        1px 0 0 rgba(255,255,255,.72),
+        -1px 0 0 rgba(255,255,255,.72),
+        0 -1px 0 rgba(255,255,255,.72);
+    }
+
+    .hero-bottom {
+      display: block;
+      margin: 0 calc(var(--page-x) * -1);
+      padding: 0 var(--page-x);
+      background: rgba(255,255,255,.90);
+      border-top: 1px solid rgba(26,26,26,.12);
+    }
+
+    .hero-meta {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 0;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .hero-meta-item {
+      padding: 18px 20px 20px 0;
+      border: 0;
+    }
+
+    .hero-meta-item + .hero-meta-item {
+      padding-left: 20px;
+    }
+
+    .hero-meta-item:last-child {
+      border-right: 0;
+    }
+
+    .hero-meta-item strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 11px;
+      line-height: 1.5;
+      font-weight: 400;
+      color: rgba(26,26,26,.72);
+    }
+
+    .hero-tags {
+      position: absolute;
+      right: 0;
+      top: 42px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 7px;
+    }
+
+    .tag {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      font-size: 10px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      background: transparent;
+      color: rgba(17,17,17,.74);
+      text-shadow: 0 1px 1px rgba(255,255,255,.88);
+    }
+
+    .tag + .tag::before {
+      content: "/";
+      margin-right: 7px;
+      color: rgba(17,17,17,.34);
+    }
+
+    @media (max-width: 980px) {
+      .hero-title-block {
+        grid-column: 1 / span 7;
+      }
+
+      .hero-description {
+        grid-column: 8 / span 5;
+      }
+
+      .project-title {
+        font-size: clamp(66px, 10vw, 118px);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .project-hero {
+        min-height: auto;
+        padding: 90px var(--page-x) 0;
+      }
+
+      .soil-strata {
+        inset: 57px 0 0 0;
+      }
+
+      .hero-inner {
+        display: block;
+        min-height: 0;
+      }
+
+      .project-kicker {
+        display: block;
+      }
+
+      .hero-tags {
+        position: static;
+        justify-content: flex-start;
+        margin-top: 28px;
+      }
+
+      .hero-main {
+        display: block;
+        padding: 76px 0 44px;
+      }
+
+      .project-title {
+        font-size: clamp(62px, 19vw, 100px);
+      }
+
+      .hero-description {
+        margin-top: 46px;
+      }
+
+      .hero-bottom {
+        margin: 0 calc(var(--page-x) * -1);
+      }
+
+      .hero-meta {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-meta-item {
+        border: 0;
+      }
+
+      .hero-meta-item:nth-child(odd) {
+        border: 0;
+      }
+
+      .hero-meta-item + .hero-meta-item {
+        padding-left: 16px;
+      }
+    }
+
+    /* ---------- HERO ---------- */
+    .project-hero {
+      position: relative;
+      min-height: 82vh;
+      padding: 112px var(--page-x) 58px;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .hero-linework {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      color: var(--foreground);
+      overflow: hidden;
+    }
+
+    .orbit {
+      position: absolute;
+      width: 58vw;
+      height: 58vw;
+      fill: none;
+    }
+
+    .orbit-a {
+      top: 8%;
+      right: 5%;
+      animation: spin 90s linear infinite;
+    }
+
+    .orbit-b {
+      left: 23%;
+      bottom: -37vw;
+      animation: spinReverse 76s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spinReverse { to { transform: rotate(-360deg); } }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-kicker {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .eyebrow, .meta-label, .section-index, .micro-label {
+      margin: 0;
+      font-size: 10px;
+      line-height: 1.3;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,.48);
+    }
+
+    .hero-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      font-size: 11px;
+      color: rgba(26,26,26,.58);
+    }
+
+    .hero-back::before {
+      content: "←";
+      color: var(--project-primary);
+      transition: transform .2s ease;
+    }
+    .hero-back:hover::before { transform: translateX(-3px); }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(110px, 1fr));
+      gap: 24px;
+      width: min(680px, 58vw);
+    }
+
+    .hero-meta-item strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 11px;
+      line-height: 1.5;
+      font-weight: 400;
+      color: rgba(26,26,26,.72);
+    }
+
+    .hero-title-block {
+      margin-top: auto;
+      padding-top: 110px;
+    }
+
+    .project-number {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 17px;
+      font-size: 11px;
+      color: rgba(26,26,26,.46);
+    }
+
+    .project-number::before {
+      content: "";
+      width: 32px;
+      height: 4px;
+      background: var(--project-primary);
+    }
+
+    .project-title {
+      max-width: 11ch;
+      margin: 0;
+      font-family: var(--font-brand);
+      font-size: clamp(62px, 9.6vw, 150px);
+      line-height: .86;
+      letter-spacing: -.065em;
+      font-weight: 700;
+    }
+
+    .project-title .shade {
+      color: var(--project-primary);
+    }
+
+    .hero-bottom {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0,1fr));
+      gap: 16px;
+      align-items: end;
+      padding-top: 52px;
+    }
+
+    .hero-summary {
+      grid-column: span 6;
+      max-width: 700px;
+      margin: 0;
+      font-size: clamp(17px, 1.5vw, 23px);
+      line-height: 1.55;
+      color: rgba(26,26,26,.74);
+    }
+
+    .hero-tags {
+      grid-column: 9 / span 4;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 7px;
+    }
+
+    .tag {
+      padding: 7px 9px 6px;
+      border: 1px solid rgba(26,26,26,.14);
+      border-radius: 3px;
+      font-size: 10px;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      background: rgba(255,255,255,.65);
+    }
+
+
+    /* ---------- PROJECT COLOR BAND ---------- */
+    .color-band {
+      min-height: 220px;
+      background:
+        linear-gradient(
+          110deg,
+          var(--project-primary) 0 62%,
+          var(--project-secondary) 62% 100%
+        );
+      color: var(--project-on-primary);
+      display: flex;
+      align-items: end;
+    }
+
+    .color-band-inner {
+      width: 100%;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 42px var(--page-x);
+      display: grid;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .color-band-title {
+      grid-column: span 5;
+      margin: 0;
+      font-family: var(--font-brand);
+      font-size: clamp(30px, 4vw, 60px);
+      line-height: .95;
+      letter-spacing: -.04em;
+      font-weight: 700;
+    }
+
+    .color-band-copy {
+      grid-column: 8 / span 5;
+      margin: 0;
+      max-width: 520px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: color-mix(in srgb, var(--project-on-primary) 82%, transparent);
+    }
+
+    /* ---------- GENERAL SECTIONS ---------- */
+    .section {
+      padding: 112px var(--page-x);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-inner {
+      width: 100%;
+      max-width: var(--content-max);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+      gap: 16px;
+      margin-bottom: 72px;
+    }
+
+    .section-index {
+      grid-column: span 2;
+      padding-top: 5px;
+    }
+
+    .section-title {
+      grid-column: span 5;
+      margin: 0;
+      font-family: var(--font-brand);
+      font-size: clamp(32px, 4.6vw, 72px);
+      line-height: .96;
+      letter-spacing: -.045em;
+      font-weight: 700;
+    }
+
+    .section-lead {
+      grid-column: 9 / span 4;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.75;
+      color: rgba(26,26,26,.63);
+    }
+
+    /* Snapshot */
+    .snapshot-grid {
+      display: grid;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+      gap: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .snapshot-item {
+      grid-column: span 3;
+      padding: 22px 0 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .snapshot-item strong {
+      display: block;
+      margin-top: 12px;
+      max-width: 28ch;
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    /* Media */
+    .media-frame {
+      position: relative;
+      min-height: 650px;
+      overflow: hidden;
+      background: #efefed;
+      border-radius: 4px;
+    }
+
+    .media-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 40px;
+      background:
+        linear-gradient(rgba(26,26,26,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26,26,26,.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .media-placeholder-inner {
+      width: min(650px, 85%);
+      aspect-ratio: 16 / 10;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(26,26,26,.15);
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 30px 80px rgba(0,0,0,.07);
+    }
+
+    .media-placeholder-inner span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: rgba(26,26,26,.42);
+    }
+
+    .media-caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 12px;
+      font-size: 10px;
+      line-height: 1.5;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(26,26,26,.42);
+    }
+
+    /* Problem / outcome split */
+    .split-grid {
+      display: grid;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .split-panel {
+      grid-column: span 6;
+      min-height: 430px;
+      padding: 34px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .split-panel.accent {
+      border: 0;
+      background: var(--project-primary);
+      color: var(--project-on-primary);
+    }
+
+    .split-title {
+      margin: auto 0 22px;
+      font-family: var(--font-brand);
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: .95;
+      letter-spacing: -.04em;
+      font-weight: 700;
+    }
+
+    .split-copy {
+      margin: 0;
+      max-width: 48ch;
+      font-size: 13px;
+      line-height: 1.75;
+      color: rgba(26,26,26,.62);
+    }
+
+    .split-panel.accent .micro-label,
+    .split-panel.accent .split-copy {
+      color: color-mix(in srgb, var(--project-on-primary) 76%, transparent);
+    }
+
+    /* Process rows */
+    .process-table {
+      border-top: 1px solid var(--border);
+    }
+
+    .process-row {
+      --fill: var(--project-primary);
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+      gap: 16px;
+      padding: 25px 12px;
+      margin: 0 -12px;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      transition: color .25s ease;
+    }
+
+    .process-row::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: var(--fill);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .42s cubic-bezier(.76,0,.24,1);
+    }
+
+    .process-row:nth-child(even) { --fill: var(--project-secondary); }
+
+    .process-row:hover::before { transform: scaleX(1); }
+
+    .process-step {
+      grid-column: span 2;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: rgba(26,26,26,.4);
+      transition: color .25s ease;
+    }
+
+    .process-name {
+      grid-column: span 4;
+      font-family: var(--font-brand);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      transition: color .25s ease;
+    }
+
+    .process-copy {
+      grid-column: 8 / span 5;
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.7;
+      color: rgba(26,26,26,.52);
+      transition: color .25s ease;
+    }
+
+    .process-row:hover .process-step,
+    .process-row:hover .process-name,
+    .process-row:hover .process-copy {
+      color: var(--project-on-primary);
+    }
+
+    /* Findings */
+    .findings {
+      display: grid;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .finding {
+      grid-column: span 4;
+      min-height: 310px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      transition: transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
+    }
+
+    .finding:hover {
+      transform: translateY(-5px);
+      background: var(--project-primary);
+      border-color: var(--project-primary);
+      color: var(--project-on-primary);
+    }
+
+    .finding:nth-child(2):hover {
+      background: var(--project-secondary);
+      border-color: var(--project-secondary);
+    }
+
+    .finding-number {
+      font-size: 11px;
+      color: rgba(26,26,26,.38);
+    }
+
+    .finding h3 {
+      margin: auto 0 18px;
+      font-family: var(--font-brand);
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.035em;
+    }
+
+    .finding p {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.7;
+      color: rgba(26,26,26,.55);
+    }
+
+    .finding:hover .finding-number,
+    .finding:hover p {
+      color: color-mix(in srgb, var(--project-on-primary) 75%, transparent);
+    }
+
+    /* Quote / decision */
+    .decision {
+      padding: 100px var(--page-x);
+      background: #f4f3ef;
+    }
+
+    .decision-inner {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .decision-mark {
+      grid-column: span 2;
+      width: 48px;
+      height: 8px;
+      margin-top: 12px;
+      background: var(--project-primary);
+    }
+
+    .decision blockquote {
+      grid-column: span 8;
+      margin: 0;
+      font-family: var(--font-brand);
+      font-size: clamp(31px, 4vw, 64px);
+      line-height: 1.06;
+      letter-spacing: -.045em;
+      font-weight: 700;
+    }
+
+    /* Metrics */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+      gap: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .metric {
+      grid-column: span 3;
+      padding: 32px 0 10px;
+    }
+
+    .metric-value {
+      display: block;
+      font-family: var(--font-brand);
+      font-size: clamp(44px, 5vw, 78px);
+      line-height: .9;
+      letter-spacing: -.055em;
+      font-weight: 700;
+      color: var(--project-primary);
+    }
+
+    .metric-label {
+      display: block;
+      max-width: 26ch;
+      margin-top: 17px;
+      font-size: 11px;
+      line-height: 1.6;
+      color: rgba(26,26,26,.52);
+    }
+
+    /* Next project */
+    .next-project {
+      display: block;
+      background: var(--project-primary);
+      color: var(--project-on-primary);
+      overflow: hidden;
+    }
+
+    .next-project-inner {
+      min-height: 340px;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 54px var(--page-x);
+      display: grid;
+      grid-template-columns: repeat(12,minmax(0,1fr));
+      gap: 16px;
+      align-items: end;
+    }
+
+    .next-label {
+      grid-column: span 3;
+      align-self: start;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: color-mix(in srgb, var(--project-on-primary) 64%, transparent);
+    }
+
+    .next-title {
+      grid-column: 4 / span 7;
+      margin: 0;
+      font-family: var(--font-brand);
+      font-size: clamp(50px, 8vw, 126px);
+      line-height: .83;
+      letter-spacing: -.06em;
+      font-weight: 700;
+      transition: transform .45s cubic-bezier(.76,0,.24,1);
+    }
+
+    .next-arrow {
+      grid-column: span 2;
+      justify-self: end;
+      font-size: 42px;
+      transition: transform .45s cubic-bezier(.76,0,.24,1);
+    }
+
+    .next-project:hover .next-title { transform: translateX(10px); }
+    .next-project:hover .next-arrow { transform: translateX(10px); }
+
+    /* ---------- FOOTER: SIGNAL FIELD ---------- */
+    .footer-shell {
+      position: relative;
+      height: calc(18vh + 50px);
+      display: flex;
+      flex-direction: column;
+      background: var(--footer);
+    }
+
+    .footer-art {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      background: var(--footer);
+    }
+
+    #footer-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .footer-base {
+      flex: 0 0 50px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-base-inner {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a, .copyright {
+      font-size: 12px;
+      letter-spacing: .05em;
+      color: rgba(26,26,26,.5);
+    }
+    .footer-links a { text-transform: uppercase; }
+    .footer-links a:hover { color: var(--foreground); }
+    .copyright { color: rgba(26,26,26,.4); }
+
+    /* ---------- CUSTOM CURSOR ---------- */
+    .cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      pointer-events: none;
+      display: none;
+      transform: translate3d(-100px,-100px,0);
+    }
+
+    .cursor-dot > div {
+      width: 10px;
+      height: 10px;
+      margin: -5px 0 0 -5px;
+      background: var(--foreground);
+      transition: transform .25s ease, background .25s ease;
+    }
+
+    @media (hover:hover) and (min-width:768px) {
+      html, body, a, button { cursor: none; }
+      .cursor-dot { display: block; }
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 980px) {
+      :root { --page-x: 40px; }
+
+      .hero-meta {
+        width: 58vw;
+        grid-template-columns: repeat(2, minmax(110px, 1fr));
+      }
+
+      .hero-summary { grid-column: span 8; }
+      .hero-tags { grid-column: 9 / span 4; }
+
+      .section-index { grid-column: span 2; }
+      .section-title { grid-column: span 6; }
+      .section-lead { grid-column: 9 / span 4; }
+
+      .snapshot-item { grid-column: span 6; }
+      .finding { grid-column: span 6; }
+      .metric { grid-column: span 6; }
+    }
+
+    @media (max-width: 767px) {
+      :root { --page-x: 20px; }
+
+      .nav-inner { height: 57px; padding: 0 20px; }
+      .nav-links { display: none; }
+      .mobile-menu {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        margin-right: -8px;
+        border: 0;
+        background: transparent;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+      }
+      .mobile-menu span { width: 20px; height: 1.5px; background: var(--foreground); }
+
+      .project-hero { min-height: auto; padding-top: 94px; }
+      .project-kicker { display: block; }
+      .hero-meta {
+        width: 100%;
+        margin-top: 45px;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-title-block { padding-top: 90px; }
+      .project-title { font-size: clamp(58px, 19vw, 96px); max-width: 9ch; }
+
+      .hero-bottom { display: block; padding-top: 42px; }
+      .hero-tags { justify-content: flex-start; margin-top: 26px; }
+
+      .color-band { min-height: 300px; }
+      .color-band-inner { display: block; padding-top: 48px; padding-bottom: 48px; }
+      .color-band-copy { margin-top: 30px; }
+
+      .section { padding-top: 80px; padding-bottom: 80px; }
+      .section-head { display: block; margin-bottom: 52px; }
+      .section-title { margin-top: 17px; }
+      .section-lead { margin-top: 30px; }
+
+      .snapshot-grid, .split-grid, .findings, .metric-grid { display: block; }
+      .snapshot-item { padding: 22px 0; }
+      .split-panel { min-height: 360px; margin-bottom: 12px; }
+      .finding { min-height: 270px; margin-bottom: 12px; }
+      .metric { padding: 30px 0; border-bottom: 1px solid var(--border); }
+
+      .media-frame { min-height: 430px; }
+
+      .process-row {
+        display: grid;
+        grid-template-columns: 56px 1fr;
+        gap: 14px;
+      }
+      .process-step { grid-column: 1; }
+      .process-name { grid-column: 2; }
+      .process-copy { grid-column: 2; margin-top: 10px; }
+
+      .decision-inner { display: block; }
+      .decision-mark { margin-bottom: 38px; }
+
+      .next-project-inner {
+        min-height: 300px;
+        display: block;
+      }
+      .next-title { margin-top: 90px; }
+      .next-arrow { display: block; margin-top: 24px; }
+
+      .footer-base { padding: 0 20px; }
+      .footer-links { gap: 10px; }
+      .footer-links a, .copyright { font-size: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+
+<style>
+/* DirtLENS hero v9 — open white space + soil horizon */
+.hero-v9{position:relative;min-height:82vh;padding:0 var(--page-x);overflow:hidden;background:#fff;isolation:isolate;display:block;margin-bottom:38px}
+.hero-v9 .hero-linework{display:none!important}
+.soil-horizon{position:absolute;left:0;right:0;bottom:0;height:46%;z-index:0;pointer-events:none;overflow:visible}
+.soil-horizon svg{width:100%;height:100%;display:block;overflow:visible}
+.hero-inner-v9{position:relative;z-index:2;max-width:var(--content-max);min-height:82vh;margin:0 auto;padding-top:70px;display:grid;grid-template-rows:auto 1fr auto}
+.hero-top-v9{display:flex;justify-content:space-between;align-items:flex-start;gap:32px}
+.hero-v9 .hero-back{color:rgba(26,26,26,.48)!important;text-shadow:none!important;background:none!important;border:0!important;padding:0!important}
+.hero-v9 .hero-back::before{color:#1a1a1a!important;background:transparent!important}
+.hero-tags-v9{display:flex;gap:18px;align-items:center;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(26,26,26,.46)}
+.hero-tags-v9 span+span::before{content:"/";margin-right:18px;color:rgba(26,26,26,.20)}
+.hero-copy-v9{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  grid-template-rows:1fr 1fr;
+  gap:16px;
+  align-items:center;
+  min-height:0;
+  padding:18px 0 22px;
+}
+.hero-title-v9{
+  grid-column:1/span 7;
+  grid-row:2;
+  align-self:center;
+  justify-self:start;
+  transform:translateY(3.5vh);
+}
+.project-number-v9{
+  font-size:10px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:#ffffff;
+  opacity:.72;
+  margin-bottom:13px;
+}
+.hero-title-v9 h1{
+  margin:0;
+  font-family:var(--font-brand);
+  font-size:clamp(82px,11.4vw,176px);
+  line-height:.80;
+  letter-spacing:-.075em;
+  font-weight:700;
+  color:#ffffff;
+  text-shadow:none;
+}
+.hero-description-v9{
+  grid-column:9/span 4;
+  grid-row:2;
+  align-self:center;
+  margin:0;
+  max-width:410px;
+  padding:0 0 0 8px;
+  transform:translateY(3.5vh);
+}
+.hero-description-v9 .micro-label{
+  margin:0 0 12px;
+  color:#ffffff!important;
+  opacity:.72;
+  text-shadow:none!important;
+}
+.hero-description-v9 p:last-child{
+  margin:0;
+  font-size:14px;
+  line-height:1.7;
+  color:#ffffff;
+  text-shadow:none!important;
+}
+.hero-meta-v9{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;padding:22px 0 24px;color:#fff}
+.hero-meta-v9>div{min-width:0}
+.hero-meta-v9 span{display:block;margin-bottom:7px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.hero-meta-v9 strong{display:block;font-size:10px;line-height:1.45;font-weight:400;letter-spacing:.02em;color:rgba(255,255,255,.92)}
+@media(max-width:980px){.soil-horizon{height:44%}.hero-title-v9{grid-column:1/span 7;transform:translateY(3vh)}.hero-description-v9{grid-column:8/span 5;grid-row:2;transform:translateY(3vh)}.hero-title-v9 h1{font-size:clamp(72px,11vw,125px)}}
+@media(max-width:767px){.hero-v9{min-height:auto;padding:0 20px}.hero-inner-v9{min-height:760px;padding-top:68px}.hero-top-v9{display:block}.hero-tags-v9{margin-top:20px;gap:10px;flex-wrap:wrap}.hero-tags-v9 span+span::before{margin-right:10px}.hero-copy-v9{display:grid;grid-template-columns:1fr;grid-template-rows:1fr auto auto;padding:42px 0 26px}.hero-title-v9{grid-column:1;grid-row:2;align-self:end;transform:none}.hero-description-v9{grid-column:1;grid-row:3;margin:18px 0 0;max-width:34ch;transform:none;padding:0}.hero-title-v9 h1{font-size:clamp(64px,20vw,105px)}.soil-horizon{height:49%}.hero-meta-v9{grid-template-columns:repeat(2,1fr);gap:18px 20px;padding:18px 0 20px}}
+</style>
+
+<style>
+/* ============================================================
+   UX-FIRST CASE STUDY OVERRIDES
+   ============================================================ */
+
+/* Accessible keyboard entry */
+.skip-link {
+  position: fixed;
+  z-index: 10000;
+  top: 10px;
+  left: 10px;
+  padding: 10px 14px;
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+  transform: translateY(-160%);
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Do not hide the system cursor in the UX-first version. */
+html, body, a, button { cursor: auto !important; }
+.cursor-dot { display: none !important; }
+
+/* Clear focus treatment. */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #7d8251;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Navigation: fewer choices, usable target sizes. */
+.nav-inner { min-height: 57px; }
+.nav-links { gap: 24px; }
+.nav-link {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+}
+.nav-link .base-copy,
+.nav-link .hover-copy {
+  line-height: 32px;
+}
+
+/* Working mobile menu */
+.mobile-panel {
+  display: none;
+}
+@media (max-width: 767px) {
+  .mobile-panel {
+    position: absolute;
+    top: 57px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 20px 16px;
+  }
+  .mobile-panel[data-open="true"] {
+    display: grid;
+    gap: 4px;
+  }
+  .mobile-panel a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+  }
+}
+
+/* ------------------------------------------------------------
+   HERO
+   ------------------------------------------------------------ */
+.hero-v9 {
+  min-height: 78vh;
+  margin-bottom: 48px;
+}
+
+/* Soil remains identity-bearing, but text contrast is deterministic. */
+.soil-horizon {
+  height: 48%;
+}
+.soil-horizon svg path[fill="#9b7450"] {
+  fill: #866343;
+}
+
+/* Reduce dead space above content. */
+.hero-inner-v9 {
+  min-height: 78vh;
+  padding-top: 72px;
+}
+
+/* Clear information hierarchy: context -> project -> details. */
+.hero-top-v9 {
+  align-items: center;
+}
+
+.hero-tags-v9 {
+  color: rgba(26,26,26,.58);
+}
+
+.hero-copy-v9 {
+  grid-template-rows: 1fr 1.1fr;
+  padding: 12px 0 18px;
+}
+
+.hero-title-v9 {
+  grid-column: 1 / span 7;
+  grid-row: 2;
+  transform: translateY(2.25vh);
+}
+
+.hero-title-v9 h1 {
+  color: #fff !important;
+  font-size: clamp(78px, 10.7vw, 162px);
+  line-height: .84;
+  letter-spacing: -.065em;
+}
+
+.project-number-v9 {
+  color: rgba(255,255,255,.78) !important;
+  opacity: 1;
+}
+
+.hero-description-v9 {
+  grid-column: 9 / span 4;
+  grid-row: 2;
+  align-self: center;
+  transform: translateY(2.25vh);
+  max-width: 34rem;
+  padding: 0;
+}
+
+/* Normal text now passes against the darker soil layer. */
+.hero-description-v9 .micro-label {
+  color: rgba(255,255,255,.78) !important;
+  opacity: 1;
+}
+
+.hero-description-v9 p:last-child {
+  color: #fff !important;
+  font-size: 15px;
+  line-height: 1.65;
+  max-width: 42ch;
+}
+
+/* Metadata is a scan-friendly single row, not cards. */
+.hero-meta-v9 {
+  gap: 0;
+  padding: 17px 0 20px;
+}
+.hero-meta-v9 > div {
+  padding-right: 24px;
+}
+.hero-meta-v9 > div + div {
+  padding-left: 24px;
+  border-left: 1px solid rgba(255,255,255,.18);
+}
+.hero-meta-v9 span {
+  color: rgba(255,255,255,.67);
+}
+.hero-meta-v9 strong {
+  color: #fff;
+}
+
+/* ------------------------------------------------------------
+   KEY TAKEAWAY + CASE STUDY NAVIGATION
+   ------------------------------------------------------------ */
+.color-band {
+  min-height: auto;
+}
+.color-band-inner {
+  padding-top: 48px;
+  padding-bottom: 48px;
+  align-items: center;
+}
+.color-band-title {
+  font-size: clamp(30px, 3.4vw, 52px);
+  line-height: 1;
+}
+.color-band-copy {
+  font-size: 14px;
+  line-height: 1.65;
+  max-width: 48ch;
+}
+
+/* Page orientation: persistent, useful, and keyboard accessible. */
+.case-nav {
+  position: sticky;
+  top: 57px;
+  z-index: 30;
+  background: rgba(255,255,255,.96);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.case-nav-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--page-x);
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.case-nav-inner::-webkit-scrollbar { display: none; }
+.case-nav a {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: rgba(26,26,26,.58);
+  border-bottom: 2px solid transparent;
+}
+.case-nav a:hover,
+.case-nav a[aria-current="true"] {
+  color: var(--foreground);
+  border-bottom-color: var(--foreground);
+}
+
+/* ------------------------------------------------------------
+   READING / CONTENT
+   ------------------------------------------------------------ */
+.section {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+.section-head {
+  margin-bottom: 56px;
+}
+
+.section-title {
+  max-width: 11ch;
+}
+
+.section-lead {
+  max-width: 48ch;
+  font-size: 14px;
+  line-height: 1.75;
+  color: rgba(26,26,26,.68);
+}
+
+.split-copy,
+.process-copy,
+.finding p {
+  max-width: 62ch;
+  line-height: 1.7;
+}
+
+/* Non-clickable content should not masquerade as controls. */
+.process-row {
+  cursor: default;
+  transition: none;
+}
+.process-row::before {
+  display: none;
+}
+.process-row:hover .process-step,
+.process-row:hover .process-name,
+.process-row:hover .process-copy {
+  color: inherit;
+}
+.process-row:hover .process-step {
+  color: rgba(26,26,26,.4);
+}
+.process-row:hover .process-copy {
+  color: rgba(26,26,26,.52);
+}
+
+.finding {
+  transition: none;
+}
+.finding:hover {
+  transform: none;
+  background: transparent;
+  border-color: var(--border);
+  color: inherit;
+}
+.finding:nth-child(2):hover {
+  background: transparent;
+  border-color: var(--border);
+}
+.finding:hover .finding-number {
+  color: rgba(26,26,26,.38);
+}
+.finding:hover p {
+  color: rgba(26,26,26,.55);
+}
+
+/* Stronger media hierarchy. */
+.media-frame {
+  min-height: 560px;
+}
+.media-caption {
+  line-height: 1.6;
+}
+
+/* Next project remains clearly interactive. */
+.next-project:focus-visible {
+  outline: 4px solid #111;
+  outline-offset: -8px;
+}
+
+/* Footer motion is secondary; keep it visually quiet. */
+.footer-art {
+  opacity: .72;
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE
+   ------------------------------------------------------------ */
+@media (max-width: 980px) {
+  .hero-title-v9 {
+    grid-column: 1 / span 7;
+    transform: translateY(2vh);
+  }
+  .hero-description-v9 {
+    grid-column: 8 / span 5;
+    transform: translateY(2vh);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-v9 {
+    min-height: auto;
+    margin-bottom: 32px;
+  }
+  .hero-inner-v9 {
+    min-height: 700px;
+    padding-top: 70px;
+  }
+  .hero-copy-v9 {
+    grid-template-rows: 1fr auto auto;
+    padding: 26px 0 22px;
+  }
+  .hero-title-v9 {
+    grid-column: 1;
+    grid-row: 2;
+    transform: none;
+  }
+  .hero-description-v9 {
+    grid-column: 1;
+    grid-row: 3;
+    transform: none;
+    margin-top: 20px;
+    max-width: 38ch;
+  }
+  .hero-title-v9 h1 {
+    font-size: clamp(62px, 19vw, 96px);
+  }
+  .soil-horizon {
+    height: 54%;
+  }
+  .hero-meta-v9 {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+    padding: 16px 0 20px;
+  }
+  .hero-meta-v9 > div,
+  .hero-meta-v9 > div + div {
+    padding: 0;
+    border-left: 0;
+  }
+
+  .case-nav-inner {
+    padding: 0 8px;
+  }
+
+  .section {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+
+  .media-frame {
+    min-height: 390px;
+  }
+}
+
+/* Respect reduced motion; also stop the decorative footer loop. */
+@media (prefers-reduced-motion: reduce) {
+  .footer-art canvas {
+    display: none;
+  }
+}
+</style>
+
+
+<style>
+/* ============================================================
+   DIRTLENS STRATA COLOR SYSTEM
+   ============================================================ */
+:root {
+  --strata-grass: #7d8251;
+  --strata-grass-light: #c6c9a3;
+  --strata-topsoil: #4d3b2e;
+  --strata-a: #866343;
+  --strata-b: #68472f;
+}
+
+/* Primary case-study statement: Topsoil -> A horizon */
+.color-band {
+  background:
+    linear-gradient(
+      90deg,
+      var(--strata-topsoil) 0 62%,
+      var(--strata-a) 62% 100%
+    ) !important;
+  color: #fff;
+}
+
+.color-band-title,
+.color-band-copy {
+  color: #fff !important;
+}
+
+/* Sticky case-study tabs use the grass tone instead of blue. */
+.case-nav a:hover,
+.case-nav a[aria-current="true"] {
+  color: var(--foreground);
+  border-bottom-color: var(--strata-grass);
+}
+
+/* Accessible focus uses the same grass accent. */
+a:focus-visible,
+button:focus-visible {
+  outline-color: var(--strata-grass) !important;
+}
+
+/* Section markers and small accent rules inherit the soil palette. */
+.decision-mark {
+  background: var(--strata-grass) !important;
+}
+
+.metric-value {
+  color: var(--strata-topsoil) !important;
+}
+
+/* Process and finding accents stay within the A/B horizon family. */
+.process-row:nth-child(odd) {
+  --fill: var(--strata-topsoil);
+}
+.process-row:nth-child(even) {
+  --fill: var(--strata-a);
+}
+
+/* Keep interactive next-project color in the soil family. */
+.next-project {
+  background: var(--strata-b) !important;
+  color: #fff !important;
+}
+
+/* Footer signal line follows the grass accent. */
+.footer-shell {
+  --project-primary: var(--strata-grass);
+}
+</style>
+
+
+<style>
+/* ============================================================
+   COMPACT DIRTLENS CASE STUDY
+   ============================================================ */
+
+.case-nav { display: none !important; }
+
+.section {
+  padding-top: 64px !important;
+  padding-bottom: 64px !important;
+}
+
+.section-head {
+  margin-bottom: 34px !important;
+}
+
+.section-title {
+  font-size: clamp(30px, 3.5vw, 54px) !important;
+  max-width: 12ch !important;
+}
+
+.section-lead {
+  max-width: 52ch !important;
+}
+
+.color-band {
+  margin-bottom: 0 !important;
+}
+
+.color-band-inner {
+  padding-top: 34px !important;
+  padding-bottom: 34px !important;
+}
+
+.color-band-title {
+  font-size: clamp(28px, 3vw, 46px) !important;
+}
+
+.compact-overview {
+  padding: 62px var(--page-x) 58px;
+  border-bottom: 1px solid var(--border);
+}
+
+.compact-overview-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.compact-overview-head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0,1fr));
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 38px;
+}
+
+.compact-overview-head .section-index {
+  grid-column: span 2;
+}
+
+.compact-overview-head h2 {
+  grid-column: span 5;
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: clamp(32px, 4vw, 58px);
+  line-height: .96;
+  letter-spacing: -.045em;
+  font-weight: 700;
+}
+
+.compact-overview-head p {
+  grid-column: 9 / span 4;
+  margin: 0;
+  max-width: 48ch;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(26,26,26,.64);
+}
+
+.compact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.compact-card {
+  min-height: 240px;
+  padding: 22px 0 0;
+}
+
+.compact-card + .compact-card {
+  padding-left: 24px;
+  border-left: 1px solid var(--border);
+}
+
+.compact-card .micro-label {
+  margin-bottom: 18px;
+}
+
+.compact-card h3 {
+  margin: 0 0 16px;
+  font-family: var(--font-brand);
+  font-size: 27px;
+  line-height: 1;
+  letter-spacing: -.03em;
+}
+
+.compact-card p {
+  margin: 0;
+  max-width: 40ch;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(26,26,26,.58);
+}
+
+.compact-workflow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 20px;
+}
+
+.compact-workflow span {
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  background: #f4f3ef;
+  border-radius: 2px;
+}
+
+.compact-prototype {
+  padding: 64px var(--page-x);
+}
+
+.compact-prototype-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.compact-prototype-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0,1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.compact-prototype-copy {
+  grid-column: span 4;
+  position: sticky;
+  top: 96px;
+}
+
+.compact-prototype-copy h2 {
+  margin: 14px 0 20px;
+  font-family: var(--font-brand);
+  font-size: clamp(34px, 4vw, 60px);
+  line-height: .96;
+  letter-spacing: -.045em;
+}
+
+.compact-prototype-copy > p {
+  margin: 0 0 28px;
+  max-width: 40ch;
+  font-size: 14px;
+  line-height: 1.72;
+  color: rgba(26,26,26,.64);
+}
+
+.compact-status {
+  border-top: 1px solid var(--border);
+}
+
+.compact-status-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 18px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.compact-status-row span:first-child {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: rgba(26,26,26,.42);
+}
+
+.compact-status-row span:last-child {
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.compact-visuals {
+  grid-column: 6 / span 7;
+}
+
+.compact-visuals .media-frame {
+  min-height: 420px !important;
+}
+
+.compact-visuals .media-frame + .media-caption {
+  margin-bottom: 30px;
+}
+
+.compact-visuals .media-frame.secondary {
+  min-height: 310px !important;
+}
+
+.compact-next {
+  margin-top: 0 !important;
+}
+
+.decision,
+#overview,
+#system,
+#build,
+#outcome {
+  display: none !important;
+}
+
+.next-project-inner {
+  min-height: 250px !important;
+}
+
+.footer-shell {
+  height: calc(14vh + 50px) !important;
+}
+
+@media (max-width: 900px) {
+  .compact-overview-head {
+    display: block;
+  }
+
+  .compact-overview-head h2 {
+    margin-top: 12px;
+  }
+
+  .compact-overview-head p {
+    margin-top: 20px;
+  }
+
+  .compact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .compact-card {
+    min-height: 0;
+    padding: 22px 0 26px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compact-card + .compact-card {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .compact-prototype-grid {
+    display: block;
+  }
+
+  .compact-prototype-copy {
+    position: static;
+    margin-bottom: 34px;
+  }
+}
+
+@media (max-width: 767px) {
+  .compact-overview,
+  .compact-prototype {
+    padding: 50px 20px;
+  }
+
+  .compact-visuals .media-frame {
+    min-height: 330px !important;
+  }
+
+  .compact-visuals .media-frame.secondary {
+    min-height: 250px !important;
+  }
+
+  .next-project-inner {
+    min-height: 220px !important;
+  }
+}
+</style>
+
+
+<style>
+/* ============================================================
+   DIRTLENS STRATA TYPOGRAPHY
+   ============================================================ */
+:root {
+  --text-primary: #4d3b2e;
+  --text-body: #68472f;
+  --text-secondary: #866343;
+  --text-accent: #7d8251;
+  --text-accent-light: #c6c9a3;
+}
+
+/* Main text hierarchy */
+body {
+  color: var(--text-primary);
+}
+
+.section-title,
+.compact-overview-head h2,
+.compact-card h3,
+.compact-prototype-copy h2,
+.split-title,
+.process-name,
+.finding h3 {
+  color: var(--text-primary) !important;
+}
+
+/* Body copy */
+.section-lead,
+.compact-overview-head p,
+.compact-card p,
+.compact-prototype-copy > p,
+.split-copy,
+.process-copy,
+.finding p,
+.color-band-copy {
+  color: var(--text-body) !important;
+}
+
+/* Labels / section indices / metadata */
+.section-index,
+.micro-label,
+.meta-label,
+.compact-status-row span:first-child,
+.media-caption,
+.eyebrow {
+  color: var(--text-accent) !important;
+}
+
+/* Supporting values and small secondary text */
+.compact-status-row span:last-child,
+.snapshot-item strong,
+.hero-meta-item strong,
+.metric-label {
+  color: var(--text-secondary) !important;
+}
+
+/* Borders/rules inherit the same material palette more subtly */
+.compact-grid,
+.compact-card + .compact-card,
+.compact-status,
+.compact-status-row,
+.section,
+.snapshot-grid,
+.snapshot-item,
+.media-frame,
+.finding,
+.split-panel {
+  border-color: color-mix(in srgb, var(--text-secondary) 26%, white) !important;
+}
+
+/* Workflow chips echo the grass/topsoil system */
+.compact-workflow span {
+  color: var(--text-primary) !important;
+  background: color-mix(in srgb, var(--text-accent-light) 42%, white) !important;
+}
+
+/* Keep the hero white where contrast is required */
+.hero-title-v9 h1,
+.project-number-v9,
+.hero-description-v9 .micro-label,
+.hero-description-v9 p:last-child,
+.hero-meta-v9 span,
+.hero-meta-v9 strong {
+  color: #fff !important;
+}
+
+/* Top navigation uses soil tones instead of neutral black */
+.brand,
+.nav-link {
+  color: var(--text-primary) !important;
+}
+
+.nav-link .hover-copy {
+  color: var(--text-accent) !important;
+}
+
+/* Next-project text remains white on dark B-horizon background */
+.next-project,
+.next-project .next-label,
+.next-project .next-title,
+.next-project .next-arrow {
+  color: #fff !important;
+}
+
+/* Footer text shifts from gray/black into the strata family */
+.footer-links a {
+  color: var(--text-secondary) !important;
+}
+
+.footer-links a:hover {
+  color: var(--text-primary) !important;
+}
+
+.copyright {
+  color: var(--text-accent) !important;
+}
+</style>
+
+
+<style>
+/* ============================================================
+   CLEAN COMPACT TRANSITION
+   ============================================================ */
+
+/* Remove the old large color statement block completely. */
+.color-band {
+  display: none !important;
+}
+
+/* Give the hero-to-content transition breathing room without another box. */
+.hero-v9 {
+  margin-bottom: 0 !important;
+}
+
+.compact-overview {
+  padding-top: 54px !important;
+}
+
+.compact-thesis {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 760px);
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 46px;
+}
+
+.compact-thesis-rule {
+  width: 36px;
+  height: 4px;
+  margin-top: 8px;
+  background:
+    linear-gradient(
+      90deg,
+      var(--strata-grass) 0 34%,
+      var(--strata-topsoil) 34% 67%,
+      var(--strata-a) 67% 100%
+    );
+}
+
+.compact-thesis-title {
+  margin: 0 0 8px;
+  font-family: var(--font-brand);
+  font-size: clamp(22px, 2.2vw, 34px);
+  line-height: 1.08;
+  letter-spacing: -.025em;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.compact-thesis-copy {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-body);
+}
+
+@media (max-width: 767px) {
+  .compact-overview {
+    padding-top: 42px !important;
+  }
+
+  .compact-thesis {
+    grid-template-columns: 24px 1fr;
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+
+  .compact-thesis-rule {
+    width: 24px;
+  }
+}
+</style>
+
+
+<style>
+.d3-frame{position:relative;aspect-ratio:16/10;min-height:430px;background:#f4f3ef;border-top:1px solid #d8d0c7;border-bottom:1px solid #d8d0c7}.d3-frame canvas{width:100%;height:100%;min-height:430px;display:block;touch-action:none;cursor:grab}.d3-frame .status{position:absolute;left:14px;bottom:14px;padding:7px 9px;background:rgba(77,59,46,.92);color:#fff;font-size:10px;letter-spacing:.08em;text-transform:uppercase;pointer-events:none}@media(max-width:767px){.d3-frame{aspect-ratio:4/5;min-height:330px}.d3-frame canvas{min-height:330px}}
+</style>
+
+<style id="typography-cleanup-v11">
+/* ============================================================
+   TYPOGRAPHY CLEANUP
+   One visual hierarchy for the compact DirtLENS case study.
+   ============================================================ */
+
+/* Use sans-serif for reading; keep monospace only for labels/metadata. */
+body {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.eyebrow,
+.micro-label,
+.section-index,
+.project-number-v9,
+.hero-tags-v9,
+.hero-meta-v9,
+.compact-status-row span:first-child,
+.media-caption,
+.nav-link {
+  font-family: var(--font-ui) !important;
+}
+
+/* ---------- Navigation ---------- */
+.brand {
+  font-size: 13px !important;
+}
+
+.nav-link {
+  font-size: 11px !important;
+  letter-spacing: .1em !important;
+}
+
+/* ---------- Hero ---------- */
+.hero-title-v9 h1 {
+  font-size: clamp(68px, 7.5vw, 112px) !important;
+  line-height: .88 !important;
+  letter-spacing: -.055em !important;
+}
+
+.project-number-v9 {
+  font-size: 10px !important;
+  letter-spacing: .13em !important;
+}
+
+.hero-description-v9 {
+  max-width: 34ch !important;
+}
+
+.hero-description-v9 .micro-label {
+  margin-bottom: 10px !important;
+  font-size: 10px !important;
+}
+
+.hero-description-v9 p:last-child {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.55 !important;
+  letter-spacing: 0 !important;
+}
+
+.hero-meta-v9 span {
+  margin-bottom: 6px !important;
+  font-size: 9px !important;
+  letter-spacing: .12em !important;
+}
+
+.hero-meta-v9 strong {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0 !important;
+}
+
+/* ---------- Overview intro ---------- */
+.compact-overview {
+  padding-top: 64px !important;
+  padding-bottom: 64px !important;
+}
+
+.compact-thesis {
+  grid-template-columns: 28px minmax(0, 720px) !important;
+  gap: 16px !important;
+  margin-bottom: 52px !important;
+}
+
+.compact-thesis-rule {
+  width: 28px !important;
+  height: 3px !important;
+  margin-top: 11px !important;
+}
+
+.compact-thesis-title {
+  margin-bottom: 10px !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 24px !important;
+  line-height: 1.15 !important;
+  letter-spacing: -.02em !important;
+  font-weight: 700 !important;
+}
+
+.compact-thesis-copy {
+  max-width: 62ch !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.62 !important;
+}
+
+/* ---------- Overview section ---------- */
+.compact-overview-head {
+  grid-template-columns: 150px minmax(0, 1.15fr) minmax(300px, .85fr) !important;
+  gap: 32px !important;
+  align-items: start !important;
+  margin-bottom: 46px !important;
+}
+
+.compact-overview-head .section-index {
+  grid-column: 1 !important;
+  padding-top: 6px !important;
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+  letter-spacing: .12em !important;
+}
+
+.compact-overview-head h2 {
+  grid-column: 2 !important;
+  max-width: 16ch !important;
+  font-size: clamp(34px, 3vw, 44px) !important;
+  line-height: 1.03 !important;
+  letter-spacing: -.035em !important;
+}
+
+.compact-overview-head > p {
+  grid-column: 3 !important;
+  max-width: 46ch !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.62 !important;
+}
+
+/* ---------- Three overview cards ---------- */
+.compact-grid {
+  gap: 0 !important;
+}
+
+.compact-card {
+  min-height: 220px !important;
+  padding: 28px 30px 8px 0 !important;
+}
+
+.compact-card + .compact-card {
+  padding-left: 30px !important;
+}
+
+.compact-card .micro-label {
+  margin-bottom: 14px !important;
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+  letter-spacing: .12em !important;
+}
+
+.compact-card h3 {
+  margin-bottom: 12px !important;
+  font-size: 21px !important;
+  line-height: 1.15 !important;
+  letter-spacing: -.015em !important;
+}
+
+.compact-card p {
+  max-width: 38ch !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 15px !important;
+  line-height: 1.62 !important;
+}
+
+.compact-workflow {
+  margin-top: 18px !important;
+}
+
+.compact-workflow span {
+  font-family: var(--font-ui) !important;
+  font-size: 9px !important;
+  letter-spacing: .08em !important;
+  padding: 6px 8px !important;
+}
+
+/* ---------- Prototype ---------- */
+.compact-prototype {
+  padding-top: 72px !important;
+  padding-bottom: 72px !important;
+}
+
+.compact-prototype-grid {
+  grid-template-columns: minmax(300px, 4fr) minmax(0, 7fr) !important;
+  gap: 72px !important;
+}
+
+.compact-prototype-copy {
+  grid-column: 1 !important;
+}
+
+.compact-prototype-copy .section-index {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+  letter-spacing: .12em !important;
+}
+
+.compact-prototype-copy h2 {
+  margin: 14px 0 18px !important;
+  max-width: 12ch !important;
+  font-size: clamp(34px, 3vw, 44px) !important;
+  line-height: 1.03 !important;
+  letter-spacing: -.035em !important;
+}
+
+.compact-prototype-copy > p {
+  max-width: 42ch !important;
+  margin-bottom: 30px !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.62 !important;
+}
+
+.compact-visuals {
+  grid-column: 2 !important;
+}
+
+/* Status table now reads like information, not tiny annotations. */
+.compact-status-row {
+  grid-template-columns: 92px 1fr !important;
+  gap: 20px !important;
+  padding: 14px 0 !important;
+}
+
+.compact-status-row span:first-child {
+  padding-top: 2px !important;
+  font-size: 9px !important;
+  line-height: 1.4 !important;
+  letter-spacing: .1em !important;
+}
+
+.compact-status-row span:last-child {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+/* Captions should not compete with body copy. */
+.media-caption {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+  letter-spacing: .08em !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1050px) {
+  .compact-overview-head {
+    grid-template-columns: 110px minmax(0, 1fr) !important;
+    gap: 24px 28px !important;
+  }
+
+  .compact-overview-head .section-index {
+    grid-column: 1 !important;
+  }
+
+  .compact-overview-head h2 {
+    grid-column: 2 !important;
+  }
+
+  .compact-overview-head > p {
+    grid-column: 2 !important;
+    margin-top: -4px !important;
+  }
+
+  .compact-prototype-grid {
+    grid-template-columns: minmax(270px, 4fr) minmax(0, 6fr) !important;
+    gap: 44px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    font-size: 16px !important;
+  }
+
+  .hero-title-v9 h1 {
+    font-size: clamp(58px, 18vw, 84px) !important;
+  }
+
+  .hero-description-v9 p:last-child {
+    font-size: 15px !important;
+  }
+
+  .compact-thesis {
+    grid-template-columns: 20px 1fr !important;
+    gap: 12px !important;
+    margin-bottom: 40px !important;
+  }
+
+  .compact-thesis-title {
+    font-size: 22px !important;
+  }
+
+  .compact-thesis-copy {
+    font-size: 15px !important;
+  }
+
+  .compact-overview-head {
+    display: block !important;
+  }
+
+  .compact-overview-head .section-index {
+    margin-bottom: 14px !important;
+  }
+
+  .compact-overview-head h2 {
+    margin-bottom: 18px !important;
+    font-size: 34px !important;
+  }
+
+  .compact-overview-head > p {
+    font-size: 15px !important;
+  }
+
+  .compact-card {
+    padding: 24px 0 !important;
+  }
+
+  .compact-card + .compact-card {
+    padding-left: 0 !important;
+  }
+
+  .compact-card p {
+    font-size: 15px !important;
+  }
+
+  .compact-prototype-grid {
+    display: block !important;
+  }
+
+  .compact-prototype-copy {
+    position: static !important;
+    margin-bottom: 38px !important;
+  }
+
+  .compact-prototype-copy h2 {
+    font-size: 34px !important;
+  }
+
+  .compact-prototype-copy > p {
+    font-size: 15px !important;
+  }
+}
+</style>
+
+
+<style id="exact-trim-v14">
+.compact-overview{
+  padding-top: 34px !important;
+}
+</style>
+
+
+<style id="compact-hero-v23">
+@media (min-width: 768px) {
+  /*
+   * Stop using vh for the hero. Browser zoom was making the white
+   * upper half expand. Use a compact fixed desktop composition.
+   */
+  .project-hero.hero-v9 {
+    min-height: 300px !important;
+    height: 300px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .project-hero.hero-v9 .hero-inner-v9 {
+    min-height: 300px !important;
+    height: 300px !important;
+    padding-top: 18px !important;
+  }
+
+  /*
+   * Keep the soil profile as a bar rather than stretching it to fill
+   * the shortened hero.
+   */
+  .project-hero.hero-v9 .soil-horizon {
+    height: 250px !important;
+    bottom: 0 !important;
+    transform: none !important;
+  }
+
+  .project-hero.hero-v9 .hero-copy-v9 {
+    padding: 4px 0 6px !important;
+  }
+
+  .project-hero.hero-v9 .hero-title-v9,
+  .project-hero.hero-v9 .hero-description-v9 {
+    transform: none !important;
+  }
+
+  .project-hero.hero-v9 .hero-meta-v9 {
+    padding: 8px 0 10px !important;
+  }
+
+  /*
+   * Keep the divider above Problem / Response / Workflow.
+   * Only a small space separates it from the hero.
+   */
+  .compact-overview {
+    padding-top: 10px !important;
+    margin-top: 0 !important;
+  }
+
+  .compact-grid {
+    margin-top: 0 !important;
+    border-top: 1px solid var(--border) !important;
+  }
+}
+</style>
+
+
+<style id="centered-boxes-v24">
+@media (min-width: 768px) {
+  /*
+   * Three-box section:
+   * - equal-height columns
+   * - content centered vertically
+   * - top and bottom horizontal borders retained
+   * - vertical rules run the full height between them
+   */
+  .compact-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    border-top: 1px solid var(--border) !important;
+    border-bottom: 1px solid var(--border) !important;
+    gap: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .compact-card {
+    min-height: 230px !important;
+    height: 100% !important;
+    padding: 34px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    border-bottom: 0 !important;
+  }
+
+  .compact-card + .compact-card {
+    border-left: 1px solid var(--border) !important;
+  }
+
+  .compact-card .micro-label {
+    margin: 0 0 14px !important;
+  }
+
+  .compact-card h3 {
+    margin: 0 0 12px !important;
+  }
+
+  .compact-card p {
+    margin: 0 !important;
+  }
+
+  .compact-workflow {
+    margin-top: 18px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .compact-grid {
+    border-top: 1px solid var(--border) !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  .compact-card {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-height: 190px !important;
+  }
+
+  .compact-card + .compact-card {
+    border-top: 1px solid var(--border) !important;
+  }
+}
+</style>
+
+
+<style id="symmetrical-spacing-v26">
+@media (min-width: 768px) {
+  /*
+   * Exact symmetric vertical rhythm around the three-box block:
+   * 32px above its top border and 32px below its bottom border.
+   */
+  .compact-overview {
+    padding-top: 32px !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .compact-grid {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-top: 1px solid var(--border) !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  .compact-prototype {
+    padding-top: 32px !important;
+  }
+}
+</style>
+
+
+<style id="single-prototype-media-v27">
+.compact-visuals > .media-frame:last-child,
+.compact-visuals > .media-caption:last-child {
+  margin-bottom: 0 !important;
+}
+</style>
+
+
+<style id="prototype-layout-v36">
+/*
+ * Prevent the prototype copy column from becoming too narrow at
+ * wide viewports / browser zoom levels.
+ */
+@media (min-width: 901px) {
+  .compact-prototype-grid {
+    display: grid !important;
+    grid-template-columns: minmax(340px, 0.78fr) minmax(0, 1.42fr) !important;
+    gap: clamp(44px, 4.5vw, 78px) !important;
+    align-items: start !important;
+  }
+
+  .compact-prototype-copy {
+    grid-column: auto !important;
+    min-width: 0 !important;
+    max-width: 430px !important;
+  }
+
+  .compact-visuals {
+    grid-column: auto !important;
+    min-width: 0 !important;
+  }
+
+  .compact-prototype-copy h2 {
+    max-width: none !important;
+    margin: 14px 0 18px !important;
+    font-size: clamp(34px, 3vw, 46px) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -.035em !important;
+    text-wrap: balance;
+  }
+
+  .compact-prototype-copy > p {
+    max-width: 42ch !important;
+    margin-bottom: 26px !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+  }
+
+  .compact-status-row {
+    grid-template-columns: 96px minmax(0, 1fr) !important;
+    gap: 18px !important;
+  }
+
+  .compact-status-row span:last-child {
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  .d3-frame {
+    width: 100% !important;
+  }
+}
+
+/* Keep the existing stacked mobile/tablet behavior. */
+@media (max-width: 900px) {
+  .compact-prototype-copy h2 {
+    font-size: clamp(34px, 8vw, 46px) !important;
+    line-height: 1.02 !important;
+  }
+}
+</style>
+
+
+<style id="compact-matched-model-v39">
+@media (min-width: 901px) {
+  /*
+   * Keep BOTH sides compact.
+   * Do not stretch either column to fill the page.
+   */
+  .compact-prototype-grid {
+    display: grid !important;
+    grid-template-columns: minmax(340px, 430px) minmax(340px, 430px) !important;
+    gap: 64px !important;
+    justify-content: center !important;
+    align-items: start !important;
+  }
+
+  .compact-prototype-copy {
+    width: 100% !important;
+    max-width: 430px !important;
+    min-width: 0 !important;
+  }
+
+  .compact-visuals {
+    width: 100% !important;
+    max-width: 430px !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .compact-visuals .d3-frame {
+    width: 100% !important;
+    height: var(--matched-model-height, 380px) !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+    flex: 0 0 auto !important;
+  }
+
+  .compact-visuals .d3-frame canvas {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .compact-visuals .media-caption {
+    margin-top: 10px !important;
+    flex: 0 0 auto !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .compact-prototype-grid {
+    display: block !important;
+  }
+
+  .compact-prototype-copy,
+  .compact-visuals {
+    max-width: none !important;
+  }
+
+  .compact-visuals .d3-frame {
+    height: auto !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+}
+</style>
+
+
+<style id="landscape-viewer-v40">
+@media (min-width: 901px) {
+  /*
+   * Match the user's annotated geometry:
+   * compact text column on the left;
+   * wider, shorter landscape viewer on the right.
+   */
+  .compact-prototype-grid {
+    display: grid !important;
+    grid-template-columns: 430px 570px !important;
+    gap: 64px !important;
+    justify-content: center !important;
+    align-items: start !important;
+  }
+
+  .compact-prototype-copy {
+    width: 430px !important;
+    max-width: 430px !important;
+  }
+
+  .compact-visuals {
+    width: 570px !important;
+    max-width: 570px !important;
+    padding-top: 70px !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .compact-visuals .d3-frame {
+    width: 570px !important;
+    height: 340px !important;
+    min-height: 340px !important;
+    aspect-ratio: auto !important;
+    flex: 0 0 340px !important;
+  }
+
+  .compact-visuals .d3-frame canvas {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .compact-visuals .media-caption {
+    width: 100% !important;
+    margin-top: 10px !important;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 901px) {
+  .compact-prototype-grid {
+    grid-template-columns: 400px minmax(440px, 1fr) !important;
+    gap: 42px !important;
+    padding-inline: 24px;
+  }
+
+  .compact-prototype-copy {
+    width: 400px !important;
+    max-width: 400px !important;
+  }
+
+  .compact-visuals {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .compact-visuals .d3-frame {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .compact-prototype-grid {
+    display: block !important;
+  }
+
+  .compact-prototype-copy,
+  .compact-visuals {
+    width: 100% !important;
+    max-width: none !important;
+    padding-top: 0 !important;
+  }
+
+  .compact-visuals .d3-frame {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 16 / 10 !important;
+    flex: none !important;
+  }
+}
+</style>
+
+
+<style id="aligned-card-headers-v41">
+@media (min-width: 768px) {
+  .compact-card {
+    justify-content: flex-start !important;
+    padding-top: 38px !important;
+  }
+
+  .compact-card .micro-label {
+    margin-top: 0 !important;
+    margin-bottom: 14px !important;
+  }
+}
+</style>
+
+
+<style id="hero-meta-shift-v42">
+@media (min-width: 768px) {
+  /*
+   * Shift ONLY the ROLE / PLATFORM / STACK / STATUS row
+   * in the direction marked in the supplied screenshot.
+   */
+  .project-hero.hero-v9 .hero-meta-v9 {
+    width: calc(100% - 160px) !important;
+    margin-left: 80px !important;
+    margin-right: 80px !important;
+    position: relative !important;
+    top: 14px !important;
+  }
+}
+</style>
+
+
+<style id="hero-meta-position-v43">
+@media (min-width: 768px) {
+  /*
+   * Align the metadata row with the guide shown in the screenshot:
+   * hero-inner already begins at the page content edge; add only 25px.
+   */
+  .project-hero.hero-v9 .hero-meta-v9 {
+    width: calc(100% - 50px) !important;
+    margin-left: 25px !important;
+    margin-right: 25px !important;
+    position: relative !important;
+    top: -8px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .project-hero.hero-v9 .hero-meta-v9 {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    top: 0 !important;
+  }
+}
+</style>
+
+
+<style id="dirtlens-title-alignment-v44">
+@media (min-width: 981px) {
+  .hero-title-v9 h1 {
+    transform: translateX(-15px) !important;
+  }
+}
+</style>
+
+
+<style id="galeriste-case-study-v1">
+:root {
+  --project-primary:#66745f;
+  --project-secondary:#d8cc8c;
+  --project-on-primary:#ffffff;
+  --project-on-secondary:#010101;
+
+  --galeriste-black:#010101;
+  --galeriste-paper:#eaeaea;
+  --galeriste-green:#98a88a;
+  --galeriste-green-dark:#66745f;
+  --galeriste-yellow:#d8cc8c;
+  --galeriste-yellow-light:#eee9cd;
+
+  --strata-topsoil:#24251f;
+  --strata-a:#66745f;
+  --strata-b:#8c8150;
+  --strata-grass:#98a88a;
+  --strata-grass-light:#eee9cd;
+
+  --text-primary:#24251f;
+  --text-body:#5d5e53;
+  --text-secondary:#66745f;
+}
+
+.galeriste-page {
+  background:#f5f4ef;
+  color:#24251f;
+}
+
+/* ---------- Gallery-wall hero ---------- */
+.galeriste-hero {
+  background:#f5f4ef !important;
+}
+
+.galeriste-hero .gallery-horizon {
+  background:var(--galeriste-paper);
+  overflow:visible;
+}
+
+.gallery-horizon::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(1,1,1,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(1,1,1,.018) 1px, transparent 1px);
+  background-size:34px 34px;
+  z-index:0;
+}
+
+.gallery-floor-band {
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:66px;
+  background:var(--galeriste-green);
+  border-top:3px solid var(--galeriste-green-dark);
+  z-index:1;
+}
+
+.gallery-wall-rail {
+  position:absolute;
+  left:0;
+  right:0;
+  top:36%;
+  height:2px;
+  background:rgba(1,1,1,.10);
+  z-index:1;
+}
+
+.hero-gallery-piece {
+  position:absolute;
+  z-index:1;
+}
+
+.hero-piece-a { left:4%; top:18px; width:108px; }
+.hero-piece-b { left:50%; top:7px; width:124px; }
+.hero-piece-c { right:7%; top:20px; width:102px; }
+
+.hero-frame-matte {
+  padding:8px;
+  background:var(--galeriste-black);
+  box-shadow:0 8px 20px rgba(1,1,1,.12);
+}
+
+.hero-art {
+  position:relative;
+  aspect-ratio:4 / 3;
+  overflow:hidden;
+  background:#f5f2e7;
+}
+
+.hero-art-a { background:#d8cc8c; }
+.hero-art-a .shape-a1 {
+  position:absolute; width:62%; height:58%; left:8%; top:18%;
+  background:#98a88a; transform:rotate(-8deg);
+}
+.hero-art-a .shape-a2 {
+  position:absolute; width:26%; height:82%; right:9%; top:7%;
+  background:#010101;
+}
+
+.hero-art-b { background:#98a88a; }
+.hero-art-b .shape-b1 {
+  position:absolute; width:58%; aspect-ratio:1; border-radius:50%;
+  left:12%; top:17%; background:#010101;
+}
+.hero-art-b .shape-b2 {
+  position:absolute; width:46%; height:28%; right:-5%; bottom:12%;
+  background:#d8cc8c; transform:rotate(14deg);
+}
+
+.hero-art-c { background:#f1efe7; }
+.hero-art-c .shape-c1 {
+  position:absolute; width:74%; height:24%; left:13%; top:18%;
+  background:#d8cc8c;
+}
+.hero-art-c .shape-c2 {
+  position:absolute; width:34%; height:58%; left:33%; bottom:8%;
+  background:#98a88a;
+}
+
+.hero-art-label {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  margin:7px auto 0;
+  padding:4px 6px;
+  width:94%;
+  background:#f9f8f3;
+  border:1px solid rgba(1,1,1,.12);
+  font-family:var(--font-ui);
+  font-size:7px;
+  line-height:1;
+  letter-spacing:.08em;
+  color:#3a3a34;
+}
+
+.hero-art-label strong { font-weight:600; }
+
+.hero-qr-mark {
+  position:absolute;
+  left:31%;
+  top:36px;
+  width:46px;
+  height:46px;
+  padding:5px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:3px;
+  background:#f8f7f2;
+  border:3px solid #010101;
+  z-index:1;
+}
+
+.hero-qr-mark span:nth-child(1),
+.hero-qr-mark span:nth-child(3),
+.hero-qr-mark span:nth-child(5),
+.hero-qr-mark span:nth-child(7),
+.hero-qr-mark span:nth-child(9) { background:#010101; }
+
+.hero-qr-mark span:nth-child(2),
+.hero-qr-mark span:nth-child(4),
+.hero-qr-mark span:nth-child(6),
+.hero-qr-mark span:nth-child(8) { background:#98a88a; }
+
+.galeriste-hero .hero-title-v9 h1 {
+  color:#010101 !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.65);
+}
+
+.galeriste-hero .project-number-v9,
+.galeriste-hero .hero-description-v9 .micro-label,
+.galeriste-hero .hero-description-v9 p:last-child {
+  color:#24251f !important;
+}
+
+.galeriste-hero .project-number-v9 {
+  opacity:.75;
+}
+
+.galeriste-hero .hero-description-v9 p:last-child {
+  text-shadow:0 1px 0 rgba(255,255,255,.85);
+}
+
+.galeriste-hero .hero-meta-v9 > div {
+  color:#24251f;
+}
+
+.galeriste-hero .hero-meta-v9 > div + div {
+  border-left-color:rgba(36,37,31,.24) !important;
+}
+
+.galeriste-hero .hero-meta-v9 span {
+  color:#56604f !important;
+}
+
+.galeriste-hero .hero-meta-v9 strong {
+  color:#24251f !important;
+}
+
+/* ---------- Three-card color system ---------- */
+.galeriste-page .compact-card .micro-label,
+.galeriste-page .section-index {
+  color:var(--galeriste-green-dark) !important;
+}
+
+.galeriste-page .compact-card h3,
+.galeriste-page .compact-prototype-copy h2 {
+  color:#24251f !important;
+}
+
+.galeriste-page .compact-card p,
+.galeriste-page .compact-prototype-copy > p,
+.galeriste-page .compact-status-row span:last-child {
+  color:#5d5e53 !important;
+}
+
+.galeriste-page .compact-workflow span {
+  background:var(--galeriste-yellow-light) !important;
+  color:#625d3f !important;
+}
+
+/* ---------- Mobile interface visual ---------- */
+.galeriste-interface-frame {
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(152,168,138,.16), transparent 38%),
+    #efeee8 !important;
+  border:1px solid rgba(36,37,31,.16) !important;
+}
+
+.auction-demo {
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  padding:24px 30px;
+}
+
+.demo-phone {
+  position:relative;
+  width:142px;
+  height:286px;
+  padding:7px;
+  background:#010101;
+  border-radius:22px;
+  box-shadow:0 18px 38px rgba(1,1,1,.16);
+}
+
+.phone-lot { transform:rotate(-3deg) translateY(4px); }
+.phone-bid { transform:rotate(3deg) translateY(-4px); }
+
+.phone-speaker {
+  position:absolute;
+  width:36px;
+  height:4px;
+  top:9px;
+  left:50%;
+  transform:translateX(-50%);
+  border-radius:4px;
+  background:#393939;
+  z-index:2;
+}
+
+.phone-screen {
+  height:100%;
+  overflow:hidden;
+  border-radius:16px;
+  background:#eaeaea;
+  padding:18px 10px 11px;
+  color:#010101;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.app-topbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:9px;
+  font-family:var(--font-ui);
+  font-size:6px;
+  letter-spacing:.08em;
+}
+
+.app-topbar b {
+  padding:3px 4px;
+  background:#d8cc8c;
+  font-weight:500;
+}
+
+.app-art {
+  position:relative;
+  height:95px;
+  overflow:hidden;
+  margin-bottom:10px;
+  background:#98a88a;
+  border:7px solid #010101;
+}
+
+.art-lot span:first-child {
+  position:absolute;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  left:13px;
+  top:12px;
+  background:#d8cc8c;
+}
+
+.art-lot span:last-child {
+  position:absolute;
+  width:26px;
+  height:72px;
+  right:13px;
+  top:6px;
+  background:#010101;
+  transform:rotate(7deg);
+}
+
+.lot-meta small,
+.bid-panel small {
+  display:block;
+  margin-bottom:3px;
+  font-family:var(--font-ui);
+  font-size:6px;
+  letter-spacing:.1em;
+  color:#66745f;
+}
+
+.lot-meta strong,
+.bid-panel > strong {
+  display:block;
+  font-size:24px;
+  line-height:1;
+  letter-spacing:-.04em;
+}
+
+.lot-meta p {
+  margin:4px 0 10px;
+  font-size:9px;
+}
+
+.phone-screen button {
+  width:100%;
+  border:0;
+  padding:9px 5px;
+  background:#98a88a;
+  color:#010101;
+  font-family:var(--font-ui);
+  font-size:7px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.bid-panel {
+  margin:24px 0 16px;
+  padding:13px 9px 10px;
+  background:#f6f4e8;
+  border-top:4px solid #d8cc8c;
+}
+
+.bid-panel > strong {
+  margin-bottom:15px;
+  font-size:31px;
+}
+
+.bid-line {
+  display:flex;
+  justify-content:space-between;
+  padding:5px 0;
+  border-top:1px solid rgba(1,1,1,.12);
+  font-size:8px;
+}
+
+.bid-line b { font-weight:600; }
+
+.continue-note {
+  margin:9px 2px 0;
+  font-size:7px;
+  line-height:1.4;
+  color:#66745f;
+}
+
+.demo-qr-card {
+  width:92px;
+  padding:11px;
+  background:#d8cc8c;
+  border:1px solid rgba(1,1,1,.14);
+  transform:translateY(16px) rotate(-4deg);
+  box-shadow:0 10px 24px rgba(1,1,1,.08);
+}
+
+.demo-qr {
+  aspect-ratio:1;
+  padding:7px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+  background:#fff;
+  border:6px solid #010101;
+}
+
+.demo-qr i:nth-child(1),
+.demo-qr i:nth-child(3),
+.demo-qr i:nth-child(5),
+.demo-qr i:nth-child(7),
+.demo-qr i:nth-child(9) { background:#010101; }
+
+.demo-qr i:nth-child(2),
+.demo-qr i:nth-child(4),
+.demo-qr i:nth-child(6),
+.demo-qr i:nth-child(8) { background:#98a88a; }
+
+.demo-qr-card > span {
+  display:block;
+  margin-top:8px;
+  text-align:center;
+  font-family:var(--font-ui);
+  font-size:6px;
+  letter-spacing:.1em;
+  color:#38362b;
+}
+
+@media (max-width:1100px) and (min-width:901px) {
+  .auction-demo { gap:12px; padding:20px; }
+  .demo-phone { width:128px; height:260px; }
+  .demo-qr-card { width:78px; }
+}
+
+@media (max-width:900px) {
+  .auction-demo { gap:12px; padding:18px; }
+  .demo-phone { width:29%; min-width:104px; height:250px; }
+  .demo-qr-card { width:20%; min-width:72px; }
+}
+
+@media (max-width:600px) {
+  .demo-qr-card { display:none; }
+  .demo-phone { width:42%; min-width:110px; height:246px; }
+  .auction-demo { gap:18px; }
+}
+
+/* Footer / next-project accents */
+.galeriste-page .footer-shell,
+.galeriste-page .footer-base {
+  background:#cfd6c7;
+}
+</style>
+
+
+<style id="galeriste-hero-v2">
+:root{
+  --galeriste-red:#a92b2b;
+  --galeriste-red-dark:#842020;
+}
+
+/* Red wall hero */
+.galeriste-hero .gallery-horizon{
+  background:var(--galeriste-red) !important;
+  overflow:hidden !important;
+}
+
+.galeriste-hero .gallery-horizon::before{
+  content:none !important;
+}
+
+.galeriste-hero .gallery-floor-band,
+.galeriste-hero .gallery-wall-rail,
+.galeriste-hero .hero-qr-mark,
+.galeriste-hero .hero-gallery-piece{
+  display:none !important;
+}
+
+/* Bottom halves of framed paintings only */
+.gallery-frame{
+  position:absolute;
+  top:-92px;
+  z-index:2;
+}
+
+.frame-left{
+  left:7%;
+  width:180px;
+}
+
+.frame-center{
+  left:50%;
+  transform:translateX(-50%);
+  width:210px;
+  top:-108px;
+}
+
+.frame-right{
+  right:8%;
+  width:170px;
+  top:-82px;
+}
+
+.frame-matte{
+  padding:10px;
+  background:#010101;
+  box-shadow:0 10px 22px rgba(1,1,1,.18);
+}
+
+.frame-art{
+  width:100%;
+  aspect-ratio:4 / 5;
+}
+
+.art-green{
+  background:#98a88a;
+}
+
+.art-yellow{
+  background:#d8cc8c;
+}
+
+.art-cream{
+  background:#eaeaea;
+}
+
+/* Restore the DirtLENS hero relationship:
+   title left, description right, same vertical band. */
+.galeriste-hero .hero-copy-v9{
+  display:grid !important;
+  grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr) !important;
+  align-items:center !important;
+  gap:64px !important;
+}
+
+.galeriste-hero .hero-title-v9{
+  min-width:0 !important;
+}
+
+.galeriste-hero .hero-description-v9{
+  align-self:center !important;
+  justify-self:end !important;
+  width:min(100%, 380px) !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+.galeriste-hero .hero-description-v9 p:last-child{
+  margin:0 !important;
+  max-width:36ch !important;
+}
+
+/* White content on red wall */
+.galeriste-hero .hero-title-v9 h1,
+.galeriste-hero .project-number-v9,
+.galeriste-hero .hero-description-v9 .micro-label,
+.galeriste-hero .hero-description-v9 p:last-child,
+.galeriste-hero .hero-meta-v9 span,
+.galeriste-hero .hero-meta-v9 strong{
+  color:#fff !important;
+  text-shadow:none !important;
+}
+
+.galeriste-hero .hero-meta-v9 > div + div{
+  border-left-color:rgba(255,255,255,.28) !important;
+}
+
+/* Keep title aligned like DirtLENS rather than inherited left shift hacks. */
+.galeriste-hero .hero-title-v9 h1{
+  transform:none !important;
+}
+
+/* Responsive */
+@media(max-width:980px){
+  .galeriste-hero .hero-copy-v9{
+    grid-template-columns:1fr !important;
+    gap:18px !important;
+    align-items:start !important;
+  }
+
+  .galeriste-hero .hero-description-v9{
+    justify-self:start !important;
+    width:min(100%, 560px) !important;
+  }
+
+  .frame-left{left:4%;width:140px}
+  .frame-center{width:165px}
+  .frame-right{right:4%;width:135px}
+}
+
+@media(max-width:640px){
+  .frame-left{left:2%;width:96px;top:-50px}
+  .frame-center{width:112px;top:-58px}
+  .frame-right{right:2%;width:92px;top:-46px}
+}
+</style>
+
+
+<style id="galeriste-hero-v3">
+.galeriste-hero .frame-art.art-white{
+  background:#ffffff !important;
+  display:grid;
+  place-items:center;
+}
+
+.galeriste-hero .frame-art.art-white svg{
+  width:72%;
+  height:72%;
+  display:block;
+}
+
+.galeriste-hero .gallery-frame{
+  overflow:visible !important;
+}
+
+/* Lot labels: museum placard first, auction information second. */
+.gallery-lot-label{
+  width:88%;
+  margin:8px auto 0;
+  padding:7px 8px 6px;
+  background:#f7f5ef;
+  border:1px solid rgba(1,1,1,.18);
+  color:#010101;
+  font-family:var(--font-ui);
+  line-height:1;
+  box-shadow:0 3px 8px rgba(1,1,1,.08);
+}
+
+.gallery-lot-label > div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:6px;
+}
+
+.gallery-lot-label span{
+  font-size:7px;
+  letter-spacing:.1em;
+}
+
+.gallery-lot-label strong{
+  display:block;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:12px;
+  line-height:1;
+  letter-spacing:-.02em;
+  font-weight:700;
+}
+
+.live-badge{
+  padding:3px 4px 2px;
+  background:#010101;
+  color:#fff;
+  font-size:5px;
+  font-weight:500;
+  letter-spacing:.12em;
+}
+
+/* Restrained auction signal across the red gallery wall. */
+.gallery-auction-status{
+  position:absolute;
+  left:27%;
+  right:27%;
+  top:24px;
+  z-index:1;
+  display:grid;
+  grid-template-columns:auto auto 1fr auto;
+  align-items:center;
+  gap:8px;
+  color:rgba(255,255,255,.88);
+  font-family:var(--font-ui);
+  font-size:6px;
+  line-height:1;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.gallery-auction-status strong{
+  font-weight:500;
+}
+
+.auction-live-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(255,255,255,.15);
+}
+
+.auction-rule{
+  height:1px;
+  background:rgba(255,255,255,.38);
+}
+
+/* Ensure the partial frames remain the primary visual. */
+.frame-left{
+  left:6% !important;
+  width:176px !important;
+  top:-96px !important;
+}
+
+.frame-center{
+  width:208px !important;
+  top:-112px !important;
+}
+
+.frame-right{
+  right:7% !important;
+  width:170px !important;
+  top:-88px !important;
+}
+
+@media(max-width:1100px){
+  .gallery-auction-status{
+    left:24%;
+    right:24%;
+  }
+
+  .frame-left{width:150px !important}
+  .frame-center{width:175px !important}
+  .frame-right{width:146px !important}
+}
+
+@media(max-width:800px){
+  .gallery-auction-status{
+    left:20%;
+    right:20%;
+  }
+
+  .gallery-lot-label{
+    display:none;
+  }
+}
+
+@media(max-width:640px){
+  .gallery-auction-status{
+    left:12%;
+    right:12%;
+    top:15px;
+  }
+
+  .frame-left{width:96px !important;top:-52px !important}
+  .frame-center{width:114px !important;top:-62px !important}
+  .frame-right{width:94px !important;top:-48px !important}
+}
+</style>
+
+
+<style id="galeriste-hero-v4">
+:root{
+  --galeriste-red:#9f2f2f;
+  --galeriste-red-dark:#7f2424;
+}
+
+/* One continuous hero field: fixes all hero text contrast conflicts. */
+.galeriste-hero{
+  background:var(--galeriste-red) !important;
+}
+
+.galeriste-hero .gallery-horizon{
+  background:var(--galeriste-red) !important;
+  overflow:hidden !important;
+}
+
+.galeriste-hero .gallery-horizon::before{
+  content:none !important;
+}
+
+/* Remove literal auction UI from previous version. */
+.gallery-auction-status,
+.gallery-lot-label,
+.auction-live-dot,
+.auction-rule,
+.live-badge{
+  display:none !important;
+}
+
+/* Hero copy: one readable treatment across the red field. */
+.galeriste-hero .eyebrow,
+.galeriste-hero .hero-back,
+.galeriste-hero .hero-tags-v9 span,
+.galeriste-hero .hero-title-v9 h1,
+.galeriste-hero .project-number-v9,
+.galeriste-hero .hero-description-v9 .micro-label,
+.galeriste-hero .hero-description-v9 p:last-child,
+.galeriste-hero .hero-meta-v9 span,
+.galeriste-hero .hero-meta-v9 strong{
+  color:#ffffff !important;
+  text-shadow:none !important;
+}
+
+.galeriste-hero .hero-back{
+  border-bottom-color:rgba(255,255,255,.55) !important;
+}
+
+.galeriste-hero .hero-tags-v9 span{
+  border-color:rgba(255,255,255,.38) !important;
+  background:rgba(255,255,255,.04) !important;
+}
+
+.galeriste-hero .hero-meta-v9 > div + div{
+  border-left-color:rgba(255,255,255,.30) !important;
+}
+
+/* White matrix + black minimal marks. */
+.galeriste-hero .frame-art.art-white{
+  background:#ffffff !important;
+  display:grid;
+  place-items:center;
+}
+
+.galeriste-hero .frame-art.art-white svg{
+  width:68%;
+  height:68%;
+  display:block;
+}
+
+/* Auction is implied through price + upward bid count only. */
+.gallery-price-card{
+  width:74%;
+  margin:7px auto 0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:5px 7px;
+  background:#f4f1ea;
+  border:1px solid rgba(1,1,1,.16);
+  color:#010101;
+  font-family:var(--font-ui);
+  line-height:1;
+  box-shadow:0 3px 8px rgba(1,1,1,.08);
+}
+
+.gallery-price-card span{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+
+.gallery-price-card i{
+  font-style:normal;
+  font-size:6px;
+  letter-spacing:.06em;
+  color:#66745f;
+}
+
+/* Preserve the partial-painting composition. */
+.frame-left{
+  left:6% !important;
+  width:176px !important;
+  top:-96px !important;
+}
+
+.frame-center{
+  width:208px !important;
+  top:-112px !important;
+}
+
+.frame-right{
+  right:7% !important;
+  width:170px !important;
+  top:-88px !important;
+}
+
+@media(max-width:1100px){
+  .frame-left{width:150px !important}
+  .frame-center{width:175px !important}
+  .frame-right{width:146px !important}
+}
+
+@media(max-width:800px){
+  .gallery-price-card{display:none !important}
+}
+
+@media(max-width:640px){
+  .frame-left{width:96px !important;top:-52px !important}
+  .frame-center{width:114px !important;top:-62px !important}
+  .frame-right{width:94px !important;top:-48px !important}
+}
+</style>
+
+
+<style id="galeriste-hero-v5">
+:root{
+  --galeriste-wall:#d4d2cd;
+  --galeriste-ink:#242421;
+}
+
+/* Gallery-gray field */
+.galeriste-hero,
+.galeriste-hero .gallery-horizon{
+  background:var(--galeriste-wall) !important;
+}
+
+/* Hero text now uses one dark treatment for contrast. */
+.galeriste-hero .eyebrow,
+.galeriste-hero .hero-back,
+.galeriste-hero .hero-tags-v9,
+.galeriste-hero .hero-tags-v9 span,
+.galeriste-hero .hero-title-v9 h1,
+.galeriste-hero .project-number-v9,
+.galeriste-hero .hero-description-v9 .micro-label,
+.galeriste-hero .hero-description-v9 p:last-child,
+.galeriste-hero .hero-meta-v9 span,
+.galeriste-hero .hero-meta-v9 strong{
+  color:var(--galeriste-ink) !important;
+  text-shadow:none !important;
+}
+
+.galeriste-hero .project-number-v9,
+.galeriste-hero .hero-description-v9 .micro-label,
+.galeriste-hero .hero-meta-v9 span{
+  opacity:.62 !important;
+}
+
+.galeriste-hero .hero-back{
+  border-bottom-color:rgba(36,36,33,.40) !important;
+}
+
+.galeriste-hero .hero-back::before{
+  color:var(--galeriste-ink) !important;
+}
+
+.galeriste-hero .hero-tags-v9 span{
+  border-color:rgba(36,36,33,.28) !important;
+  background:rgba(255,255,255,.10) !important;
+}
+
+.galeriste-hero .hero-tags-v9 span+span::before{
+  color:rgba(36,36,33,.28) !important;
+}
+
+.galeriste-hero .hero-meta-v9 > div + div{
+  border-left-color:rgba(36,36,33,.24) !important;
+}
+
+/*
+ * Keep the gallery motif above the copy.
+ * Only the lower portions of the paintings enter the hero.
+ */
+.frame-left{
+  left:6% !important;
+  width:176px !important;
+  top:-305px !important;
+}
+
+.frame-center{
+  width:208px !important;
+  top:-337px !important;
+}
+
+.frame-right{
+  right:7% !important;
+  width:170px !important;
+  top:-296px !important;
+}
+
+/* Bid cue remains small and separated from the copy. */
+.gallery-price-card{
+  background:#f5f4f0 !important;
+  border-color:rgba(1,1,1,.20) !important;
+  color:#161614 !important;
+  box-shadow:none !important;
+}
+
+.gallery-price-card i{
+  color:#66745f !important;
+}
+
+@media(max-width:1100px) and (min-width:768px){
+  .frame-left{
+    width:150px !important;
+    top:-262px !important;
+  }
+
+  .frame-center{
+    width:175px !important;
+    top:-286px !important;
+  }
+
+  .frame-right{
+    width:146px !important;
+    top:-252px !important;
+  }
+}
+
+@media(max-width:767px){
+  /* On phones the decorative frames stay above the title/copy. */
+  .frame-left{
+    width:96px !important;
+    top:-165px !important;
+  }
+
+  .frame-center{
+    width:114px !important;
+    top:-184px !important;
+  }
+
+  .frame-right{
+    width:94px !important;
+    top:-159px !important;
+  }
+
+  .gallery-price-card{
+    display:none !important;
+  }
+}
+</style>
+
+
+<style id="galeriste-hanging-art-v6">
+@media (min-width: 1101px) {
+  /* Bring the framed artwork back into view while keeping it above the copy. */
+  .frame-left {
+    top: -215px !important;
+  }
+
+  .frame-center {
+    top: -245px !important;
+  }
+
+  .frame-right {
+    top: -208px !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  .frame-left {
+    top: -185px !important;
+  }
+
+  .frame-center {
+    top: -208px !important;
+  }
+
+  .frame-right {
+    top: -178px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .frame-left {
+    top: -104px !important;
+  }
+
+  .frame-center {
+    top: -122px !important;
+  }
+
+  .frame-right {
+    top: -98px !important;
+  }
+}
+</style>
+
+
+<style id="galeriste-hero-v7">
+/* Frames only. No auction labels or overlays. */
+.gallery-price-card,
+.gallery-lot-label,
+.gallery-auction-status,
+.live-badge,
+.auction-live-dot,
+.auction-rule{
+  display:none !important;
+}
+
+.galeriste-hero .frame-matte{
+  background:#010101 !important;
+  padding:10px !important;
+}
+
+.galeriste-hero .frame-art{
+  width:100% !important;
+  aspect-ratio:4 / 5 !important;
+}
+
+.galeriste-hero .art-one{
+  background:#98a88a !important;
+}
+
+.galeriste-hero .art-two{
+  background:#d8cc8c !important;
+}
+
+.galeriste-hero .art-three{
+  background:#eaeaea !important;
+}
+</style>
+
+
+<style id="galeriste-visible-frames-v8">
+/*
+ * The previous frame offsets were relative to DirtLENS's lower
+ * "soil horizon" layer, so the negative offsets clipped the frames.
+ * Galeriste uses the gallery layer as a full-height wall instead.
+ */
+.galeriste-hero .gallery-horizon{
+  top:0 !important;
+  bottom:0 !important;
+  height:100% !important;
+  overflow:hidden !important;
+}
+
+/* Hanging frames: lower portions remain visible from the top edge. */
+@media (min-width:1101px){
+  .galeriste-hero .frame-left{
+    left:7% !important;
+    width:176px !important;
+    top:-125px !important;
+  }
+
+  .galeriste-hero .frame-center{
+    left:50% !important;
+    width:208px !important;
+    top:-155px !important;
+    transform:translateX(-50%) !important;
+  }
+
+  .galeriste-hero .frame-right{
+    right:7% !important;
+    width:170px !important;
+    top:-118px !important;
+  }
+}
+
+@media (min-width:768px) and (max-width:1100px){
+  .galeriste-hero .frame-left{
+    left:5% !important;
+    width:150px !important;
+    top:-105px !important;
+  }
+
+  .galeriste-hero .frame-center{
+    left:50% !important;
+    width:175px !important;
+    top:-128px !important;
+    transform:translateX(-50%) !important;
+  }
+
+  .galeriste-hero .frame-right{
+    right:5% !important;
+    width:146px !important;
+    top:-100px !important;
+  }
+}
+
+@media (max-width:767px){
+  .galeriste-hero .frame-left{
+    left:3% !important;
+    width:96px !important;
+    top:-68px !important;
+  }
+
+  .galeriste-hero .frame-center{
+    left:50% !important;
+    width:114px !important;
+    top:-82px !important;
+    transform:translateX(-50%) !important;
+  }
+
+  .galeriste-hero .frame-right{
+    right:3% !important;
+    width:94px !important;
+    top:-64px !important;
+  }
+}
+</style>
+
+
+<style id="galeriste-grid-fix-v9">
+/*
+ * Restore the exact DirtLENS desktop hero grid.
+ * Earlier Galeriste CSS changed hero-copy to two columns while the
+ * title/overview still referenced the original 12-column coordinates.
+ */
+@media (min-width: 981px) {
+  .galeriste-hero .hero-copy-v9 {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    grid-template-rows: 1fr 1.1fr !important;
+    column-gap: 16px !important;
+    row-gap: 16px !important;
+    align-items: center !important;
+    min-height: 0 !important;
+    padding: 4px 0 6px !important;
+  }
+
+  .galeriste-hero .hero-title-v9 {
+    grid-column: 1 / span 7 !important;
+    grid-row: 2 !important;
+    align-self: center !important;
+    justify-self: start !important;
+    width: auto !important;
+    min-width: 0 !important;
+    transform: none !important;
+  }
+
+  .galeriste-hero .hero-description-v9 {
+    grid-column: 9 / span 4 !important;
+    grid-row: 2 !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    width: auto !important;
+    max-width: 410px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+  }
+
+  .galeriste-hero .hero-meta-v9 {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    width: calc(100% - 50px) !important;
+    margin-left: 25px !important;
+    margin-right: 25px !important;
+    position: relative !important;
+    top: -8px !important;
+  }
+}
+
+/* DirtLENS tablet behavior: still 12 columns, with a wider overview block. */
+@media (min-width: 768px) and (max-width: 980px) {
+  .galeriste-hero .hero-copy-v9 {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    grid-template-rows: 1fr 1.1fr !important;
+    gap: 16px !important;
+    align-items: center !important;
+    padding: 4px 0 6px !important;
+  }
+
+  .galeriste-hero .hero-title-v9 {
+    grid-column: 1 / span 7 !important;
+    grid-row: 2 !important;
+    transform: none !important;
+  }
+
+  .galeriste-hero .hero-description-v9 {
+    grid-column: 8 / span 5 !important;
+    grid-row: 2 !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+  }
+}
+
+/* Preserve the existing single-column mobile layout. */
+@media (max-width: 767px) {
+  .galeriste-hero .hero-copy-v9 {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 1fr auto auto !important;
+    gap: 0 !important;
+  }
+
+  .galeriste-hero .hero-title-v9 {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+  }
+
+  .galeriste-hero .hero-description-v9 {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+    justify-self: start !important;
+    width: auto !important;
+    max-width: 34ch !important;
+    margin: 18px 0 0 !important;
+  }
+}
+</style>
+
+
+<style id="galeriste-png-title-v10">
+.galeriste-hero .galeriste-title-image{
+  margin:0 !important;
+  padding:0 !important;
+  line-height:0 !important;
+  font-size:0 !important;
+  width:min(100%, 620px) !important;
+  max-width:620px !important;
+  height:auto !important;
+  transform:none !important;
+}
+
+.galeriste-hero .galeriste-title-image img{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  max-width:100% !important;
+}
+
+@media(max-width:980px){
+  .galeriste-hero .galeriste-title-image{
+    width:min(100%, 560px) !important;
+  }
+}
+
+@media(max-width:767px){
+  .galeriste-hero .galeriste-title-image{
+    width:min(100%, 430px) !important;
+  }
+}
+</style>
+
+
+<style id="union-cemetery-case-study-v1">
+:root{
+  --union-paper:#e7e2d7;
+  --union-paper-light:#f5f2ea;
+  --union-ink:#31332e;
+  --union-olive:#7b8067;
+  --union-brown:#9a846c;
+  --union-gold:#b8a56e;
+
+  --project-primary:#7b8067;
+  --project-secondary:#b8a56e;
+  --project-on-primary:#f7f4ec;
+  --project-on-secondary:#272921;
+
+  --text-primary:#31332e;
+  --text-secondary:#7b8067;
+  --text-body:#5f6059;
+}
+
+.union-page{
+  background:#f6f4ef;
+  color:var(--union-ink);
+}
+
+.union-hero{
+  background:var(--union-paper) !important;
+}
+
+.union-hero .union-map-layer{
+  top:0 !important;
+  bottom:0 !important;
+  height:100% !important;
+  overflow:hidden !important;
+  background:var(--union-paper) !important;
+}
+
+.union-map-layer svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.union-map-layer .timeline-line{
+  stroke:#5f6258;
+  stroke-width:1.25;
+  opacity:.58;
+}
+
+.union-map-layer .timeline-ticks line{
+  stroke:#4f524a;
+  stroke-width:1.15;
+  opacity:.72;
+}
+
+.union-map-layer .timeline-ticks text,
+.union-map-layer .map-kicker,
+.union-map-layer .section-labels text{
+  fill:#4c5047;
+  font-family:var(--font-ui);
+  letter-spacing:.14em;
+}
+
+.union-map-layer .timeline-ticks text{
+  font-size:10px;
+}
+
+.union-map-layer .map-kicker{
+  font-size:10px;
+}
+
+.union-map-layer .section-labels text{
+  font-size:10px;
+  opacity:.58;
+}
+
+.union-map-layer .section-lines path{
+  fill:rgba(245,242,234,.20);
+  stroke:#9a846c;
+  stroke-width:1.35;
+  opacity:.62;
+}
+
+.union-map-layer .road-lines path,
+.union-map-layer .road-lines circle{
+  fill:none;
+  stroke:#8e8a7b;
+  stroke-width:4;
+  opacity:.38;
+}
+
+.union-map-layer .grave-field{
+  opacity:.82;
+}
+
+/* A flat wash keeps the text readable without covering the map. */
+.union-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(247,244,236,.34);
+  pointer-events:none;
+  z-index:0;
+}
+
+.union-hero .hero-inner-v9{
+  position:relative;
+  z-index:2;
+}
+
+.union-hero .eyebrow,
+.union-hero .hero-back,
+.union-hero .hero-tags-v9 span,
+.union-hero .project-number-v9,
+.union-hero .hero-title-v9 h1,
+.union-hero .hero-description-v9 .micro-label,
+.union-hero .hero-description-v9 p:last-child,
+.union-hero .hero-meta-v9 span,
+.union-hero .hero-meta-v9 strong{
+  color:var(--union-ink) !important;
+  text-shadow:none !important;
+}
+
+.union-hero .hero-tags-v9 span{
+  border-color:rgba(49,51,46,.24) !important;
+  background:rgba(247,244,236,.24) !important;
+}
+
+.union-hero .hero-meta-v9 > div + div{
+  border-left-color:rgba(49,51,46,.22) !important;
+}
+
+.union-hero .project-number-v9,
+.union-hero .hero-description-v9 .micro-label,
+.union-hero .hero-meta-v9 span{
+  color:#6e725f !important;
+}
+
+.union-hero .hero-title-v9 h1{
+  font-size:clamp(48px,5.75vw,86px) !important;
+  line-height:.88 !important;
+  letter-spacing:-.055em !important;
+  max-width:760px;
+  transform:none !important;
+}
+
+.union-hero .hero-description-v9{
+  background:rgba(247,244,236,.56);
+  padding:15px 17px !important;
+  border-left:2px solid rgba(123,128,103,.55);
+}
+
+.union-page .compact-card .micro-label,
+.union-page .section-index{
+  color:var(--union-olive) !important;
+}
+
+.union-page .compact-card h3,
+.union-page .compact-prototype-copy h2{
+  color:var(--union-ink) !important;
+}
+
+.union-page .compact-card p,
+.union-page .compact-prototype-copy > p,
+.union-page .compact-status-row span:last-child{
+  color:#62635c !important;
+}
+
+.union-page .compact-workflow span{
+  background:#e3ddc8 !important;
+  color:#5f5a43 !important;
+}
+
+/* Timeline prototype */
+.cemetery-interface-frame{
+  position:relative;
+  overflow:hidden;
+  background:#22251f !important;
+  border:1px solid rgba(49,51,46,.22) !important;
+}
+
+.cemetery-demo{
+  position:absolute;
+  inset:0;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  padding:18px 20px 16px;
+  color:#f3efe6;
+  font-family:var(--font-ui);
+}
+
+.cemetery-demo-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  z-index:5;
+  font-size:8px;
+  letter-spacing:.13em;
+}
+
+.cemetery-demo-head strong{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:21px;
+  letter-spacing:-.03em;
+}
+
+.cemetery-scene{
+  position:relative;
+  min-height:0;
+  overflow:hidden;
+}
+
+.cemetery-plane{
+  position:absolute;
+  left:8%;
+  right:8%;
+  top:7%;
+  bottom:2%;
+  transform:perspective(650px) rotateX(55deg) rotateZ(-3deg);
+  transform-origin:center;
+  border:1px solid rgba(233,225,205,.27);
+  background:#2b2e27;
+  box-shadow:0 18px 28px rgba(0,0,0,.28);
+  overflow:hidden;
+}
+
+.cemetery-plan-lines{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
+.cemetery-plan-lines rect,
+.cemetery-plan-lines path,
+.cemetery-plan-lines circle{
+  fill:none;
+  stroke:rgba(216,204,140,.28);
+  stroke-width:2;
+}
+
+.marker-field{
+  position:absolute;
+  inset:0;
+}
+
+.grave-marker{
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  width:3px;
+  height:var(--mh);
+  border-radius:1px 1px 0 0;
+  background:#d8cc8c;
+  box-shadow:0 0 5px rgba(216,204,140,.26);
+  transform:translate(-50%,-100%);
+  opacity:1;
+  transition:opacity .16s linear, transform .16s linear;
+}
+
+.grave-marker[data-hidden="true"]{
+  opacity:0;
+  transform:translate(-50%,-65%) scaleY(.25);
+}
+
+.cemetery-controls{
+  display:grid;
+  grid-template-columns:30px auto 1fr auto;
+  align-items:center;
+  gap:9px;
+  position:relative;
+  z-index:5;
+  font-size:7px;
+  letter-spacing:.06em;
+}
+
+.timeline-play{
+  width:28px;
+  height:28px;
+  border:1px solid rgba(245,242,234,.35);
+  background:transparent;
+  color:#f5f2ea;
+  font-size:10px;
+  cursor:pointer;
+}
+
+#cemetery-slider{
+  width:100%;
+  accent-color:#d8cc8c;
+}
+
+.union-page .footer-shell,
+.union-page .footer-base{
+  background:#d6d1c6;
+}
+
+/* Maintain the exact established hero grid on desktop/tablet. */
+@media(min-width:981px){
+  .union-hero .hero-copy-v9{
+    display:grid !important;
+    grid-template-columns:repeat(12,minmax(0,1fr)) !important;
+    grid-template-rows:1fr 1.1fr !important;
+    column-gap:16px !important;
+    row-gap:16px !important;
+    align-items:center !important;
+    min-height:0 !important;
+    padding:4px 0 6px !important;
+  }
+
+  .union-hero .hero-title-v9{
+    grid-column:1 / span 7 !important;
+    grid-row:2 !important;
+    align-self:center !important;
+  }
+
+  .union-hero .hero-description-v9{
+    grid-column:9 / span 4 !important;
+    grid-row:2 !important;
+    align-self:center !important;
+    justify-self:stretch !important;
+    width:auto !important;
+    max-width:410px !important;
+    margin:0 !important;
+  }
+
+  .union-hero .hero-meta-v9{
+    width:calc(100% - 50px) !important;
+    margin-left:25px !important;
+    margin-right:25px !important;
+    position:relative !important;
+    top:-8px !important;
+  }
+}
+
+@media(min-width:768px) and (max-width:980px){
+  .union-hero .hero-copy-v9{
+    display:grid !important;
+    grid-template-columns:repeat(12,minmax(0,1fr)) !important;
+    grid-template-rows:1fr 1.1fr !important;
+    gap:16px !important;
+  }
+
+  .union-hero .hero-title-v9{
+    grid-column:1 / span 7 !important;
+    grid-row:2 !important;
+  }
+
+  .union-hero .hero-description-v9{
+    grid-column:8 / span 5 !important;
+    grid-row:2 !important;
+    width:auto !important;
+    max-width:none !important;
+    margin:0 !important;
+  }
+}
+
+@media(max-width:767px){
+  .union-map-layer .timeline-ticks text,
+  .union-map-layer .map-kicker,
+  .union-map-layer .section-labels{
+    display:none;
+  }
+
+  .union-map-layer .grave-field{
+    opacity:.45;
+  }
+
+  .union-hero .hero-copy-v9{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    grid-template-rows:1fr auto auto !important;
+    gap:0 !important;
+  }
+
+  .union-hero .hero-title-v9{
+    grid-column:1 !important;
+    grid-row:2 !important;
+  }
+
+  .union-hero .hero-title-v9 h1{
+    font-size:clamp(42px,13vw,68px) !important;
+    line-height:.9 !important;
+  }
+
+  .union-hero .hero-description-v9{
+    grid-column:1 !important;
+    grid-row:3 !important;
+    justify-self:start !important;
+    width:auto !important;
+    max-width:34ch !important;
+    margin:18px 0 0 !important;
+    padding:12px 14px !important;
+  }
+
+  .cemetery-demo{
+    padding:13px 14px 12px;
+  }
+
+  .cemetery-plane{
+    left:4%;
+    right:4%;
+  }
+}
+</style>
+
+</head>
+
+<body class="union-page">
+  <a class="skip-link" href="#main-content">Skip to case study</a>
+  <!-- ============================================================
+       TEMPLATE NOTES
+       1. Duplicate this file for each project.
+       2. Change the four --project-* variables at the top.
+       3. Replace all [BRACKETED] copy.
+       4. Replace .media-placeholder blocks with your screenshots,
+          video, prototypes, diagrams, or photos.
+       ============================================================ -->
+
+  <nav class="nav-shell" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="Daniel Ross home">DANIEL ROSS</a>
+
+      <div class="nav-links">
+        <a class="nav-link" href="index.html#work">
+          <span class="base-copy">WORK</span><span class="hover-copy">WORK</span>
+        </a>
+        <a class="nav-link" href="DanielLRossCV.pdf">
+          <span class="base-copy">CV</span><span class="hover-copy">CV</span>
+        </a>
+        <a class="nav-link" href="mailto:arthurpockets@gmail.com">
+          <span class="base-copy">CONTACT</span><span class="hover-copy">CONTACT</span>
+        </a>
+      </div>
+
+      <button class="mobile-menu" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-navigation">
+        <span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile-panel" id="mobile-navigation" data-open="false">
+      <a href="index.html#work">Work</a>
+      <a href="DanielLRossCV.pdf">CV</a>
+      <a href="mailto:arthurpockets@gmail.com">Contact</a>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    <section class="project-hero hero-v9 union-hero">
+      <div class="soil-horizon union-map-layer" aria-hidden="true">
+        <svg viewBox="0 0 1440 500" preserveAspectRatio="none">
+          <rect width="1440" height="500" fill="#e7e2d7"/>
+
+          <!-- timeline -->
+          <text x="720" y="63" text-anchor="middle" class="map-kicker">BURIALS THROUGH TIME</text>
+          <line x1="55" y1="92" x2="1385" y2="92" class="timeline-line"/>
+          <g class="timeline-ticks">
+            <line x1="62" y1="84" x2="62" y2="101"/><text x="62" y="78" text-anchor="middle">1806</text>
+            <line x1="335" y1="84" x2="335" y2="101"/><text x="335" y="78" text-anchor="middle">1850</text>
+            <line x1="610" y1="84" x2="610" y2="101"/><text x="610" y="78" text-anchor="middle">1900</text>
+            <line x1="885" y1="84" x2="885" y2="101"/><text x="885" y="78" text-anchor="middle">1950</text>
+            <line x1="1160" y1="84" x2="1160" y2="101"/><text x="1160" y="78" text-anchor="middle">2000</text>
+            <line x1="1370" y1="84" x2="1370" y2="101"/><text x="1370" y="78" text-anchor="middle">2026</text>
+          </g>
+
+          <!-- section boundaries -->
+          <g class="section-lines">
+            <path d="M34 126 L303 131 L302 304 L30 296 Z"/>
+            <path d="M306 132 L557 136 L559 314 L303 304 Z"/>
+            <path d="M560 136 L790 129 L800 324 L559 314 Z"/>
+            <path d="M801 129 L1091 121 L1099 338 L800 324 Z"/>
+            <path d="M1095 121 L1398 128 L1402 348 L1099 338 Z"/>
+          </g>
+
+          <!-- roads / paths -->
+          <g class="road-lines">
+            <path d="M0 338 C220 325 380 349 560 342 S910 324 1120 351 S1325 357 1440 345"/>
+            <path d="M560 116 C590 176 602 240 600 500"/>
+            <path d="M805 111 C830 184 846 253 842 500"/>
+            <circle cx="600" cy="342" r="22"/>
+            <circle cx="842" cy="337" r="18"/>
+          </g>
+
+          <g class="grave-field">
+            <rect x="208.9" y="165.8" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="230.7" y="238.8" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="72.2" y="173.5" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="191.3" y="243.2" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="166.1" y="194.2" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="141.6" y="180.4" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="86.8" y="257.9" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="229.2" y="223.1" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="251.6" y="232.3" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.33"/>
+<rect x="80.6" y="237.1" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="260.0" y="205.6" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="101.6" y="202.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="218.8" y="171.0" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="120.1" y="214.8" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="114.4" y="199.3" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="246.1" y="207.9" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="192.6" y="243.4" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="264.1" y="235.0" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.32"/>
+<rect x="232.6" y="223.4" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="196.3" y="203.5" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="235.1" y="259.4" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.32"/>
+<rect x="218.1" y="229.8" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="170.3" y="191.2" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="90.8" y="262.1" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="131.0" y="180.7" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="124.3" y="219.1" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="260.9" y="196.4" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="99.4" y="248.4" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="199.8" y="217.7" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="252.1" y="197.4" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="278.1" y="172.6" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="184.9" y="177.1" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="102.2" y="222.1" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="274.0" y="247.6" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="154.8" y="238.2" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="166.6" y="190.8" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="446.3" y="239.8" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="342.4" y="176.2" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="380.0" y="249.6" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.32"/>
+<rect x="526.5" y="237.7" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="499.6" y="191.2" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="419.0" y="225.0" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="536.7" y="180.0" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="511.0" y="198.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="418.6" y="202.0" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="510.9" y="235.1" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.55"/>
+<rect x="505.6" y="286.2" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="431.1" y="273.5" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="536.9" y="200.4" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="531.0" y="289.4" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="362.5" y="204.2" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="342.8" y="206.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="523.1" y="232.8" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="369.0" y="240.6" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="527.7" y="237.5" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="347.2" y="248.2" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="384.8" y="249.7" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.35"/>
+<rect x="357.5" y="246.8" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="526.5" y="169.1" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.55"/>
+<rect x="345.4" y="194.0" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="515.0" y="275.3" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.32"/>
+<rect x="505.1" y="253.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="470.3" y="235.7" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="358.2" y="182.1" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="387.2" y="241.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.33"/>
+<rect x="463.2" y="200.2" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="507.7" y="179.3" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="400.0" y="184.0" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="445.9" y="220.2" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="515.5" y="278.3" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="452.3" y="186.1" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="518.8" y="265.1" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="382.4" y="180.5" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="487.4" y="280.9" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="500.3" y="275.5" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="399.8" y="281.6" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="386.0" y="264.1" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="510.3" y="195.1" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="497.0" y="195.8" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.33"/>
+<rect x="398.9" y="273.5" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="413.9" y="287.7" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="354.2" y="286.4" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="385.7" y="181.2" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="395.9" y="242.0" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="451.1" y="199.1" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.28"/>
+<rect x="524.4" y="233.7" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="371.4" y="220.6" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="469.3" y="183.2" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="662.6" y="215.1" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="664.9" y="291.5" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="701.9" y="200.7" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="624.9" y="269.6" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="668.9" y="253.9" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="767.4" y="262.5" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="711.1" y="245.9" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="627.7" y="186.3" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.35"/>
+<rect x="675.3" y="278.7" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="704.7" y="185.6" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="631.4" y="251.2" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="626.6" y="272.2" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="690.9" y="288.3" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.32"/>
+<rect x="673.3" y="233.4" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="728.5" y="220.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="757.3" y="221.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="670.5" y="264.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="684.0" y="247.0" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="639.3" y="196.6" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="613.7" y="212.4" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="663.8" y="205.0" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="743.2" y="213.3" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="752.3" y="239.7" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="641.7" y="213.4" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="688.8" y="243.7" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="667.8" y="162.1" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="661.8" y="181.4" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="686.5" y="286.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="601.0" y="218.9" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="657.0" y="188.1" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="657.0" y="264.8" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="674.4" y="264.4" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="598.0" y="293.9" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="622.9" y="160.9" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="712.2" y="238.1" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="730.7" y="181.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="732.8" y="181.3" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="761.5" y="239.8" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="622.7" y="242.1" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="731.8" y="278.7" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="692.5" y="163.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="598.1" y="250.0" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="605.1" y="294.4" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="667.7" y="262.2" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="759.7" y="268.0" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="697.6" y="203.8" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="670.7" y="264.6" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="648.9" y="228.2" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="652.4" y="194.7" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="637.5" y="159.4" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.35"/>
+<rect x="662.2" y="236.8" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="720.3" y="221.6" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="661.8" y="192.5" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="690.2" y="206.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="718.5" y="196.5" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="621.6" y="175.0" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.33"/>
+<rect x="626.1" y="226.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="684.7" y="198.2" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="653.6" y="200.9" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="593.6" y="165.7" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="706.2" y="264.9" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="674.2" y="220.5" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.35"/>
+<rect x="748.7" y="174.2" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="694.6" y="255.5" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="765.3" y="170.1" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="664.1" y="242.7" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="657.3" y="287.0" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.55"/>
+<rect x="643.0" y="246.2" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="729.9" y="246.8" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="630.6" y="236.4" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="716.0" y="224.7" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="638.7" y="280.1" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="886.1" y="281.2" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="869.5" y="171.6" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.32"/>
+<rect x="886.4" y="176.0" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="968.8" y="286.5" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="992.2" y="266.4" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="929.4" y="249.9" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="882.6" y="167.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="825.2" y="276.9" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="1009.1" y="229.2" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="865.4" y="247.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="937.5" y="219.2" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="860.2" y="219.7" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="920.1" y="276.2" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="883.1" y="171.8" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="820.3" y="293.8" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="949.6" y="253.9" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="832.9" y="196.3" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="994.6" y="172.7" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="997.4" y="203.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="876.2" y="289.3" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="981.9" y="177.9" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="888.4" y="288.2" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="856.2" y="183.9" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="854.1" y="164.3" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="946.9" y="285.9" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="966.7" y="314.8" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="941.1" y="206.9" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="900.4" y="183.6" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="878.4" y="278.6" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="996.3" y="284.4" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="983.0" y="177.6" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="967.5" y="293.9" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="934.2" y="270.0" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="838.7" y="279.6" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="919.4" y="166.0" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="915.0" y="204.3" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="829.0" y="164.1" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="1069.4" y="274.0" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="996.0" y="169.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="827.2" y="205.5" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="927.7" y="192.6" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="865.0" y="181.4" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="880.2" y="300.9" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="883.5" y="194.4" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="989.4" y="178.6" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.55"/>
+<rect x="894.8" y="308.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="895.5" y="314.9" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="963.0" y="246.1" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="1027.5" y="217.1" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="1014.6" y="310.7" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="1046.0" y="199.4" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="874.8" y="183.8" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="1011.9" y="263.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="976.9" y="159.4" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1003.1" y="167.6" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="863.9" y="174.4" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="1048.4" y="287.5" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="893.8" y="294.0" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="855.2" y="309.6" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="919.4" y="290.0" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="918.6" y="195.8" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="1007.3" y="195.5" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="847.1" y="190.9" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="960.4" y="301.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="1026.0" y="300.3" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="854.9" y="306.3" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="878.7" y="240.1" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="1057.3" y="265.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1001.6" y="296.4" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="973.9" y="305.1" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="874.3" y="225.0" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="991.4" y="241.2" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="889.0" y="309.8" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="980.4" y="249.7" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="880.9" y="173.4" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="1011.3" y="186.6" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="856.9" y="298.9" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="856.2" y="174.1" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="1036.6" y="174.4" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="823.9" y="196.0" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="848.4" y="163.3" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="847.3" y="234.6" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="1047.2" y="259.7" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="827.8" y="314.8" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="942.6" y="300.4" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="857.1" y="173.4" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="998.0" y="214.7" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="946.4" y="222.7" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="982.7" y="277.6" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1042.0" y="220.0" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="843.8" y="222.1" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="858.2" y="302.5" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="843.3" y="168.6" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="959.1" y="248.0" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="850.6" y="210.3" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="1000.3" y="309.9" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="964.5" y="187.5" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="847.1" y="290.0" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="963.5" y="283.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="980.7" y="157.3" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.35"/>
+<rect x="865.1" y="266.8" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="865.4" y="176.2" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="1005.2" y="310.4" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="914.0" y="226.5" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="901.1" y="305.5" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="858.9" y="275.2" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="930.8" y="221.7" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="873.9" y="236.0" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="989.6" y="249.1" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="875.1" y="312.5" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="1351.3" y="276.1" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="1116.9" y="272.8" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="1290.9" y="231.5" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="1330.4" y="155.1" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="1330.5" y="244.2" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="1219.4" y="167.2" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.33"/>
+<rect x="1351.9" y="224.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="1326.1" y="188.6" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="1213.9" y="199.8" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="1157.0" y="233.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="1341.5" y="206.3" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="1174.1" y="172.5" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1305.1" y="257.5" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="1303.6" y="274.9" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="1256.1" y="254.1" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="1271.8" y="173.2" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1190.7" y="193.9" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="1192.6" y="223.5" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="1134.2" y="292.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1211.1" y="244.9" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1317.5" y="256.9" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="1152.7" y="158.3" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.55"/>
+<rect x="1136.1" y="255.9" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="1362.7" y="235.5" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="1344.5" y="212.7" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1312.3" y="256.1" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="1284.6" y="195.5" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="1265.7" y="173.1" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="1344.2" y="199.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="1147.2" y="266.4" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="1275.9" y="202.9" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="1351.8" y="314.5" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="1220.9" y="208.4" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.33"/>
+<rect x="1168.5" y="306.3" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="1149.4" y="160.9" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="1323.8" y="295.6" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="1306.6" y="169.9" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.32"/>
+<rect x="1322.8" y="276.8" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1217.7" y="261.0" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1303.1" y="278.9" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="1356.4" y="279.0" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.46"/>
+<rect x="1257.6" y="221.6" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="1219.7" y="175.1" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.32"/>
+<rect x="1177.5" y="255.1" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="1292.9" y="234.2" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="1155.1" y="223.0" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="1137.9" y="300.1" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="1218.7" y="214.2" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="1135.4" y="185.5" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="1277.5" y="280.2" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="1322.4" y="264.2" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="1268.8" y="299.3" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="1152.4" y="305.0" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="1309.0" y="187.7" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="1274.7" y="252.0" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="1240.0" y="237.5" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1294.6" y="196.6" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="1257.7" y="179.3" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="1205.2" y="307.2" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="1241.9" y="151.4" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="1360.3" y="190.4" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="1201.2" y="270.4" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="1298.8" y="203.5" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="1318.4" y="177.2" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="1234.6" y="178.4" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="1350.9" y="154.2" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="1336.4" y="200.7" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="1318.9" y="227.1" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.33"/>
+<rect x="1204.2" y="278.4" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.35"/>
+<rect x="1314.8" y="221.0" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1354.1" y="204.6" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="1206.8" y="281.1" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="1134.7" y="248.6" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="1140.6" y="202.8" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1294.4" y="175.8" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1296.7" y="300.2" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.35"/>
+<rect x="1360.0" y="306.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="1205.8" y="281.8" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="1150.7" y="249.5" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="1174.0" y="255.7" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="1123.1" y="173.6" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.38"/>
+<rect x="1305.8" y="243.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="1277.4" y="189.7" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="1239.8" y="212.6" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.35"/>
+<rect x="1180.1" y="222.5" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="1364.7" y="181.4" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1339.7" y="222.3" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.54"/>
+<rect x="1361.6" y="259.5" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="1187.6" y="198.1" width="3.2" height="8.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="1290.1" y="177.1" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="1361.3" y="280.3" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="1253.5" y="209.6" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.45"/>
+<rect x="1136.6" y="199.7" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="1217.7" y="216.4" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="1194.3" y="160.4" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="1147.1" y="286.5" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1306.9" y="169.5" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="1244.5" y="198.8" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.53"/>
+<rect x="1171.4" y="306.2" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="1177.7" y="254.1" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.31"/>
+<rect x="1190.7" y="237.1" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.33"/>
+<rect x="1350.4" y="173.8" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="1266.3" y="288.7" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="1122.1" y="155.6" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.35"/>
+<rect x="1167.7" y="243.5" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.29"/>
+<rect x="1337.2" y="239.1" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="1316.2" y="262.4" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.30"/>
+<rect x="1130.0" y="221.4" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="1266.7" y="200.2" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="1330.2" y="310.9" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="1141.5" y="188.4" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1150.2" y="156.5" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="1355.7" y="298.7" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.47"/>
+<rect x="1162.5" y="174.6" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="1192.1" y="151.9" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.40"/>
+<rect x="1175.2" y="245.4" width="3.2" height="6.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="1264.4" y="288.8" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.36"/>
+<rect x="1117.0" y="166.0" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+<rect x="1306.0" y="209.1" width="3.8" height="6.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="1163.7" y="240.4" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.42"/>
+<rect x="1306.1" y="194.7" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1147.2" y="164.1" width="3.8" height="7.5" rx=".7" fill="#6f614f" opacity="0.43"/>
+<rect x="1206.4" y="172.1" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.39"/>
+<rect x="1125.1" y="154.5" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.50"/>
+<rect x="1244.8" y="172.9" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="1268.3" y="175.1" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.51"/>
+<rect x="1263.4" y="232.7" width="4.4" height="8.5" rx=".7" fill="#6f614f" opacity="0.41"/>
+<rect x="1255.7" y="227.3" width="3.2" height="7.5" rx=".7" fill="#6f614f" opacity="0.37"/>
+<rect x="1142.4" y="217.6" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.52"/>
+<rect x="1272.3" y="247.7" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.49"/>
+<rect x="1309.0" y="244.5" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.44"/>
+<rect x="1157.6" y="253.0" width="4.4" height="7.5" rx=".7" fill="#6f614f" opacity="0.32"/>
+<rect x="1285.2" y="153.3" width="4.4" height="6.5" rx=".7" fill="#6f614f" opacity="0.33"/>
+<rect x="1225.3" y="217.9" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.34"/>
+<rect x="1240.5" y="250.1" width="3.8" height="8.5" rx=".7" fill="#6f614f" opacity="0.48"/>
+          </g>
+
+          <g class="section-labels">
+            <text x="175" y="207" text-anchor="middle">OLD SECTION</text>
+            <text x="435" y="213" text-anchor="middle">NEW ADDITION</text>
+            <text x="682" y="205" text-anchor="middle">CHAPEL</text>
+            <text x="945" y="203" text-anchor="middle">GARDEN A</text>
+            <text x="1242" y="202" text-anchor="middle">GARDEN B</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="hero-inner-v9">
+        <div class="hero-top-v9">
+          <div>
+            <p class="eyebrow">Selected Project / Case Study</p>
+            <a class="hero-back" href="index.html#work">Back to work</a>
+          </div>
+          <div class="hero-tags-v9" aria-label="Project disciplines">
+            <span>Data Visualization</span><span>Python</span><span>Blender</span><span>Mapping</span>
+          </div>
+        </div>
+
+        <div class="hero-copy-v9">
+          <div class="hero-title-v9">
+            <div class="project-number-v9">PROJECT 03</div>
+            <h1>Union Cemetery<br>Visualization</h1>
+          </div>
+          <div class="hero-description-v9">
+            <p class="micro-label">Overview</p>
+            <p>A historical visualization that connects more than 78,000 cemetery records to mapped sections and uses time to show how Union Cemetery developed from its earliest burials to the present.</p>
+          </div>
+        </div>
+
+        <div class="hero-meta-v9">
+          <div><span>Role</span><strong>Data / UX / Development</strong></div>
+          <div><span>Platform</span><strong>Web / Blender</strong></div>
+          <div><span>Stack</span><strong>Python / CSV / SVG / Blender</strong></div>
+          <div><span>Status</span><strong>In Progress</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="compact-overview">
+      <div class="compact-overview-inner">
+        <div class="compact-grid">
+          <article class="compact-card">
+            <p class="micro-label">Problem</p>
+            <h3>Records lack spatial context</h3>
+            <p>
+              Burial records exist as text, dates, sections, and lots. On their own,
+              they do not show where growth occurred or how the cemetery changed over time.
+            </p>
+          </article>
+
+          <article class="compact-card">
+            <p class="micro-label">Response</p>
+            <h3>Connect records to place</h3>
+            <p>
+              The project cleans and normalizes the records, matches them to historic
+              section maps, and converts chronology into a spatial visualization.
+            </p>
+          </article>
+
+          <article class="compact-card">
+            <p class="micro-label">Workflow</p>
+            <h3>Four linked steps</h3>
+            <p>
+              The data pipeline moves from cemetery records to mapped placement and
+              then to a time-based view of cemetery growth.
+            </p>
+            <div class="compact-workflow">
+              <span>Clean</span>
+              <span>Match</span>
+              <span>Place</span>
+              <span>Animate</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="compact-prototype">
+      <div class="compact-prototype-inner">
+        <div class="compact-prototype-grid">
+          <div class="compact-prototype-copy">
+            <p class="section-index">02 / Prototype</p>
+            <h2>Cemetery growth timeline</h2>
+            <p>
+              The prototype uses mapped grave markers and a year-based reveal to show
+              the cemetery filling over time. Current work focuses on lot-level placement
+              and extending the visualization across the full cemetery.
+            </p>
+
+            <div class="compact-status">
+              <div class="compact-status-row">
+                <span>Records</span>
+                <span>78,569 normalized source rows</span>
+              </div>
+              <div class="compact-status-row">
+                <span>Mapping</span>
+                <span>Section aliases, historic maps, and section crosswalks</span>
+              </div>
+              <div class="compact-status-row">
+                <span>Timeline</span>
+                <span>Year-based marker reveal from early burials through 2026</span>
+              </div>
+              <div class="compact-status-row">
+                <span>Current work</span>
+                <span>Lot placement, map alignment, and full-cemetery visualization</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="compact-visuals">
+            <div class="d3-frame cemetery-interface-frame" aria-label="Interactive Union Cemetery timeline mockup">
+              <div class="cemetery-demo">
+                <div class="cemetery-demo-head">
+                  <span>UNION CEMETERY</span>
+                  <strong id="cemetery-year">1867</strong>
+                </div>
+
+                <div class="cemetery-scene">
+                  <div class="cemetery-plane">
+                    <svg class="cemetery-plan-lines" viewBox="0 0 600 360" preserveAspectRatio="none" aria-hidden="true">
+                      <rect x="8" y="10" width="175" height="132"/>
+                      <rect x="190" y="15" width="130" height="127"/>
+                      <rect x="327" y="10" width="112" height="137"/>
+                      <rect x="446" y="13" width="145" height="136"/>
+                      <rect x="12" y="151" width="210" height="196"/>
+                      <rect x="230" y="151" width="160" height="195"/>
+                      <rect x="398" y="154" width="190" height="191"/>
+                      <path d="M0 144 H600"/>
+                      <path d="M221 0 V360"/>
+                      <path d="M392 0 V360"/>
+                      <circle cx="392" cy="145" r="20"/>
+                    </svg>
+                    <div class="marker-field">
+                      <i class="grave-marker" data-year="1826" style="--x:71.30%;--y:83.78%;--mh:4px"></i>
+<i class="grave-marker" data-year="1998" style="--x:52.00%;--y:62.56%;--mh:7px"></i>
+<i class="grave-marker" data-year="1982" style="--x:49.88%;--y:53.32%;--mh:8px"></i>
+<i class="grave-marker" data-year="1979" style="--x:17.83%;--y:86.55%;--mh:8px"></i>
+<i class="grave-marker" data-year="1980" style="--x:47.00%;--y:81.84%;--mh:8px"></i>
+<i class="grave-marker" data-year="1934" style="--x:24.19%;--y:62.45%;--mh:8px"></i>
+<i class="grave-marker" data-year="1939" style="--x:78.59%;--y:19.55%;--mh:6px"></i>
+<i class="grave-marker" data-year="1875" style="--x:53.29%;--y:7.99%;--mh:7px"></i>
+<i class="grave-marker" data-year="1892" style="--x:16.48%;--y:66.11%;--mh:4px"></i>
+<i class="grave-marker" data-year="1823" style="--x:54.06%;--y:46.08%;--mh:7px"></i>
+<i class="grave-marker" data-year="1967" style="--x:6.30%;--y:57.66%;--mh:8px"></i>
+<i class="grave-marker" data-year="1864" style="--x:58.79%;--y:84.74%;--mh:5px"></i>
+<i class="grave-marker" data-year="1900" style="--x:33.32%;--y:37.92%;--mh:7px"></i>
+<i class="grave-marker" data-year="1966" style="--x:42.89%;--y:53.90%;--mh:4px"></i>
+<i class="grave-marker" data-year="1934" style="--x:84.47%;--y:13.54%;--mh:5px"></i>
+<i class="grave-marker" data-year="1964" style="--x:58.69%;--y:84.86%;--mh:5px"></i>
+<i class="grave-marker" data-year="1916" style="--x:44.10%;--y:61.21%;--mh:8px"></i>
+<i class="grave-marker" data-year="1968" style="--x:28.83%;--y:90.98%;--mh:6px"></i>
+<i class="grave-marker" data-year="1895" style="--x:13.46%;--y:73.63%;--mh:6px"></i>
+<i class="grave-marker" data-year="1900" style="--x:85.99%;--y:65.21%;--mh:4px"></i>
+<i class="grave-marker" data-year="1978" style="--x:56.25%;--y:25.57%;--mh:7px"></i>
+<i class="grave-marker" data-year="1987" style="--x:56.67%;--y:29.65%;--mh:6px"></i>
+<i class="grave-marker" data-year="1808" style="--x:51.12%;--y:80.48%;--mh:4px"></i>
+<i class="grave-marker" data-year="1857" style="--x:83.73%;--y:75.87%;--mh:6px"></i>
+<i class="grave-marker" data-year="1935" style="--x:70.14%;--y:21.85%;--mh:5px"></i>
+<i class="grave-marker" data-year="1855" style="--x:44.39%;--y:76.28%;--mh:4px"></i>
+<i class="grave-marker" data-year="1857" style="--x:94.53%;--y:52.94%;--mh:5px"></i>
+<i class="grave-marker" data-year="1907" style="--x:87.94%;--y:43.00%;--mh:4px"></i>
+<i class="grave-marker" data-year="1952" style="--x:63.79%;--y:79.54%;--mh:7px"></i>
+<i class="grave-marker" data-year="1970" style="--x:14.07%;--y:37.58%;--mh:6px"></i>
+<i class="grave-marker" data-year="1932" style="--x:35.77%;--y:84.92%;--mh:4px"></i>
+<i class="grave-marker" data-year="1907" style="--x:29.77%;--y:82.72%;--mh:4px"></i>
+<i class="grave-marker" data-year="1913" style="--x:66.21%;--y:84.94%;--mh:8px"></i>
+<i class="grave-marker" data-year="1854" style="--x:36.40%;--y:85.11%;--mh:8px"></i>
+<i class="grave-marker" data-year="1819" style="--x:95.81%;--y:78.71%;--mh:6px"></i>
+<i class="grave-marker" data-year="2019" style="--x:45.00%;--y:28.21%;--mh:4px"></i>
+<i class="grave-marker" data-year="1890" style="--x:35.31%;--y:27.51%;--mh:7px"></i>
+<i class="grave-marker" data-year="1932" style="--x:18.64%;--y:46.65%;--mh:6px"></i>
+<i class="grave-marker" data-year="1919" style="--x:53.74%;--y:36.14%;--mh:6px"></i>
+<i class="grave-marker" data-year="1934" style="--x:68.16%;--y:86.42%;--mh:8px"></i>
+<i class="grave-marker" data-year="1831" style="--x:31.01%;--y:90.10%;--mh:4px"></i>
+<i class="grave-marker" data-year="1966" style="--x:11.99%;--y:65.82%;--mh:8px"></i>
+<i class="grave-marker" data-year="1886" style="--x:33.61%;--y:83.31%;--mh:8px"></i>
+<i class="grave-marker" data-year="1965" style="--x:36.85%;--y:90.66%;--mh:8px"></i>
+<i class="grave-marker" data-year="1903" style="--x:26.04%;--y:86.33%;--mh:6px"></i>
+<i class="grave-marker" data-year="1811" style="--x:36.39%;--y:37.99%;--mh:4px"></i>
+<i class="grave-marker" data-year="1916" style="--x:69.35%;--y:37.62%;--mh:6px"></i>
+<i class="grave-marker" data-year="2003" style="--x:49.61%;--y:34.52%;--mh:4px"></i>
+<i class="grave-marker" data-year="1988" style="--x:80.30%;--y:7.91%;--mh:4px"></i>
+<i class="grave-marker" data-year="1997" style="--x:81.48%;--y:62.16%;--mh:5px"></i>
+<i class="grave-marker" data-year="1983" style="--x:12.89%;--y:68.41%;--mh:8px"></i>
+<i class="grave-marker" data-year="2024" style="--x:27.92%;--y:89.66%;--mh:5px"></i>
+<i class="grave-marker" data-year="1968" style="--x:86.82%;--y:34.75%;--mh:6px"></i>
+<i class="grave-marker" data-year="1962" style="--x:84.17%;--y:62.25%;--mh:7px"></i>
+<i class="grave-marker" data-year="1919" style="--x:30.05%;--y:30.50%;--mh:7px"></i>
+<i class="grave-marker" data-year="1909" style="--x:42.98%;--y:28.57%;--mh:4px"></i>
+<i class="grave-marker" data-year="2008" style="--x:46.83%;--y:28.25%;--mh:6px"></i>
+<i class="grave-marker" data-year="1951" style="--x:26.88%;--y:47.03%;--mh:8px"></i>
+<i class="grave-marker" data-year="1950" style="--x:67.89%;--y:31.00%;--mh:4px"></i>
+<i class="grave-marker" data-year="1945" style="--x:58.14%;--y:77.22%;--mh:8px"></i>
+<i class="grave-marker" data-year="1877" style="--x:61.24%;--y:47.64%;--mh:7px"></i>
+<i class="grave-marker" data-year="1940" style="--x:16.50%;--y:12.40%;--mh:8px"></i>
+<i class="grave-marker" data-year="1937" style="--x:31.73%;--y:57.35%;--mh:7px"></i>
+<i class="grave-marker" data-year="2003" style="--x:79.28%;--y:68.09%;--mh:5px"></i>
+<i class="grave-marker" data-year="1922" style="--x:36.06%;--y:36.68%;--mh:6px"></i>
+<i class="grave-marker" data-year="1871" style="--x:11.36%;--y:26.55%;--mh:6px"></i>
+<i class="grave-marker" data-year="1971" style="--x:53.36%;--y:20.98%;--mh:5px"></i>
+<i class="grave-marker" data-year="1876" style="--x:54.85%;--y:19.46%;--mh:5px"></i>
+<i class="grave-marker" data-year="1967" style="--x:75.18%;--y:11.91%;--mh:7px"></i>
+<i class="grave-marker" data-year="2011" style="--x:76.83%;--y:52.91%;--mh:7px"></i>
+<i class="grave-marker" data-year="1885" style="--x:46.08%;--y:21.95%;--mh:6px"></i>
+<i class="grave-marker" data-year="1974" style="--x:46.76%;--y:24.45%;--mh:8px"></i>
+<i class="grave-marker" data-year="1967" style="--x:48.65%;--y:61.33%;--mh:6px"></i>
+<i class="grave-marker" data-year="1992" style="--x:76.25%;--y:29.77%;--mh:4px"></i>
+<i class="grave-marker" data-year="1989" style="--x:72.89%;--y:81.64%;--mh:7px"></i>
+<i class="grave-marker" data-year="1956" style="--x:44.34%;--y:80.52%;--mh:6px"></i>
+<i class="grave-marker" data-year="1862" style="--x:16.53%;--y:70.37%;--mh:5px"></i>
+<i class="grave-marker" data-year="1867" style="--x:28.31%;--y:25.01%;--mh:6px"></i>
+<i class="grave-marker" data-year="1981" style="--x:74.38%;--y:90.25%;--mh:8px"></i>
+<i class="grave-marker" data-year="2014" style="--x:44.61%;--y:77.31%;--mh:7px"></i>
+<i class="grave-marker" data-year="1821" style="--x:67.64%;--y:78.98%;--mh:7px"></i>
+<i class="grave-marker" data-year="1916" style="--x:28.13%;--y:90.52%;--mh:5px"></i>
+<i class="grave-marker" data-year="1985" style="--x:26.25%;--y:66.31%;--mh:7px"></i>
+<i class="grave-marker" data-year="2005" style="--x:21.01%;--y:49.90%;--mh:4px"></i>
+<i class="grave-marker" data-year="1840" style="--x:15.69%;--y:10.80%;--mh:5px"></i>
+<i class="grave-marker" data-year="1912" style="--x:33.55%;--y:71.90%;--mh:7px"></i>
+<i class="grave-marker" data-year="1889" style="--x:20.59%;--y:52.99%;--mh:5px"></i>
+<i class="grave-marker" data-year="1929" style="--x:94.98%;--y:49.12%;--mh:4px"></i>
+<i class="grave-marker" data-year="2000" style="--x:73.09%;--y:41.57%;--mh:8px"></i>
+<i class="grave-marker" data-year="1856" style="--x:94.20%;--y:19.64%;--mh:5px"></i>
+<i class="grave-marker" data-year="1952" style="--x:54.06%;--y:73.37%;--mh:8px"></i>
+<i class="grave-marker" data-year="1928" style="--x:35.90%;--y:38.63%;--mh:7px"></i>
+<i class="grave-marker" data-year="1852" style="--x:51.01%;--y:43.57%;--mh:5px"></i>
+<i class="grave-marker" data-year="1913" style="--x:35.36%;--y:68.88%;--mh:4px"></i>
+<i class="grave-marker" data-year="1898" style="--x:36.20%;--y:11.25%;--mh:6px"></i>
+<i class="grave-marker" data-year="1817" style="--x:90.44%;--y:13.30%;--mh:7px"></i>
+<i class="grave-marker" data-year="2013" style="--x:4.96%;--y:49.34%;--mh:7px"></i>
+<i class="grave-marker" data-year="1984" style="--x:58.67%;--y:18.91%;--mh:6px"></i>
+<i class="grave-marker" data-year="1873" style="--x:34.56%;--y:35.19%;--mh:5px"></i>
+<i class="grave-marker" data-year="2018" style="--x:13.90%;--y:60.92%;--mh:5px"></i>
+<i class="grave-marker" data-year="1933" style="--x:94.26%;--y:12.58%;--mh:7px"></i>
+<i class="grave-marker" data-year="1997" style="--x:73.06%;--y:57.03%;--mh:7px"></i>
+<i class="grave-marker" data-year="1972" style="--x:17.59%;--y:27.31%;--mh:5px"></i>
+<i class="grave-marker" data-year="1841" style="--x:40.12%;--y:57.18%;--mh:4px"></i>
+<i class="grave-marker" data-year="1848" style="--x:47.09%;--y:60.52%;--mh:7px"></i>
+<i class="grave-marker" data-year="2007" style="--x:49.56%;--y:24.69%;--mh:6px"></i>
+<i class="grave-marker" data-year="2015" style="--x:73.36%;--y:28.89%;--mh:7px"></i>
+<i class="grave-marker" data-year="2022" style="--x:39.86%;--y:50.87%;--mh:8px"></i>
+<i class="grave-marker" data-year="2004" style="--x:23.86%;--y:15.65%;--mh:6px"></i>
+<i class="grave-marker" data-year="1977" style="--x:17.34%;--y:80.52%;--mh:7px"></i>
+<i class="grave-marker" data-year="1970" style="--x:94.35%;--y:13.13%;--mh:6px"></i>
+<i class="grave-marker" data-year="1987" style="--x:43.07%;--y:80.09%;--mh:8px"></i>
+<i class="grave-marker" data-year="1924" style="--x:40.99%;--y:76.61%;--mh:6px"></i>
+<i class="grave-marker" data-year="1948" style="--x:44.28%;--y:81.03%;--mh:7px"></i>
+<i class="grave-marker" data-year="2006" style="--x:32.41%;--y:87.50%;--mh:8px"></i>
+<i class="grave-marker" data-year="1844" style="--x:82.82%;--y:86.31%;--mh:6px"></i>
+<i class="grave-marker" data-year="1997" style="--x:14.02%;--y:28.73%;--mh:4px"></i>
+<i class="grave-marker" data-year="1918" style="--x:42.64%;--y:44.25%;--mh:5px"></i>
+<i class="grave-marker" data-year="1872" style="--x:91.80%;--y:25.08%;--mh:7px"></i>
+<i class="grave-marker" data-year="1949" style="--x:88.40%;--y:41.45%;--mh:8px"></i>
+<i class="grave-marker" data-year="2008" style="--x:94.25%;--y:13.42%;--mh:8px"></i>
+<i class="grave-marker" data-year="2020" style="--x:73.94%;--y:59.14%;--mh:7px"></i>
+<i class="grave-marker" data-year="1946" style="--x:85.84%;--y:87.43%;--mh:7px"></i>
+<i class="grave-marker" data-year="2011" style="--x:84.72%;--y:65.91%;--mh:6px"></i>
+<i class="grave-marker" data-year="1896" style="--x:5.77%;--y:35.33%;--mh:8px"></i>
+<i class="grave-marker" data-year="1927" style="--x:22.51%;--y:69.43%;--mh:4px"></i>
+<i class="grave-marker" data-year="1978" style="--x:82.38%;--y:55.74%;--mh:6px"></i>
+<i class="grave-marker" data-year="1823" style="--x:57.84%;--y:64.71%;--mh:6px"></i>
+<i class="grave-marker" data-year="1978" style="--x:23.64%;--y:18.25%;--mh:5px"></i>
+<i class="grave-marker" data-year="2009" style="--x:84.56%;--y:84.58%;--mh:4px"></i>
+<i class="grave-marker" data-year="1987" style="--x:65.52%;--y:29.96%;--mh:6px"></i>
+<i class="grave-marker" data-year="2007" style="--x:85.87%;--y:78.64%;--mh:5px"></i>
+<i class="grave-marker" data-year="1843" style="--x:48.60%;--y:86.47%;--mh:8px"></i>
+<i class="grave-marker" data-year="1915" style="--x:86.20%;--y:13.20%;--mh:8px"></i>
+<i class="grave-marker" data-year="1877" style="--x:66.57%;--y:18.01%;--mh:4px"></i>
+<i class="grave-marker" data-year="1932" style="--x:89.12%;--y:11.84%;--mh:5px"></i>
+<i class="grave-marker" data-year="1909" style="--x:24.81%;--y:88.15%;--mh:5px"></i>
+<i class="grave-marker" data-year="1961" style="--x:18.99%;--y:53.42%;--mh:5px"></i>
+<i class="grave-marker" data-year="1846" style="--x:54.67%;--y:61.52%;--mh:7px"></i>
+<i class="grave-marker" data-year="1980" style="--x:94.66%;--y:12.04%;--mh:7px"></i>
+<i class="grave-marker" data-year="1974" style="--x:44.17%;--y:17.97%;--mh:7px"></i>
+<i class="grave-marker" data-year="1926" style="--x:26.99%;--y:90.81%;--mh:4px"></i>
+<i class="grave-marker" data-year="2017" style="--x:54.52%;--y:74.36%;--mh:6px"></i>
+<i class="grave-marker" data-year="1948" style="--x:86.43%;--y:20.61%;--mh:8px"></i>
+<i class="grave-marker" data-year="1996" style="--x:69.99%;--y:86.19%;--mh:8px"></i>
+<i class="grave-marker" data-year="1985" style="--x:22.75%;--y:24.86%;--mh:7px"></i>
+<i class="grave-marker" data-year="2018" style="--x:93.35%;--y:21.28%;--mh:4px"></i>
+<i class="grave-marker" data-year="2004" style="--x:52.60%;--y:68.35%;--mh:6px"></i>
+<i class="grave-marker" data-year="2011" style="--x:49.17%;--y:83.45%;--mh:7px"></i>
+<i class="grave-marker" data-year="1860" style="--x:12.00%;--y:36.80%;--mh:7px"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="cemetery-controls">
+                  <button class="timeline-play" id="timeline-play" type="button" aria-label="Play burial timeline">▶</button>
+                  <span>1806</span>
+                  <input id="cemetery-slider" type="range" min="1806" max="2026" value="1867" aria-label="Cemetery year">
+                  <span>2026</span>
+                </div>
+              </div>
+            </div>
+            <div class="media-caption">
+              <span>Interactive timeline mockup</span>
+              <span>Representative markers / mapped growth</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <a class="next-project compact-next" href="galeriste.html"
+       style="--project-primary:#d4d2cd; --project-secondary:#242421; --project-on-primary:#242421; --project-on-secondary:#f5f4ef;">
+      <div class="next-project-inner">
+        <div class="next-label">Next project</div>
+        <h2 class="next-title">GALERISTE</h2>
+        <div class="next-arrow">→</div>
+      </div>
+    </a>
+  </main>
+
+  <footer class="footer-shell">
+    <div class="footer-art">
+      <canvas id="footer-canvas" aria-hidden="true"></canvas>
+    </div>
+    <div class="footer-base">
+      <div class="footer-base-inner">
+        <div class="footer-links">
+          <a href="#">LinkedIn</a>
+          <a href="#">GitHub</a>
+          <a href="DanielLRossCV.pdf">CV</a>
+        </div>
+        <div class="copyright">© 2026 Daniel Ross</div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cursor-dot" aria-hidden="true"><div></div></div>
+
+  <script>
+    /* ---------- Custom cursor ---------- */
+    const cursor = document.querySelector(".cursor-dot");
+    const cursorSquare = cursor.querySelector("div");
+
+    window.addEventListener("mousemove", (e) => {
+      cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    });
+
+    document.querySelectorAll("a, .finding, .process-row").forEach(el => {
+      el.addEventListener("mouseenter", () => {
+        cursorSquare.style.transform = "scale(1.7)";
+        cursorSquare.style.background = "var(--project-primary)";
+      });
+      el.addEventListener("mouseleave", () => {
+        cursorSquare.style.transform = "scale(1)";
+        cursorSquare.style.background = "var(--foreground)";
+      });
+    });
+
+    /* ---------- Signal-field footer ---------- */
+    const canvas = document.getElementById("footer-canvas");
+    const ctx = canvas.getContext("2d");
+    let cw = 0, ch = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let pointerX = .5, pointerY = .5;
+
+    function resizeFooter() {
+      const r = canvas.getBoundingClientRect();
+      cw = r.width;
+      ch = r.height;
+      canvas.width = Math.max(1, Math.floor(cw * dpr));
+      canvas.height = Math.max(1, Math.floor(ch * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function cssVar(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    canvas.addEventListener("mousemove", e => {
+      const r = canvas.getBoundingClientRect();
+      pointerX = (e.clientX - r.left) / r.width;
+      pointerY = (e.clientY - r.top) / r.height;
+    });
+
+    canvas.addEventListener("mouseleave", () => {
+      pointerX = .5;
+      pointerY = .5;
+    });
+
+    function drawFooter(t) {
+      if (!cw || !ch) return requestAnimationFrame(drawFooter);
+
+      ctx.clearRect(0, 0, cw, ch);
+
+      const fg = "rgba(26,26,26,.15)";
+      const fg2 = "rgba(26,26,26,.27)";
+      const accent = cssVar("--project-primary") || "#c5161d";
+
+      /* sparse coordinate grid */
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(26,26,26,.07)";
+      const grid = 48;
+      for (let x = 0; x <= cw; x += grid) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ch); ctx.stroke();
+      }
+      for (let y = 0; y <= ch; y += grid) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(cw, y); ctx.stroke();
+      }
+
+      /* contour / signal lines */
+      const lines = 7;
+      for (let i = 0; i < lines; i++) {
+        const base = ch * (.12 + i * .115);
+        ctx.beginPath();
+
+        for (let x = -10; x <= cw + 10; x += 7) {
+          const xn = x / Math.max(cw, 1);
+          const cursorDistance = Math.abs(xn - pointerX);
+          const cursorPull = Math.max(0, 1 - cursorDistance * 5);
+          const y =
+            base +
+            Math.sin(x * .012 + t * .00035 + i * .72) * (7 + i * .8) +
+            Math.sin(x * .004 - t * .0002 + i) * 5 +
+            cursorPull * (pointerY - .5) * 25;
+
+          if (x === -10) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+
+        ctx.strokeStyle = i === 3 ? accent : fg;
+        ctx.globalAlpha = i === 3 ? .72 : 1;
+        ctx.lineWidth = i === 3 ? 1.5 : 1;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      /* tracking markers */
+      for (let i = 0; i < 6; i++) {
+        const x = ((t * .018 + i * cw / 6) % (cw + 100)) - 50;
+        ctx.strokeStyle = fg2;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, ch);
+        ctx.stroke();
+
+        const y = ch * (.22 + ((i * .137) % .56));
+        ctx.fillStyle = i % 2 ? accent : "rgba(26,26,26,.45)";
+        ctx.fillRect(x - 2, y - 2, 4, 4);
+      }
+
+      requestAnimationFrame(drawFooter);
+    }
+
+    window.addEventListener("resize", resizeFooter);
+    resizeFooter();
+    requestAnimationFrame(drawFooter);
+  </script>
+
+<script>
+(() => {
+  const menuButton = document.querySelector(".mobile-menu");
+  const mobilePanel = document.getElementById("mobile-navigation");
+
+  if (menuButton && mobilePanel) {
+    menuButton.addEventListener("click", () => {
+      const open = menuButton.getAttribute("aria-expanded") === "true";
+      menuButton.setAttribute("aria-expanded", String(!open));
+      menuButton.setAttribute("aria-label", open ? "Open navigation" : "Close navigation");
+      mobilePanel.dataset.open = String(!open);
+    });
+
+    mobilePanel.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.setAttribute("aria-label", "Open navigation");
+        mobilePanel.dataset.open = "false";
+      });
+    });
+  }
+
+  const caseLinks = [...document.querySelectorAll(".case-nav a")];
+  const sections = caseLinks
+    .map(link => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+
+  if ("IntersectionObserver" in window && sections.length) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (!visible) return;
+
+      caseLinks.forEach(link => {
+        const active = link.getAttribute("href") === `#${visible.target.id}`;
+        if (active) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      });
+    }, {
+      rootMargin: "-20% 0px -65% 0px",
+      threshold: [0, .1, .25, .5]
+    });
+
+    sections.forEach(section => observer.observe(section));
+  }
+})();
+</script>
+
+
+
+
+
+<script id="union-timeline-interaction">
+(() => {
+  const slider = document.getElementById("cemetery-slider");
+  const yearLabel = document.getElementById("cemetery-year");
+  const play = document.getElementById("timeline-play");
+  if (!slider || !yearLabel || !play) return;
+
+  const markers = Array.from(document.querySelectorAll(".grave-marker"));
+  let timer = null;
+
+  function renderTimeline() {
+    const year = Number(slider.value);
+    yearLabel.textContent = String(year);
+    markers.forEach(marker => {
+      const visible = Number(marker.dataset.year) <= year;
+      marker.dataset.hidden = visible ? "false" : "true";
+    });
+  }
+
+  function stop() {
+    if (timer) window.clearInterval(timer);
+    timer = null;
+    play.textContent = "▶";
+    play.setAttribute("aria-label", "Play burial timeline");
+  }
+
+  play.addEventListener("click", () => {
+    if (timer) {
+      stop();
+      return;
+    }
+
+    if (Number(slider.value) >= Number(slider.max)) {
+      slider.value = slider.min;
+      renderTimeline();
+    }
+
+    play.textContent = "Ⅱ";
+    play.setAttribute("aria-label", "Pause burial timeline");
+
+    timer = window.setInterval(() => {
+      let next = Number(slider.value) + 2;
+      if (next >= Number(slider.max)) {
+        slider.value = slider.max;
+        renderTimeline();
+        stop();
+        return;
+      }
+      slider.value = String(next);
+      renderTimeline();
+    }, 55);
+  });
+
+  slider.addEventListener("input", () => {
+    renderTimeline();
+  });
+
+  renderTimeline();
+})();
+</script>
+
+</body>
+</html>
+
+<style>
+  .project-hero .hero-back::before,
+  .project-hero .project-number::before {
+    color: #111 !important;
+    background: #111 !important;
+  }
+
+  .project-hero .hero-back,
+  .project-hero .eyebrow,
+  .project-hero .meta-label,
+  .project-hero .micro-label,
+  .project-hero .tag {
+    color: rgba(17,17,17,.72) !important;
+  }
+</style>
+
+<style>
+@media (min-width: 981px) {
+  .hero-title-v9 { padding-left: 2.5vw; }
+}
+</style>
+
+<style>
+.hero-title-v9 h1,
+.project-number-v9,
+.hero-description-v9 .micro-label,
+.hero-description-v9 p:last-child {
+  color: #fff !important;
+  text-shadow: none !important;
+}
+</style>
+
+
+<style id="galeriste-png-title-v11">
+.galeriste-hero .hero-title-v9 .galeriste-title-image{
+  display:block !important;
+  width:clamp(300px,38vw,520px) !important;
+  max-width:100% !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:0 !important;
+  font-size:0 !important;
+  transform:none !important;
+  overflow:visible !important;
+}
+
+.galeriste-hero .hero-title-v9 .galeriste-title-image img{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  max-width:none !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  object-fit:contain !important;
+}
+
+@media(max-width:980px){
+  .galeriste-hero .hero-title-v9 .galeriste-title-image{
+    width:clamp(280px,43vw,450px) !important;
+  }
+}
+
+@media(max-width:767px){
+  .galeriste-hero .hero-title-v9 .galeriste-title-image{
+    width:min(82vw,430px) !important;
+  }
+}
+</style>
