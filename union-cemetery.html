@@ -183,7 +183,115 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
   .uc3d-embed-frame{height:560px}
 }
 @media(max-width:600px){.uc3d-embed-frame{height:610px}}
-</style></head>
+</style>
+<style id="mobile-case-study-hero-fix-v1">
+@media (max-width: 767px) {
+  /* Remove the forced tall mobile hero and the empty 1fr spacer. */
+  .project-hero.hero-v9 {
+    height: auto !important;
+    min-height: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    overflow: hidden !important;
+  }
+
+  .project-hero.hero-v9 .hero-inner-v9 {
+    height: auto !important;
+    min-height: 0 !important;
+    padding-top: 76px !important;
+    padding-bottom: 22px !important;
+    display: block !important;
+  }
+
+  .project-hero.hero-v9 .hero-top-v9 {
+    display: block !important;
+  }
+
+  .project-hero.hero-v9 .hero-tags-v9 {
+    margin-top: 20px !important;
+    gap: 9px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .project-hero.hero-v9 .hero-copy-v9 {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 88px 0 24px !important;
+  }
+
+  .project-hero.hero-v9 .hero-title-v9 {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    transform: none !important;
+  }
+
+  .project-hero.hero-v9 .hero-description-v9 {
+    display: block !important;
+    width: 100% !important;
+    max-width: 38ch !important;
+    margin: 26px 0 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+  }
+
+  .project-hero.hero-v9 .hero-meta-v9 {
+    position: relative !important;
+    width: 100% !important;
+    margin: 0 !important;
+    top: 0 !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 18px 20px !important;
+    padding: 18px 0 12px !important;
+  }
+
+  .project-hero.hero-v9 .hero-meta-v9 > div,
+  .project-hero.hero-v9 .hero-meta-v9 > div + div {
+    padding: 0 !important;
+    border-left: 0 !important;
+  }
+}
+</style>
+
+<style id="union-mobile-hero-fix-v1">
+@media (max-width: 767px) {
+  /* Keep both UNION and CEMETERY on the green cemetery visual. */
+  .project-hero.hero-v9 .cemetery-horizon {
+    top: 224px !important;
+    bottom: 0 !important;
+    height: auto !important;
+  }
+
+  .project-hero.hero-v9 .hero-copy-v9 {
+    padding-top: 92px !important;
+  }
+
+  .project-hero.hero-v9 .hero-title-v9 h1 {
+    font-size: clamp(58px,18vw,76px) !important;
+    line-height: .82 !important;
+  }
+}
+</style>
+
+
+<style id="mobile-project-art-v2">
+@media (max-width: 767px) {
+  /* Keep a cropped cemetery landscape visible before the title. */
+  .project-hero.hero-v9 .cemetery-horizon {
+    top: 190px !important;
+    bottom: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
+  }
+
+  .project-hero.hero-v9 .hero-copy-v9 {
+    padding-top: 118px !important;
+  }
+}
+</style>
+
+</head>
 <body>
 <a class="skip-link" href="#main-content">Skip to case study</a>
 <nav aria-label="Primary navigation" class="nav-shell">

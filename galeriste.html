@@ -4372,6 +4372,137 @@ body {
 }
 </style>
 
+
+<style id="mobile-case-study-hero-fix-v1">
+@media (max-width: 767px) {
+  /* Remove the forced tall mobile hero and the empty 1fr spacer. */
+  .project-hero.hero-v9 {
+    height: auto !important;
+    min-height: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    overflow: hidden !important;
+  }
+
+  .project-hero.hero-v9 .hero-inner-v9 {
+    height: auto !important;
+    min-height: 0 !important;
+    padding-top: 76px !important;
+    padding-bottom: 22px !important;
+    display: block !important;
+  }
+
+  .project-hero.hero-v9 .hero-top-v9 {
+    display: block !important;
+  }
+
+  .project-hero.hero-v9 .hero-tags-v9 {
+    margin-top: 20px !important;
+    gap: 9px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .project-hero.hero-v9 .hero-copy-v9 {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 88px 0 24px !important;
+  }
+
+  .project-hero.hero-v9 .hero-title-v9 {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    transform: none !important;
+  }
+
+  .project-hero.hero-v9 .hero-description-v9 {
+    display: block !important;
+    width: 100% !important;
+    max-width: 38ch !important;
+    margin: 26px 0 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+  }
+
+  .project-hero.hero-v9 .hero-meta-v9 {
+    position: relative !important;
+    width: 100% !important;
+    margin: 0 !important;
+    top: 0 !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 18px 20px !important;
+    padding: 18px 0 12px !important;
+  }
+
+  .project-hero.hero-v9 .hero-meta-v9 > div,
+  .project-hero.hero-v9 .hero-meta-v9 > div + div {
+    padding: 0 !important;
+    border-left: 0 !important;
+  }
+}
+</style>
+
+<style id="galeriste-mobile-hero-fix-v1">
+@media (max-width: 767px) {
+  .galeriste-hero .hero-copy-v9 {
+    padding-top: 78px !important;
+  }
+
+  .galeriste-hero .gallery-horizon {
+    top: 0 !important;
+    bottom: 0 !important;
+    height: 100% !important;
+  }
+
+  .galeriste-hero .hero-title-v9 .galeriste-title-image {
+    width: min(84vw,430px) !important;
+    max-width: 100% !important;
+  }
+}
+</style>
+
+
+<style id="mobile-project-art-v2">
+@media (max-width: 767px) {
+  /* Preserve a cropped gallery-art zone on phones. */
+  .galeriste-hero .gallery-horizon {
+    top: 0 !important;
+    bottom: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .galeriste-hero .hero-copy-v9 {
+    padding-top: 150px !important;
+  }
+
+  .galeriste-hero .frame-left {
+    left: 7% !important;
+    top: 205px !important;
+    width: 88px !important;
+  }
+
+  .galeriste-hero .frame-center {
+    left: 50% !important;
+    top: 187px !important;
+    width: 104px !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .galeriste-hero .frame-right {
+    right: 7% !important;
+    top: 211px !important;
+    width: 86px !important;
+  }
+
+  .galeriste-hero .frame-matte {
+    padding: 7px !important;
+    box-shadow: 0 8px 18px rgba(1,1,1,.14) !important;
+  }
+}
+</style>
+
 </head>
 
 <body class="galeriste-page">
