@@ -291,6 +291,32 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 }
 </style>
 
+
+<style id="project-footer-static-final">
+.footer-shell{
+  height:auto !important;
+  min-height:50px !important;
+  display:block !important;
+  background:var(--footer,#d4d4d4) !important;
+}
+.footer-art,
+#footer-canvas{
+  display:none !important;
+}
+.footer-base{
+  height:50px !important;
+  min-height:50px !important;
+  flex:0 0 50px !important;
+}
+.footer-shell,
+.footer-shell *,
+.footer-shell *::before,
+.footer-shell *::after{
+  animation:none !important;
+  transition:none !important;
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to case study</a>
@@ -397,7 +423,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 </section>
 <a class="next-project" href="index.html#work"><div class="next-project-inner"><div class="next-label">Back to projects</div><h2 class="next-title">SELECTED WORK</h2><div class="next-arrow">→</div></div></a>
 </main>
-<footer class="footer-shell"><div aria-hidden="true" class="footer-art"></div><div class="footer-base"><div class="footer-base-inner"><div class="footer-links"><a href="#">LinkedIn</a><a href="#">GitHub</a><a href="DanielLRossCV.pdf">CV</a></div><div class="copyright">© 2026 Daniel Ross</div></div></div></footer>
+<footer class="footer-shell">
+<div class="footer-base"><div class="footer-base-inner"><div class="footer-links"><a href="#">LinkedIn</a><a href="#">GitHub</a><a href="DanielLRossCV.pdf">CV</a></div><div class="copyright">© 2026 Daniel Ross</div></div></div></footer>
 <script>
 (() => {
   const menuButton=document.querySelector('.mobile-menu');
