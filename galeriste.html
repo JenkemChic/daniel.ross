@@ -4503,6 +4503,367 @@ body {
 }
 </style>
 
+
+
+<style id="galeriste-frame-background-fix-v3">
+/*
+ * Frames are project artwork, not foreground UI.
+ * Keep them behind all hero copy and reveal only their lower third.
+ */
+.galeriste-hero .gallery-horizon{
+  top:0 !important;
+  bottom:0 !important;
+  height:100% !important;
+  overflow:hidden !important;
+  z-index:0 !important;
+  pointer-events:none !important;
+}
+
+.galeriste-hero .hero-inner-v9{
+  position:relative !important;
+  z-index:3 !important;
+}
+
+.galeriste-hero .gallery-frame{
+  z-index:0 !important;
+  pointer-events:none !important;
+  clip-path:inset(66.666% 0 0 0) !important;
+  -webkit-clip-path:inset(66.666% 0 0 0) !important;
+}
+
+/* Desktop: lower thirds remain in the upper hero artwork zone. */
+@media (min-width:1101px){
+  .galeriste-hero .frame-left{
+    left:7% !important;
+    width:176px !important;
+    top:-125px !important;
+    transform:none !important;
+  }
+
+  .galeriste-hero .frame-center{
+    left:50% !important;
+    width:208px !important;
+    top:-155px !important;
+    transform:translateX(-50%) !important;
+  }
+
+  .galeriste-hero .frame-right{
+    right:7% !important;
+    width:170px !important;
+    top:-118px !important;
+    transform:none !important;
+  }
+}
+
+/* Tablet: same composition at the reduced frame sizes. */
+@media (min-width:768px) and (max-width:1100px){
+  .galeriste-hero .frame-left{
+    left:5% !important;
+    width:150px !important;
+    top:-105px !important;
+    transform:none !important;
+  }
+
+  .galeriste-hero .frame-center{
+    left:50% !important;
+    width:175px !important;
+    top:-128px !important;
+    transform:translateX(-50%) !important;
+  }
+
+  .galeriste-hero .frame-right{
+    right:5% !important;
+    width:146px !important;
+    top:-100px !important;
+    transform:none !important;
+  }
+}
+
+/*
+ * Phone: preserve the artwork in the body of the hero instead of snapping
+ * it to the top edge. The visible thirds sit behind the title/overview area.
+ */
+@media (max-width:767px){
+  .galeriste-hero .frame-left{
+    left:7% !important;
+    width:88px !important;
+    top:205px !important;
+    transform:none !important;
+  }
+
+  .galeriste-hero .frame-center{
+    left:50% !important;
+    width:104px !important;
+    top:187px !important;
+    transform:translateX(-50%) !important;
+  }
+
+  .galeriste-hero .frame-right{
+    right:7% !important;
+    width:86px !important;
+    top:211px !important;
+    transform:none !important;
+  }
+}
+</style>
+
+
+<style id="galeriste-prototype-reference-aesthetic-v1">
+/*
+ * Preserve the existing simple QR + two-phone flow while shifting the
+ * visual language toward the original Galeriste wireframe prototype.
+ */
+.galeriste-interface-frame{
+  background:
+    radial-gradient(circle at 22% 20%, rgba(0,0,0,.025) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 76% 68%, rgba(0,0,0,.018) 0 1px, transparent 1.5px),
+    #e9e7e1 !important;
+  background-size:17px 17px,23px 23px,auto !important;
+  border:1px solid #b9b6ae !important;
+}
+
+/* Phone shell */
+.galeriste-page .demo-phone{
+  padding:6px !important;
+  background:#080808 !important;
+  border:2px solid #080808 !important;
+  border-radius:24px !important;
+  box-shadow:0 10px 20px rgba(0,0,0,.16) !important;
+}
+
+.galeriste-page .phone-speaker{
+  width:31px !important;
+  height:5px !important;
+  top:8px !important;
+  background:#080808 !important;
+  border:1px solid #080808 !important;
+  z-index:3 !important;
+}
+
+/* Paper-like screen treatment */
+.galeriste-page .phone-screen{
+  border-radius:18px !important;
+  padding:19px 9px 10px !important;
+  color:#090909 !important;
+  background-color:#f2f0eb !important;
+  background-image:
+    linear-gradient(rgba(255,255,255,.32),rgba(255,255,255,.32)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.035' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E") !important;
+  background-size:auto,90px 90px !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+}
+
+/* Wireframe header */
+.galeriste-page .app-topbar{
+  margin-bottom:8px !important;
+  padding-bottom:6px !important;
+  border-bottom:2px solid #090909 !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:6px !important;
+  font-weight:800 !important;
+  letter-spacing:.035em !important;
+}
+
+.galeriste-page .app-topbar b{
+  padding:2px 4px !important;
+  background:#090909 !important;
+  color:#fff !important;
+  border:1px solid #090909 !important;
+  font-weight:800 !important;
+}
+
+/* Four pastel artwork placeholders from the prototype visual language */
+.galeriste-page .app-art{
+  height:100px !important;
+  margin-bottom:9px !important;
+  padding:5px !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  grid-template-rows:1fr 1fr !important;
+  gap:4px !important;
+  background:transparent !important;
+  border:2px solid #090909 !important;
+  overflow:hidden !important;
+}
+
+.galeriste-page .art-lot > span{
+  position:static !important;
+  width:auto !important;
+  height:auto !important;
+  border-radius:0 !important;
+  transform:none !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border:1px solid rgba(0,0,0,.18) !important;
+  font-size:29px !important;
+  line-height:1 !important;
+  font-weight:400 !important;
+  color:rgba(255,255,255,.65) !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+}
+
+.galeriste-page .art-a{background:#e7c7c7 !important}
+.galeriste-page .art-b{background:#cfd1ea !important}
+.galeriste-page .art-c{background:#e7e1b8 !important}
+.galeriste-page .art-d{background:#cfe0cf !important}
+
+/* Lot information becomes a boxed wireframe module */
+.galeriste-page .lot-meta{
+  border:2px solid #090909 !important;
+  padding:7px 7px 6px !important;
+  margin-bottom:7px !important;
+  background:rgba(255,255,255,.34) !important;
+}
+
+.galeriste-page .lot-meta small,
+.galeriste-page .bid-panel small{
+  margin-bottom:2px !important;
+  color:#090909 !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:5.5px !important;
+  font-weight:800 !important;
+  letter-spacing:.05em !important;
+}
+
+.galeriste-page .lot-meta strong,
+.galeriste-page .bid-panel > strong{
+  color:#090909 !important;
+  font-size:21px !important;
+  line-height:1 !important;
+  font-weight:800 !important;
+}
+
+.galeriste-page .lot-meta p{
+  margin:4px 0 0 !important;
+  font-size:7px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+}
+
+/* Prototype-style outlined controls */
+.galeriste-page .phone-screen button{
+  min-height:25px !important;
+  padding:6px 4px !important;
+  border:2px solid #090909 !important;
+  background:#f6f4ef !important;
+  color:#090909 !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:6px !important;
+  font-weight:800 !important;
+  letter-spacing:.02em !important;
+}
+
+.galeriste-page .phone-screen button::after{
+  content:"  ›" !important;
+}
+
+.galeriste-page .bid-panel{
+  margin:14px 0 8px !important;
+  padding:8px 7px !important;
+  background:rgba(255,255,255,.4) !important;
+  border:2px solid #090909 !important;
+  border-top:2px solid #090909 !important;
+}
+
+.galeriste-page .bid-panel > strong{
+  margin-bottom:9px !important;
+  font-size:25px !important;
+}
+
+.galeriste-page .bid-line{
+  padding:4px 0 !important;
+  border-top:1px solid #090909 !important;
+  font-size:6.5px !important;
+  font-weight:700 !important;
+}
+
+.galeriste-page .continue-note{
+  margin:7px 2px 0 !important;
+  color:#090909 !important;
+  font-size:5.5px !important;
+  line-height:1.35 !important;
+  font-weight:700 !important;
+}
+
+/* QR card follows the same monochrome paper/ink treatment */
+.galeriste-page .demo-qr-card{
+  background:#f2f0eb !important;
+  border:2px solid #090909 !important;
+  box-shadow:0 8px 16px rgba(0,0,0,.12) !important;
+}
+
+.galeriste-page .demo-qr{
+  padding:5px !important;
+  gap:3px !important;
+  background:#f2f0eb !important;
+  border:4px solid #090909 !important;
+}
+
+.galeriste-page .demo-qr i:nth-child(1),
+.galeriste-page .demo-qr i:nth-child(3),
+.galeriste-page .demo-qr i:nth-child(5),
+.galeriste-page .demo-qr i:nth-child(7),
+.galeriste-page .demo-qr i:nth-child(9){
+  background:#090909 !important;
+}
+
+.galeriste-page .demo-qr i:nth-child(2),
+.galeriste-page .demo-qr i:nth-child(4),
+.galeriste-page .demo-qr i:nth-child(6),
+.galeriste-page .demo-qr i:nth-child(8){
+  background:#d8d5cc !important;
+}
+
+.galeriste-page .demo-qr-card > span{
+  color:#090909 !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:5.5px !important;
+  font-weight:800 !important;
+  letter-spacing:.035em !important;
+}
+
+/* Keep existing composition and responsive sizes intact. */
+</style>
+
+
+<style id="galeriste-left-phone-button-fit-v2">
+/*
+ * The left phone's VIEW LOT control was falling below the clipped
+ * phone-screen content area. Keep the phone dimensions unchanged and
+ * compact only its internal modules enough to expose the full button.
+ */
+.galeriste-page .phone-lot .app-art{
+  height:84px !important;
+  margin-bottom:6px !important;
+}
+
+.galeriste-page .phone-lot .lot-meta{
+  padding:5px 7px 4px !important;
+  margin-bottom:5px !important;
+}
+
+.galeriste-page .phone-lot .lot-meta small{
+  margin-bottom:1px !important;
+  font-size:5px !important;
+}
+
+.galeriste-page .phone-lot .lot-meta strong{
+  font-size:19px !important;
+}
+
+.galeriste-page .phone-lot .lot-meta p{
+  margin:3px 0 0 !important;
+  font-size:6.5px !important;
+  line-height:1.2 !important;
+}
+
+.galeriste-page .phone-lot button{
+  min-height:22px !important;
+  padding:5px 4px !important;
+}
+</style>
+
 </head>
 
 <body class="galeriste-page">
@@ -4687,7 +5048,10 @@ body {
                       <b>LOT 08</b>
                     </div>
                     <div class="app-art art-lot">
-                      <span></span><span></span>
+                      <span class="art-tile art-a">A</span>
+                      <span class="art-tile art-b">B</span>
+                      <span class="art-tile art-c">C</span>
+                      <span class="art-tile art-d">D</span>
                     </div>
                     <div class="lot-meta">
                       <small>CURRENT BID</small>
