@@ -5286,6 +5286,314 @@ body {
 }
 </style>
 
+
+<style id="galeriste-blue-overlay-20">
+.galeriste-hero{
+  position:relative !important;
+}
+
+.galeriste-hero::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background:rgba(72,104,146,.40) !important;
+  pointer-events:none !important;
+  z-index:1 !important;
+}
+
+.galeriste-hero .hero-inner-v9{
+  position:relative !important;
+  z-index:2 !important;
+}
+</style>
+
+
+
+
+
+<style id="galeriste-abcd-palette-final">
+:root{
+  --gal-charcoal:#131312;
+  --gal-paper:#e7e5e3;
+  --gal-rose:#cab4af;
+  --gal-lavender:#b5b6ca;
+  --gal-yellow:#e3ddb6;
+  --gal-sage:#b9c6b8;
+  --gal-body:#555653;
+}
+
+/* Core page colors */
+.galeriste-page{
+  --text-primary:var(--gal-charcoal) !important;
+  --text-body:var(--gal-body) !important;
+  --text-secondary:#686966 !important;
+  --text-accent:#70716e !important;
+  --text-accent-light:#d7d6d1 !important;
+}
+
+.galeriste-page .brand,
+.galeriste-page .nav-link,
+.galeriste-page .compact-card h3,
+.galeriste-page .compact-prototype-copy h2,
+.galeriste-page .galeriste-reference-copy h2{
+  color:var(--gal-charcoal) !important;
+}
+
+.galeriste-page .compact-card p,
+.galeriste-page .compact-prototype-copy > p,
+.galeriste-page .compact-status-row span:last-child,
+.galeriste-page .galeriste-reference-copy p:last-child{
+  color:var(--gal-body) !important;
+}
+
+/* Use the four prototype colors as a repeating accent system. */
+.galeriste-page .compact-grid .compact-card:nth-child(1) .eyebrow,
+.galeriste-page .compact-grid .compact-card:nth-child(1) .micro-label{
+  color:#8e6962 !important;
+}
+
+.galeriste-page .compact-grid .compact-card:nth-child(2) .eyebrow,
+.galeriste-page .compact-grid .compact-card:nth-child(2) .micro-label{
+  color:#747694 !important;
+}
+
+.galeriste-page .compact-grid .compact-card:nth-child(3) .eyebrow,
+.galeriste-page .compact-grid .compact-card:nth-child(3) .micro-label{
+  color:#687968 !important;
+}
+
+.galeriste-page .section-index,
+.galeriste-page .media-caption,
+.galeriste-page .galeriste-reference-image figcaption,
+.galeriste-page .compact-status-row span:first-child{
+  color:#696a67 !important;
+}
+
+/* Workflow chips map to A / B / C / D colors. */
+.galeriste-page .compact-workflow span{
+  color:var(--gal-charcoal) !important;
+  border:1px solid rgba(19,19,18,.08) !important;
+}
+.galeriste-page .compact-workflow span:nth-child(1){
+  background:var(--gal-rose) !important;
+}
+.galeriste-page .compact-workflow span:nth-child(2){
+  background:var(--gal-lavender) !important;
+}
+.galeriste-page .compact-workflow span:nth-child(3){
+  background:var(--gal-yellow) !important;
+}
+.galeriste-page .compact-workflow span:nth-child(4){
+  background:var(--gal-sage) !important;
+}
+
+/* Low-contrast structural lines */
+.galeriste-page .compact-grid,
+.galeriste-page .compact-card + .compact-card,
+.galeriste-page .compact-status,
+.galeriste-page .compact-status-row,
+.galeriste-page .galeriste-reference-inner{
+  border-color:rgba(19,19,18,.11) !important;
+}
+
+/* Nav stays neutral, with a sage hover drawn from D. */
+.galeriste-page .nav-link{
+  --nav-hover:#6f826f !important;
+}
+.galeriste-page .nav-link .hover-copy{
+  color:#6f826f !important;
+}
+
+/* Prototype/reference framing uses the same paper family. */
+.galeriste-page .galeriste-reference-image{
+  border-color:rgba(19,19,18,.14) !important;
+  background:#deddda !important;
+}
+
+/* Static footer: neutral paper gray with restrained four-color accents. */
+.galeriste-page .footer-shell,
+.galeriste-page .footer-base{
+  background:#d8d7d3 !important;
+}
+.galeriste-page .footer-links a,
+.galeriste-page .copyright{
+  color:#5d5e5a !important;
+}
+.galeriste-page .footer-links a:hover{
+  color:#6f826f !important;
+}
+
+/*
+ * HERO
+ * Keep the real paper texture. Replace the cardinal-red wash with a light
+ * neutral-sage tint so the paper remains the visual field.
+ */
+.galeriste-hero::after{
+  background:rgba(120,137,121,.18) !important;
+}
+
+.galeriste-hero .hero-title-v9,
+.galeriste-hero .hero-title-v9 h1,
+.galeriste-hero .hero-description-v9,
+.galeriste-hero .hero-description-v9 p,
+.galeriste-hero .hero-meta-v9 strong,
+.galeriste-hero .hero-meta-v9 span,
+.galeriste-hero .hero-back,
+.galeriste-hero .hero-tags-v9{
+  color:var(--gal-charcoal) !important;
+}
+
+.galeriste-hero .hero-meta-v9 > div + div{
+  border-left-color:rgba(19,19,18,.20) !important;
+}
+
+/* Give the four metadata labels a related A/B/C/D accent without adding boxes. */
+.galeriste-hero .hero-meta-v9 > div:nth-child(1) .micro-label,
+.galeriste-hero .hero-meta-v9 > div:nth-child(1) .meta-label{
+  color:#86645e !important;
+}
+.galeriste-hero .hero-meta-v9 > div:nth-child(2) .micro-label,
+.galeriste-hero .hero-meta-v9 > div:nth-child(2) .meta-label{
+  color:#696c8b !important;
+}
+.galeriste-hero .hero-meta-v9 > div:nth-child(3) .micro-label,
+.galeriste-hero .hero-meta-v9 > div:nth-child(3) .meta-label{
+  color:#817b50 !important;
+}
+.galeriste-hero .hero-meta-v9 > div:nth-child(4) .micro-label,
+.galeriste-hero .hero-meta-v9 > div:nth-child(4) .meta-label{
+  color:#657765 !important;
+}
+
+/* Preserve prototype artwork itself and DirtLENS next-project treatment. */
+</style>
+
+
+<style id="project-native-footer-galeriste-final">
+.footer-shell,
+.footer-base{
+  background:#b9c6b8 !important;
+}
+
+.footer-base{
+  position:relative !important;
+  border-top:0 !important;
+}
+
+.footer-base::before{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:0 !important;
+  height:6px !important;
+  background:linear-gradient(
+    90deg,
+    #cab4af 0 25%,
+    #b5b6ca 25% 50%,
+    #e3ddb6 50% 75%,
+    #b9c6b8 75% 100%
+  ) !important;
+}
+
+.footer-links a,
+.copyright{
+  color:#131312 !important;
+}
+
+.footer-links a:hover{
+  color:#131312 !important;
+  text-decoration:underline !important;
+}
+
+.footer-shell,
+.footer-shell *,
+.footer-shell *::before,
+.footer-shell *::after{
+  animation:none !important;
+  transition:none !important;
+}
+</style>
+
+
+<style id="galeriste-abcd-next-project-footer-corrected">
+.next-project,
+.next-project-section,
+.next-project-block,
+section.next-project{
+  background:
+    linear-gradient(
+      90deg,
+      #cab4af 0%,
+      #cab4af 25%,
+      #b5b6ca 25%,
+      #b5b6ca 50%,
+      #e3ddb6 50%,
+      #e3ddb6 75%,
+      #b9c6b8 75%,
+      #b9c6b8 100%
+    ) !important;
+  color:#131312 !important;
+}
+
+.next-project *,
+.next-project-section *,
+.next-project-block *,
+section.next-project *{
+  color:#131312 !important;
+}
+
+.footer-shell,
+.footer-base{
+  background:#b9c6b8 !important;
+  color:#131312 !important;
+}
+
+.footer-base{
+  position:relative !important;
+  border-top:0 !important;
+}
+
+.footer-base::before{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:0 !important;
+  height:6px !important;
+  background:
+    linear-gradient(
+      90deg,
+      #cab4af 0%,
+      #cab4af 25%,
+      #b5b6ca 25%,
+      #b5b6ca 50%,
+      #e3ddb6 50%,
+      #e3ddb6 75%,
+      #b9c6b8 75%,
+      #b9c6b8 100%
+    ) !important;
+}
+
+.footer-links a,
+.copyright{
+  color:#131312 !important;
+}
+
+.footer-links a:hover{
+  color:#131312 !important;
+  text-decoration:underline !important;
+}
+
+.footer-shell,
+.footer-shell *,
+.footer-shell *::before,
+.footer-shell *::after{
+  animation:none !important;
+  transition:none !important;
+}
+</style>
+
 </head>
 
 <body class="galeriste-page">
