@@ -3225,31 +3225,41 @@ body {
 }
 </style>
 
-
-<style id="project-footer-link-wiring-final">
-.next-project,
-.next-project-section,
-.next-project-block,
-section.next-project {
-  position:relative !important;
-}
-
-.project-footer-link-overlay {
-  position:absolute !important;
-  inset:0 !important;
+<style id="dirtlens-next-project-visual-fix-final">
+/* DirtLENS owns this entire Next Project panel, even though it links to Union Cemetery. */
+body .next-project.compact-next,
+body a.next-project.compact-next{
   display:block !important;
-  z-index:20 !important;
-  cursor:pointer !important;
+  background:#68472f !important;
+  background-color:#68472f !important;
+  background-image:none !important;
+  color:#ffffff !important;
   text-decoration:none !important;
 }
 
-.next-project > *,
-.next-project-section > *,
-.next-project-block > *,
-section.next-project > * {
-  position:relative;
-  z-index:21;
-  pointer-events:none;
+body .next-project.compact-next .next-project-inner{
+  background:transparent !important;
+}
+
+body .next-project.compact-next .next-label,
+body .next-project.compact-next .next-title,
+body .next-project.compact-next .next-arrow{
+  color:#ffffff !important;
+}
+
+/* Static DirtLENS footer remains grass/soil. */
+body .footer-shell,
+body .footer-base{
+  background:#7d8251 !important;
+}
+
+body .footer-base{
+  border-top:6px solid #866343 !important;
+}
+
+body .footer-links a,
+body .copyright{
+  color:#f4f1e8 !important;
 }
 </style>
 
@@ -3700,8 +3710,7 @@ section.next-project > * {
     <a class="next-project compact-next" href="union-cemetery.html"
        style="--project-primary:#68472f; --project-secondary:#866343; --project-on-primary:#ffffff;">
       <div class="next-project-inner">
-<a class="project-footer-link-overlay" href="union-cemetery.html" aria-label="Next project: UNION CEMETERY"></a>
-        <div class="next-label">Next project</div>
+<div class="next-label">Next project</div>
         <h2 class="next-title">UNION CEMETERY</h2>
         <div class="next-arrow">→</div>
       </div>
