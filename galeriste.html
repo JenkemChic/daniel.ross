@@ -5469,156 +5469,170 @@ body {
 </style>
 
 
-<style id="project-native-footer-galeriste-final">
-.footer-shell,
-.footer-base{
-  background:#b9c6b8 !important;
-}
-
-.footer-base{
+<style id="standardized-project-footer-system">
+/* One shared footer layout across every project page. */
+.next-project.compact-next {
   position:relative !important;
-  border-top:0 !important;
-}
-
-.footer-base::before{
-  content:"" !important;
-  position:absolute !important;
-  left:0 !important;
-  right:0 !important;
-  top:0 !important;
-  height:6px !important;
-  background:linear-gradient(
-    90deg,
-    #cab4af 0 25%,
-    #b5b6ca 25% 50%,
-    #e3ddb6 50% 75%,
-    #b9c6b8 75% 100%
-  ) !important;
-}
-
-.footer-links a,
-.copyright{
-  color:#131312 !important;
-}
-
-.footer-links a:hover{
-  color:#131312 !important;
-  text-decoration:underline !important;
-}
-
-.footer-shell,
-.footer-shell *,
-.footer-shell *::before,
-.footer-shell *::after{
-  animation:none !important;
-  transition:none !important;
-}
-</style>
-
-
-<style id="galeriste-abcd-next-project-footer-corrected">
-.next-project,
-.next-project-section,
-.next-project-block,
-section.next-project{
-  background:
-    linear-gradient(
-      90deg,
-      #cab4af 0%,
-      #cab4af 25%,
-      #b5b6ca 25%,
-      #b5b6ca 50%,
-      #e3ddb6 50%,
-      #e3ddb6 75%,
-      #b9c6b8 75%,
-      #b9c6b8 100%
-    ) !important;
-  color:#131312 !important;
-}
-
-.next-project *,
-.next-project-section *,
-.next-project-block *,
-section.next-project *{
-  color:#131312 !important;
-}
-
-.footer-shell,
-.footer-base{
-  background:#b9c6b8 !important;
-  color:#131312 !important;
-}
-
-.footer-base{
-  position:relative !important;
-  border-top:0 !important;
-}
-
-.footer-base::before{
-  content:"" !important;
-  position:absolute !important;
-  left:0 !important;
-  right:0 !important;
-  top:0 !important;
-  height:6px !important;
-  background:
-    linear-gradient(
-      90deg,
-      #cab4af 0%,
-      #cab4af 25%,
-      #b5b6ca 25%,
-      #b5b6ca 50%,
-      #e3ddb6 50%,
-      #e3ddb6 75%,
-      #b9c6b8 75%,
-      #b9c6b8 100%
-    ) !important;
-}
-
-.footer-links a,
-.copyright{
-  color:#131312 !important;
-}
-
-.footer-links a:hover{
-  color:#131312 !important;
-  text-decoration:underline !important;
-}
-
-.footer-shell,
-.footer-shell *,
-.footer-shell *::before,
-.footer-shell *::after{
-  animation:none !important;
-  transition:none !important;
-}
-</style>
-
-
-<style id="project-footer-link-wiring-final">
-.next-project,
-.next-project-section,
-.next-project-block,
-section.next-project {
-  position:relative !important;
-}
-
-.project-footer-link-overlay {
-  position:absolute !important;
-  inset:0 !important;
   display:block !important;
-  z-index:20 !important;
-  cursor:pointer !important;
+  overflow:hidden !important;
+  background:#b9c6b8 !important;
+  background-image:none !important;
+  color:#131312 !important;
   text-decoration:none !important;
 }
 
-.next-project > *,
-.next-project-section > *,
-.next-project-block > *,
-section.next-project > * {
-  position:relative;
-  z-index:21;
-  pointer-events:none;
+.next-project.compact-next::before {
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:0 !important;
+  height:6px !important;
+  background:linear-gradient(90deg,#cab4af 0 25%,#b5b6ca 25% 50%,#e3ddb6 50% 75%,#b9c6b8 75% 100%) !important;
+}
+
+.next-project.compact-next .next-project-inner {
+  min-height:320px !important;
+  max-width:1280px !important;
+  margin:0 auto !important;
+  padding:54px var(--page-x) !important;
+  display:grid !important;
+  grid-template-columns:repeat(12,minmax(0,1fr)) !important;
+  gap:16px !important;
+  align-items:end !important;
+  background:transparent !important;
+}
+
+.next-project.compact-next .next-label {
+  grid-column:span 3 !important;
+  align-self:start !important;
+  font-size:10px !important;
+  text-transform:uppercase !important;
+  letter-spacing:.16em !important;
+  color:#131312 !important;
+  opacity:.68 !important;
+}
+
+.next-project.compact-next .next-title {
+  grid-column:4 / span 7 !important;
+  margin:0 !important;
+  font-family:var(--font-brand) !important;
+  font-size:clamp(50px,8vw,126px) !important;
+  line-height:.83 !important;
+  letter-spacing:-.06em !important;
+  font-weight:700 !important;
+  color:#131312 !important;
+  transition:transform .45s cubic-bezier(.76,0,.24,1) !important;
+}
+
+.next-project.compact-next .next-arrow {
+  grid-column:span 2 !important;
+  justify-self:end !important;
+  font-size:42px !important;
+  color:#131312 !important;
+  transition:transform .45s cubic-bezier(.76,0,.24,1) !important;
+}
+
+.next-project.compact-next:hover .next-title,
+.next-project.compact-next:hover .next-arrow {
+  transform:translateX(10px) !important;
+}
+
+/* Static footer: same height and spacing on every project page. */
+.footer-shell {
+  height:auto !important;
+  min-height:50px !important;
+  display:block !important;
+  background:#b5b6ca !important;
+}
+
+.footer-art,
+#footer-canvas {
+  display:none !important;
+}
+
+.footer-base {
+  position:relative !important;
+  height:50px !important;
+  min-height:50px !important;
+  padding:0 40px !important;
+  display:flex !important;
+  align-items:center !important;
+  background:#b5b6ca !important;
+  border:0 !important;
+}
+
+.footer-base::before {
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:0 !important;
+  height:6px !important;
+  background:linear-gradient(90deg,#cab4af 0 25%,#b5b6ca 25% 50%,#e3ddb6 50% 75%,#b9c6b8 75% 100%) !important;
+}
+
+.footer-base-inner {
+  width:100% !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:center !important;
+}
+
+.footer-links {
+  display:flex !important;
+  gap:16px !important;
+}
+
+.footer-links a,
+.copyright {
+  font-family:var(--font-ui) !important;
+  font-size:10px !important;
+  letter-spacing:.05em !important;
+  color:#131312 !important;
+}
+
+.footer-links a {
+  text-transform:uppercase !important;
+}
+
+.footer-links a:hover {
+  color:#131312 !important;
+  text-decoration:underline !important;
+}
+
+.footer-shell,
+.footer-shell *,
+.footer-shell *::before,
+.footer-shell *::after {
+  animation:none !important;
+}
+
+@media(max-width:767px) {
+  .next-project.compact-next .next-project-inner {
+    min-height:240px !important;
+    padding:36px 20px !important;
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+
+  .next-project.compact-next .next-label {
+    grid-column:1 / -1 !important;
+  }
+
+  .next-project.compact-next .next-title {
+    grid-column:1 / span 5 !important;
+    font-size:clamp(48px,17vw,82px) !important;
+  }
+
+  .next-project.compact-next .next-arrow {
+    grid-column:6 !important;
+    font-size:30px !important;
+  }
+
+  .footer-base {
+    padding:0 20px !important;
+  }
 }
 </style>
 
@@ -5848,10 +5862,8 @@ section.next-project > * {
   </div>
 </section>
 
-<a class="next-project compact-next" href="dirtlens.html"
-       style="--project-primary:#7d8251; --project-secondary:#866343; --project-on-primary:#ffffff;">
+<a class="next-project compact-next" href="dirtlens.html" aria-label="Next project: DIRTLENS">
       <div class="next-project-inner">
-<a class="project-footer-link-overlay" href="dirtlens.html" aria-label="Next project: DIRTLENS"></a>
         <div class="next-label">Next project</div>
         <h2 class="next-title">DIRTLENS</h2>
         <div class="next-arrow">→</div>
@@ -5860,11 +5872,11 @@ section.next-project > * {
   </main>
 
   <footer class="footer-shell">
-<div class="footer-base">
+    <div class="footer-base">
       <div class="footer-base-inner">
         <div class="footer-links">
-          <a href="#">LinkedIn</a>
-          <a href="#">GitHub</a>
+          <a href="https://www.linkedin.com/in/daniellross" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/JenkemChic" target="_blank" rel="noopener">GitHub</a>
           <a href="DanielLRossCV.pdf">CV</a>
         </div>
         <div class="copyright">© 2026 Daniel Ross</div>
