@@ -3225,6 +3225,34 @@ body {
 }
 </style>
 
+
+<style id="project-footer-link-wiring-final">
+.next-project,
+.next-project-section,
+.next-project-block,
+section.next-project {
+  position:relative !important;
+}
+
+.project-footer-link-overlay {
+  position:absolute !important;
+  inset:0 !important;
+  display:block !important;
+  z-index:20 !important;
+  cursor:pointer !important;
+  text-decoration:none !important;
+}
+
+.next-project > *,
+.next-project-section > *,
+.next-project-block > *,
+section.next-project > * {
+  position:relative;
+  z-index:21;
+  pointer-events:none;
+}
+</style>
+
 </head>
 
 <body>
@@ -3669,9 +3697,10 @@ body {
       </div>
     </section>
 
-    <a class="next-project compact-next" href="#"
+    <a class="next-project compact-next" href="union-cemetery.html"
        style="--project-primary:#68472f; --project-secondary:#866343; --project-on-primary:#ffffff;">
       <div class="next-project-inner">
+<a class="project-footer-link-overlay" href="union-cemetery.html" aria-label="Next project: UNION CEMETERY"></a>
         <div class="next-label">Next project</div>
         <h2 class="next-title">UNION CEMETERY</h2>
         <div class="next-arrow">→</div>

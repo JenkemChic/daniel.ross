@@ -370,6 +370,34 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 }
 </style>
 
+
+<style id="project-footer-link-wiring-final">
+.next-project,
+.next-project-section,
+.next-project-block,
+section.next-project {
+  position:relative !important;
+}
+
+.project-footer-link-overlay {
+  position:absolute !important;
+  inset:0 !important;
+  display:block !important;
+  z-index:20 !important;
+  cursor:pointer !important;
+  text-decoration:none !important;
+}
+
+.next-project > *,
+.next-project-section > *,
+.next-project-block > *,
+section.next-project > * {
+  position:relative;
+  z-index:21;
+  pointer-events:none;
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to case study</a>
@@ -470,11 +498,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 <div class="compact-status-row"><span>Landscape</span><span>Elevation, grass, roads, and trees that grow with the timeline</span></div>
 </div>
 </div>
-<div class="compact-visuals"><div class="uc3d-embed-frame"><iframe id="uc3d-iframe" allow="fullscreen" loading="eager" title="Interactive Union Cemetery 3D timeline"></iframe></div><div class="media-caption"><span>Union Cemetery 3D Visualization Prototype</span><span><a href="union-cemetery-3d.html" rel="noopener" target="_blank">Open full viewer ↗</a></span></div></div>
+<div class="compact-visuals"><div class="uc3d-embed-frame"><iframe id="uc3d-iframe" allow="fullscreen" loading="eager" title="Interactive Union Cemetery 3D timeline"></iframe></div><div class="media-caption"><span>Union Cemetery 3D Visualization Prototype</span><span><a href="galeriste.html" rel="noopener" target="_blank">Open full viewer ↗</a></span></div></div>
 </div>
 </div>
 </section>
-<a class="next-project" href="index.html#work"><div class="next-project-inner"><div class="next-label">Back to projects</div><h2 class="next-title">SELECTED WORK</h2><div class="next-arrow">→</div></div></a>
+<a class="next-project" href="index.html#work"><div class="next-project-inner">
+<a class="project-footer-link-overlay" href="galeriste.html" aria-label="Next project: GALERISTE"></a><div class="next-label">Back to projects</div><h2 class="next-title">SELECTED WORK</h2><div class="next-arrow">→</div></div></a>
 </main>
 <footer class="footer-shell">
 <div class="footer-base"><div class="footer-base-inner"><div class="footer-links"><a href="#">LinkedIn</a><a href="#">GitHub</a><a href="DanielLRossCV.pdf">CV</a></div><div class="copyright">© 2026 Daniel Ross</div></div></div></footer>

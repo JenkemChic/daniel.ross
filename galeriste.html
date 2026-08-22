@@ -5594,6 +5594,34 @@ section.next-project *{
 }
 </style>
 
+
+<style id="project-footer-link-wiring-final">
+.next-project,
+.next-project-section,
+.next-project-block,
+section.next-project {
+  position:relative !important;
+}
+
+.project-footer-link-overlay {
+  position:absolute !important;
+  inset:0 !important;
+  display:block !important;
+  z-index:20 !important;
+  cursor:pointer !important;
+  text-decoration:none !important;
+}
+
+.next-project > *,
+.next-project-section > *,
+.next-project-block > *,
+section.next-project > * {
+  position:relative;
+  z-index:21;
+  pointer-events:none;
+}
+</style>
+
 </head>
 
 <body class="galeriste-page">
@@ -5823,6 +5851,7 @@ section.next-project *{
 <a class="next-project compact-next" href="dirtlens.html"
        style="--project-primary:#7d8251; --project-secondary:#866343; --project-on-primary:#ffffff;">
       <div class="next-project-inner">
+<a class="project-footer-link-overlay" href="dirtlens.html" aria-label="Next project: DIRTLENS"></a>
         <div class="next-label">Next project</div>
         <h2 class="next-title">DIRTLENS</h2>
         <div class="next-arrow">→</div>
