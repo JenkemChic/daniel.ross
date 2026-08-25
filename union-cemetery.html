@@ -735,7 +735,12 @@ a.portfolio-contact-trigger{cursor:pointer}
     frame.srcdoc = html;
   } catch (err) {
     console.error('Union Cemetery viewer failed to initialize', err);
-    frame.srcdoc = '<!doctype html><html><body style="margin:0;display:grid;place-items:center;height:100vh;font:14px Arial;background:#eef0e8;color:#294b32"><div style="text-align:center;padding:24px"><strong>3D viewer failed to initialize.</strong><br><br><a href="union-cemetery-3d.html" target="_blank" style="color:#294b32">Open the standalone viewer</a></div>
+    frame.srcdoc = '<!doctype html><html><body style="margin:0;display:grid;place-items:center;height:100vh;font:14px Arial;background:#eef0e8;color:#294b32"><div style="text-align:center;padding:24px"><strong>3D viewer failed to initialize.</strong><br><br><a href="union-cemetery-3d.html" target="_blank" style="color:#294b32">Open the standalone viewer</a></div></body></html>';
+  }
+})();
+</script>
+
+
 <div class="portfolio-contact-card" id="portfolio-contact-card" aria-hidden="true">
   <div class="portfolio-contact-card__head">
     <span>CONTACT</span>
@@ -756,17 +761,22 @@ a.portfolio-contact-trigger{cursor:pointer}
 (() => {
   const card = document.getElementById("portfolio-contact-card");
   if (!card) return;
+
   const triggers = document.querySelectorAll(".portfolio-contact-trigger");
   const closeButton = card.querySelector(".portfolio-contact-card__close");
+
   const isOpen = () => card.dataset.open === "true";
+
   const openCard = () => {
     card.dataset.open = "true";
     card.setAttribute("aria-hidden", "false");
   };
+
   const closeCard = () => {
     card.dataset.open = "false";
     card.setAttribute("aria-hidden", "true");
   };
+
   triggers.forEach(trigger => {
     trigger.addEventListener("click", event => {
       event.preventDefault();
@@ -774,21 +784,19 @@ a.portfolio-contact-trigger{cursor:pointer}
       isOpen() ? closeCard() : openCard();
     });
   });
+
   closeButton.addEventListener("click", closeCard);
+
   document.addEventListener("click", event => {
     if (!isOpen()) return;
     if (card.contains(event.target)) return;
     if (event.target.closest(".portfolio-contact-trigger")) return;
     closeCard();
   });
+
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") closeCard();
   });
-})();
-</script>
-
-</body></html>';
-  }
 })();
 </script>
 
