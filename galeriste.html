@@ -5636,6 +5636,82 @@ body {
 }
 </style>
 
+
+<style id="portfolio-contact-card-styles">
+.portfolio-contact-card{
+  position:fixed;
+  top:68px;
+  right:24px;
+  width:min(330px,calc(100vw - 32px));
+  z-index:5000;
+  display:none;
+  background:#f8f7f3;
+  color:#171715;
+  border:1px solid rgba(23,23,21,.20);
+  box-shadow:0 14px 38px rgba(0,0,0,.12);
+  font-family:"Courier New",Courier,monospace;
+}
+.portfolio-contact-card[data-open="true"]{display:block}
+.portfolio-contact-card__head{
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 14px;
+  border-bottom:1px solid rgba(23,23,21,.14);
+  font-size:9px;
+  line-height:1;
+  letter-spacing:.15em;
+}
+.portfolio-contact-card__close{
+  border:0;
+  background:transparent;
+  padding:6px;
+  margin-right:-5px;
+  color:inherit;
+  font:18px/1 Arial,Helvetica,sans-serif;
+  cursor:pointer;
+}
+.portfolio-contact-card__row{
+  display:grid;
+  grid-template-columns:62px 1fr;
+  gap:12px;
+  align-items:center;
+  min-height:52px;
+  padding:0 14px;
+  border-bottom:1px solid rgba(23,23,21,.10);
+}
+.portfolio-contact-card__row:last-child{border-bottom:0}
+.portfolio-contact-card__label{
+  font-size:8px;
+  line-height:1;
+  letter-spacing:.13em;
+  color:#777771;
+}
+.portfolio-contact-card__row a{
+  color:#171715 !important;
+  font-size:11px !important;
+  line-height:1.3 !important;
+  letter-spacing:.015em !important;
+  text-decoration:none !important;
+  text-transform:none !important;
+  overflow-wrap:anywhere;
+}
+.portfolio-contact-card__row a:hover{
+  text-decoration:underline !important;
+  text-underline-offset:3px;
+}
+a.portfolio-contact-trigger{cursor:pointer}
+@media(max-width:767px){
+  .portfolio-contact-card{
+    top:66px;
+    left:16px;
+    right:16px;
+    width:auto;
+  }
+}
+</style>
+
 </head>
 
 <body class="galeriste-page">
@@ -5660,7 +5736,7 @@ body {
         <a class="nav-link" href="DanielLRossCV.pdf">
           <span class="base-copy">CV</span><span class="hover-copy">CV</span>
         </a>
-        <a class="nav-link" href="mailto:arthurpockets@gmail.com">
+        <a href="#contact" class="nav-link portfolio-contact-trigger">
           <span class="base-copy">CONTACT</span><span class="hover-copy">CONTACT</span>
         </a>
       </div>
@@ -5673,7 +5749,7 @@ body {
     <div class="mobile-panel" id="mobile-navigation" data-open="false">
       <a href="media.html">Media</a>
       <a href="DanielLRossCV.pdf">CV</a>
-      <a href="mailto:arthurpockets@gmail.com">Contact</a>
+      <a href="#contact" class="portfolio-contact-trigger" >Contact</a>
     </div>
   </nav>
 
@@ -5960,6 +6036,58 @@ body {
 
 
 
+
+
+<div class="portfolio-contact-card" id="portfolio-contact-card" aria-hidden="true">
+  <div class="portfolio-contact-card__head">
+    <span>CONTACT</span>
+    <button class="portfolio-contact-card__close" type="button" aria-label="Close contact information">×</button>
+  </div>
+  <div class="portfolio-contact-card__row">
+    <span class="portfolio-contact-card__label">EMAIL</span>
+    <a href="mailto:arthurpockets@gmail.com">arthurpockets@gmail.com</a>
+  </div>
+  <div class="portfolio-contact-card__row">
+    <span class="portfolio-contact-card__label">PHONE</span>
+    <a href="tel:+16143767617">+1 614 376-7617</a>
+  </div>
+</div>
+
+
+<script id="portfolio-contact-card-script">
+(() => {
+  const card = document.getElementById("portfolio-contact-card");
+  if (!card) return;
+  const triggers = document.querySelectorAll(".portfolio-contact-trigger");
+  const closeButton = card.querySelector(".portfolio-contact-card__close");
+  const isOpen = () => card.dataset.open === "true";
+  const openCard = () => {
+    card.dataset.open = "true";
+    card.setAttribute("aria-hidden", "false");
+  };
+  const closeCard = () => {
+    card.dataset.open = "false";
+    card.setAttribute("aria-hidden", "true");
+  };
+  triggers.forEach(trigger => {
+    trigger.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      isOpen() ? closeCard() : openCard();
+    });
+  });
+  closeButton.addEventListener("click", closeCard);
+  document.addEventListener("click", event => {
+    if (!isOpen()) return;
+    if (card.contains(event.target)) return;
+    if (event.target.closest(".portfolio-contact-trigger")) return;
+    closeCard();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeCard();
+  });
+})();
+</script>
 
 </body>
 </html>
