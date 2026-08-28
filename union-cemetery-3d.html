@@ -32,11 +32,136 @@
   .date .month{width:auto!important}.date .year{width:90px!important}
 }
 </style>
-</head><body><div id="app"><canvas id="gl"></canvas>
-<div class="top"><div class="card"><div class="eyebrow">Navigation prototype / 3D aerial</div><h1>Union Cemetery 3D Visualization Prototype</h1><p>Prototype for the eventual full Union Cemetery visualization. Starts above the terrain in a 3D oblique aerial view. Left-drag uses a free trackball orbit; Shift-drag or right-drag pans and the wheel zooms. Burial placement uses cemetery-style rows with wider head-to-head depth than side-to-side spacing, road exclusion, and chronology-independent lot assignment.</p></div><div class="tools"><button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">−</button><button id="aerial" title="3D aerial view">3D</button><button id="home" title="Reset all">⌂</button></div></div>
+
+<style id="union-free-navigation-layout">
+.mobile-help{display:none}
+
+@media(max-width:720px){
+  .panel{
+    overflow:visible!important;
+  }
+
+  .panel .row{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 106px!important;
+    align-items:end!important;
+    gap:8px!important;
+    width:100%!important;
+  }
+
+  .date{
+    width:100%!important;
+    min-width:0!important;
+    grid-template-columns:minmax(0,1fr) 66px!important;
+    column-gap:7px!important;
+    font-size:clamp(21px,7vw,29px)!important;
+    line-height:.96!important;
+  }
+
+  .date .month{
+    width:auto!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+
+  .date .year{
+    width:66px!important;
+  }
+
+  .count{
+    width:106px!important;
+    min-width:106px!important;
+    max-width:106px!important;
+    padding:0!important;
+    font:7.5px/1.28 ui-monospace,monospace!important;
+    letter-spacing:.015em!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-align:right!important;
+  }
+
+  .count>div{
+    display:block!important;
+  }
+
+  .timeline{
+    margin-top:9px!important;
+  }
+
+  .controls{
+    gap:8px!important;
+  }
+
+  .mobile-help{
+    display:block;
+    position:absolute;
+    left:10px;
+    top:12px;
+    z-index:8;
+    pointer-events:none;
+    max-width:calc(100vw - 132px);
+    padding:6px 8px;
+    background:rgba(250,251,247,.90);
+    border:1px solid rgba(207,213,202,.9);
+    color:#687268;
+    font:7px/1.25 ui-monospace,monospace;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+}
+
+@media(max-width:430px){
+  .panel .row{
+    grid-template-columns:1fr!important;
+    gap:5px!important;
+  }
+
+  .date{
+    grid-template-columns:minmax(0,1fr) 62px!important;
+    font-size:clamp(20px,7.2vw,27px)!important;
+  }
+
+  .date .year{
+    width:62px!important;
+  }
+
+  .count{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    display:flex!important;
+    justify-content:flex-end!important;
+    gap:12px!important;
+    text-align:right!important;
+    font-size:7px!important;
+  }
+}
+</style>
+
+
+<style id="union-top-view-controls">
+.tools #topview{
+  min-width:46px;
+}
+
+.tools #topview.active{
+  background:#294b32 !important;
+  color:#ffffff !important;
+  border-color:#294b32 !important;
+}
+
+@media(max-width:720px){
+  .tools #topview{
+    min-width:52px;
+  }
+}
+</style>
+
+</head><body><div id="app"><canvas id="gl"></canvas><div class="mobile-help">Current burials shown · drag · pinch zoom · TOP = overhead</div>
+<div class="top"><div class="card"><div class="eyebrow">Navigation prototype / 3D aerial</div><h1>Union Cemetery 3D Visualization Prototype</h1><p>Prototype for the eventual full Union Cemetery visualization. Starts above the terrain in a 3D oblique aerial view. Drag pans across the cemetery. Right-drag or Shift-drag orbits without rolling, the wheel zooms toward the cursor, and double-click focuses a point. On touch, drag pans, pinch zooms, twist rotates, and double-tap focuses. Burial placement uses cemetery-style rows with wider head-to-head depth than side-to-side spacing, road exclusion, and chronology-independent lot assignment.</p></div><div class="tools"><button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">−</button><button id="aerial" title="3D aerial view">3D</button><button id="topview" title="Top-down 360° view">TOP</button><button id="home" title="Reset all">⌂</button></div></div>
 <div class="legend"><div><span class="sw grass"></span>grass terrain</div><div><span class="sw road"></span>roads</div><div><span class="sw tree"></span>large trees</div><div><span class="sw grave"></span>dated burials</div></div>
 
-<div class="panel"><div class="row"><div class="date" id="date"><span class="month" id="month">JANUARY</span><span class="year" id="year">1917</span></div><div class="count"><span id="vis">0</span> VISIBLE<br>76,643 DATED + MAPPED</div></div><div class="timeline"><button id="play">PLAY</button><input id="slider" type="range" min="0" max="2615" value="1332" step="1"></div><div class="controls"><div class="control"><label>Section</label><select id="section"><option value="-1">All sections</option><option value="0">01 — Westside</option><option value="1">02 — Westside</option><option value="2">03B — Westside</option><option value="3">03C — Westside</option><option value="4">03E — Westside</option><option value="5">03W — Westside</option><option value="6">04 — Westside</option><option value="7">05 — Westside</option><option value="8">06 — Westside</option><option value="9">07 — Westside</option><option value="10">08 — Westside</option><option value="11">09 — Westside</option><option value="12">10 — Westside</option><option value="13">11 — Westside</option><option value="14">12 — Westside</option><option value="15">14 — Westside</option><option value="16">14C — Westside</option><option value="17">15 — Westside</option><option value="18">16 — Westside</option><option value="19">18 — Westside</option><option value="20">19 — Westside</option><option value="21">1912 — Eastside</option><option value="22">1914 — Eastside</option><option value="23">1915 — Eastside</option><option value="24">1917 — Eastside</option><option value="25">1918 — Eastside</option><option value="26">1924 — Eastside</option><option value="27">20 — Westside</option><option value="28">20C — Westside</option><option value="29">21 — Westside</option><option value="30">22 — Westside</option><option value="31">22W — Westside</option><option value="32">25 — Eastside</option><option value="33">26 — Eastside</option><option value="34">27 — Eastside</option><option value="35">28 — Eastside</option><option value="36">29 — Eastside</option><option value="37">30 — Eastside</option><option value="38">31 — Eastside</option><option value="39">32 — Eastside</option><option value="40">33 — Eastside</option><option value="41">34 — Eastside</option><option value="42">35 — Eastside</option><option value="43">36 — Eastside</option><option value="44">51 — Eastside</option><option value="45">52 — Eastside</option><option value="46">53 — Eastside</option><option value="47">54 — Eastside</option><option value="48">55 — Eastside</option><option value="49">56 — Eastside</option><option value="50">58 — Eastside</option><option value="51">59 — Eastside</option><option value="52">60 — Eastside</option><option value="53">61 — Eastside</option><option value="54">62 — Eastside</option><option value="55">63 — Eastside</option><option value="56">64 — Eastside</option><option value="57">65 — Eastside</option><option value="58">66 — Eastside</option><option value="59">67 — Eastside</option><option value="60">68 — Eastside</option><option value="61">69 — Eastside</option><option value="62">70 — Eastside</option><option value="63">71 — Eastside</option><option value="64">72 — Eastside</option><option value="65">Chapel A — Westside</option><option value="66">Chapel B — Westside</option><option value="67">NewAdd — Eastside</option><option value="68">Old — Eastside</option></select></div><div class="control"><label>Timeline speed</label><select id="speed"><option value="1">1 month / sec</option><option value="6">6 months / sec</option><option value="12" selected>1 year / sec</option><option value="60">5 years / sec</option></select></div></div></div>
+<div class="panel"><div class="row"><div class="date" id="date"><span class="month" id="month">DECEMBER</span><span class="year" id="year">2023</span></div><div class="count"><div><span id="vis">0</span> VISIBLE</div><div>76,643 DATED + MAPPED</div></div></div><div class="timeline"><button id="play">PLAY</button><input id="slider" type="range" min="0" max="2615" value="2615" step="1"></div><div class="controls"><div class="control"><label>Section</label><select id="section"><option value="-1">All sections</option><option value="0">01 — Westside</option><option value="1">02 — Westside</option><option value="2">03B — Westside</option><option value="3">03C — Westside</option><option value="4">03E — Westside</option><option value="5">03W — Westside</option><option value="6">04 — Westside</option><option value="7">05 — Westside</option><option value="8">06 — Westside</option><option value="9">07 — Westside</option><option value="10">08 — Westside</option><option value="11">09 — Westside</option><option value="12">10 — Westside</option><option value="13">11 — Westside</option><option value="14">12 — Westside</option><option value="15">14 — Westside</option><option value="16">14C — Westside</option><option value="17">15 — Westside</option><option value="18">16 — Westside</option><option value="19">18 — Westside</option><option value="20">19 — Westside</option><option value="21">1912 — Eastside</option><option value="22">1914 — Eastside</option><option value="23">1915 — Eastside</option><option value="24">1917 — Eastside</option><option value="25">1918 — Eastside</option><option value="26">1924 — Eastside</option><option value="27">20 — Westside</option><option value="28">20C — Westside</option><option value="29">21 — Westside</option><option value="30">22 — Westside</option><option value="31">22W — Westside</option><option value="32">25 — Eastside</option><option value="33">26 — Eastside</option><option value="34">27 — Eastside</option><option value="35">28 — Eastside</option><option value="36">29 — Eastside</option><option value="37">30 — Eastside</option><option value="38">31 — Eastside</option><option value="39">32 — Eastside</option><option value="40">33 — Eastside</option><option value="41">34 — Eastside</option><option value="42">35 — Eastside</option><option value="43">36 — Eastside</option><option value="44">51 — Eastside</option><option value="45">52 — Eastside</option><option value="46">53 — Eastside</option><option value="47">54 — Eastside</option><option value="48">55 — Eastside</option><option value="49">56 — Eastside</option><option value="50">58 — Eastside</option><option value="51">59 — Eastside</option><option value="52">60 — Eastside</option><option value="53">61 — Eastside</option><option value="54">62 — Eastside</option><option value="55">63 — Eastside</option><option value="56">64 — Eastside</option><option value="57">65 — Eastside</option><option value="58">66 — Eastside</option><option value="59">67 — Eastside</option><option value="60">68 — Eastside</option><option value="61">69 — Eastside</option><option value="62">70 — Eastside</option><option value="63">71 — Eastside</option><option value="64">72 — Eastside</option><option value="65">Chapel A — Westside</option><option value="66">Chapel B — Westside</option><option value="67">NewAdd — Eastside</option><option value="68">Old — Eastside</option></select></div><div class="control"><label>Timeline speed</label><select id="speed"><option value="1">1 month / sec</option><option value="6">6 months / sec</option><option value="12" selected>1 year / sec</option><option value="60">5 years / sec</option></select></div></div></div>
 <div class="note"><strong>Placement / road check</strong>Burial rows now use a plot proportion based on approximately 4 ft side-to-side and at least 6 ft from a stone into the burial space. Stones are deliberately narrower than the plot width. Records sharing a lot are kept near one another as family-plot clusters, while road surfaces remain exclusion zones. Large deciduous trees are added in open turf as landscape context and now grow with the timeline from provisional establishment dates; those dates can be replaced when historic tree-age data is available.</div></div>
 <script>
 const START_YEAR=1806;
@@ -119,7 +244,7 @@ function makeTrees(monthIndex){
     leafV:new Float32Array(leafV),leafN:new Float32Array(leafN),leafI:new Uint16Array(leafI)
   };
 }
-let TREE_MESH=makeTrees((1917-START_YEAR)*12);
+let TREE_MESH=makeTrees(2615);
 const trPB=buf(gl.ARRAY_BUFFER,TREE_MESH.trunkV,gl.DYNAMIC_DRAW),trNB=buf(gl.ARRAY_BUFFER,TREE_MESH.trunkN,gl.DYNAMIC_DRAW),trIB=buf(gl.ELEMENT_ARRAY_BUFFER,TREE_MESH.trunkI);
 const lfPB=buf(gl.ARRAY_BUFFER,TREE_MESH.leafV,gl.DYNAMIC_DRAW),lfNB=buf(gl.ARRAY_BUFFER,TREE_MESH.leafN,gl.DYNAMIC_DRAW),lfIB=buf(gl.ELEMENT_ARRAY_BUFFER,TREE_MESH.leafI);
 let treeMeshMonth=-1;
@@ -149,7 +274,7 @@ const V3={
 function rotateAxis(v,axis,ang){axis=V3.norm(axis);let c=Math.cos(ang),si=Math.sin(ang),d=V3.dot(axis,v),cr=V3.cross(axis,v);return[v[0]*c+cr[0]*si+axis[0]*d*(1-c),v[1]*c+cr[1]*si+axis[1]*d*(1-c),v[2]*c+cr[2]*si+axis[2]*d*(1-c)]}
 function lookAt(eye,target,up){let z=V3.norm(V3.sub(eye,target)),x=V3.norm(V3.cross(up,z)),y=V3.cross(z,x),m=new Float32Array(16);m[0]=x[0];m[1]=y[0];m[2]=z[0];m[3]=0;m[4]=x[1];m[5]=y[1];m[6]=z[1];m[7]=0;m[8]=x[2];m[9]=y[2];m[10]=z[2];m[11]=0;m[12]=-V3.dot(x,eye);m[13]=-V3.dot(y,eye);m[14]=-V3.dot(z,eye);m[15]=1;return m}
 const DEFAULT_EYE=[0,150,-235],DEFAULT_TARGET=[0,2,0],DEFAULT_UP=[0,1,0];
-let eye=DEFAULT_EYE.slice(),target=DEFAULT_TARGET.slice(),up=DEFAULT_UP.slice(),drag=false,mode='orbit',startEye=null,startTarget=null,startUp=null,startBasis=null,startBall=null,sx=0,sy=0,timeline=(1917-START_YEAR)*12,playing=false,last=performance.now(),speed=12,visible=0;
+let eye=DEFAULT_EYE.slice(),target=DEFAULT_TARGET.slice(),up=DEFAULT_UP.slice(),drag=false,mode='orbit',startEye=null,startTarget=null,startUp=null,startBasis=null,startBall=null,sx=0,sy=0,timeline=2615,playing=false,last=performance.now(),speed=12,visible=0;
 const slider=document.getElementById('slider'),monthEl=document.getElementById('month'),yearEl=document.getElementById('year'),vis=document.getElementById('vis');
 function camDist(){return V3.len(V3.sub(eye,target))}
 function basis(e=eye,t=target,u=up){let back=V3.norm(V3.sub(e,t)),right=V3.norm(V3.cross(u,back)),camUp=V3.norm(V3.cross(back,right));return{back,right,up:camUp}}
@@ -163,14 +288,33 @@ function zoom(f){setDistance(camDist()*f)}
 function aerial(){eye=DEFAULT_EYE.slice();target=DEFAULT_TARGET.slice();up=DEFAULT_UP.slice()}
 function focusAt(x,z,d){let dir=V3.norm(V3.sub(eye,target));target=[x,2,z];eye=V3.add(target,V3.mul(dir,d))}
 function filter(idx){if(idx<0){current=RECORDS;currentTimes=new Float32Array(REC_COUNT);for(let i=0;i<REC_COUNT;i++)currentTimes[i]=RECORDS[i*6+4];focusAt(0,0,285)}else{let n=0;for(let i=0;i<REC_COUNT;i++)if((RECORDS[i*6+3]|0)===idx)n++;current=new Float32Array(n*6);currentTimes=new Float32Array(n);let j=0;for(let i=0;i<REC_COUNT;i++){let o=i*6;if((RECORDS[o+3]|0)!==idx)continue;current.set(RECORDS.subarray(o,o+6),j*6);currentTimes[j]=RECORDS[o+4];j++}let s=SECTION_META[idx],d=Math.max(28,Math.max(s.w,s.h)*5);focusAt(s.cx,s.cz,d)}gl.bindBuffer(gl.ARRAY_BUFFER,iB);gl.bufferData(gl.ARRAY_BUFFER,current,gl.DYNAMIC_DRAW);ui()}
-document.getElementById('play').onclick=e=>{playing=!playing;e.currentTarget.textContent=playing?'PAUSE':'PLAY'};
+document.getElementById('play').onclick=e=>{
+  if(!playing && timeline>=+slider.max-.5){
+    timeline=0;
+    ui();
+  }
+  playing=!playing;
+  e.currentTarget.textContent=playing?'PAUSE':'PLAY'
+};
 slider.oninput=e=>{timeline=+e.target.value;playing=false;document.getElementById('play').textContent='PLAY';ui()};
 document.getElementById('speed').onchange=e=>speed=+e.target.value;
 document.getElementById('section').onchange=e=>filter(+e.target.value);
 document.getElementById('zin').onclick=()=>zoom(.82);
 document.getElementById('zout').onclick=()=>zoom(1.22);
 document.getElementById('aerial').onclick=aerial;
-document.getElementById('home').onclick=()=>{document.getElementById('section').value='-1';current=RECORDS;currentTimes=new Float32Array(REC_COUNT);for(let i=0;i<REC_COUNT;i++)currentTimes[i]=RECORDS[i*6+4];gl.bindBuffer(gl.ARRAY_BUFFER,iB);gl.bufferData(gl.ARRAY_BUFFER,current,gl.DYNAMIC_DRAW);aerial();ui()};
+document.getElementById('home').onclick=()=>{
+  document.getElementById('section').value='-1';
+  current=RECORDS;
+  currentTimes=new Float32Array(REC_COUNT);
+  for(let i=0;i<REC_COUNT;i++)currentTimes[i]=RECORDS[i*6+4];
+  gl.bindBuffer(gl.ARRAY_BUFFER,iB);
+  gl.bufferData(gl.ARRAY_BUFFER,current,gl.DYNAMIC_DRAW);
+  timeline=+slider.max;
+  playing=false;
+  document.getElementById('play').textContent='PLAY';
+  aerial();
+  ui()
+};
 canvas.oncontextmenu=e=>e.preventDefault();
 canvas.onpointerdown=e=>{drag=true;canvas.classList.add('dragging');sx=e.clientX;sy=e.clientY;startEye=eye.slice();startTarget=target.slice();startUp=up.slice();startBasis=basis(startEye,startTarget,startUp);mode=(e.shiftKey||e.button===2)?'pan':'orbit';if(mode==='orbit')startBall=mapBall(e.clientX,e.clientY);canvas.setPointerCapture?.(e.pointerId)};
 canvas.onpointermove=e=>{if(!drag)return;if(mode==='orbit'){let b1=mapBall(e.clientX,e.clientY),w0=ballWorld(startBall,startBasis),w1=ballWorld(b1,startBasis),axis=V3.cross(w0,w1),al=V3.len(axis);if(al<1e-6)return;let ang=Math.acos(Math.max(-1,Math.min(1,V3.dot(w0,w1))))*1.25,off0=V3.sub(startEye,startTarget),off=rotateAxis(off0,axis,ang),u=rotateAxis(startUp,axis,ang),candidate=V3.add(startTarget,off);if(candidate[1]>startTarget[1]+4){eye=candidate;target=startTarget.slice();up=V3.norm(u)}}else{let dx=e.clientX-sx,dy=e.clientY-sy,b=startBasis,forward=V3.norm(V3.sub(startTarget,startEye)),fGround=V3.norm([forward[0],0,forward[2]]),rGround=V3.norm([b.right[0],0,b.right[2]]),scale=camDist()*Math.tan(38*Math.PI/360)*2/Math.max(1,canvas.getBoundingClientRect().height),delta=V3.add(V3.mul(rGround,-dx*scale),V3.mul(fGround,dy*scale));eye=V3.add(startEye,delta);target=V3.add(startTarget,delta)}};
@@ -187,4 +331,499 @@ function render(now){let dt=Math.min(.1,(now-last)/1000);last=now;if(playing){ti
  gl.useProgram(sp);um(sp,'mvp',mvp);attr(sp,'p',lfPB,3);attr(sp,'n',lfNB,3);gl.uniform3f(gl.getUniformLocation(sp,'base'),.19,.34,.16);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,lfIB);gl.drawElements(gl.TRIANGLES,TREE_MESH.leafI.length,gl.UNSIGNED_SHORT,0);
  gl.useProgram(gp);um(gp,'mvp',mvp);attr(gp,'p',gPB,3);attr(gp,'n',gNB,3);attr(gp,'i0',iB,4,24,0,1);attr(gp,'i1',iB,2,24,16,1);gl.uniform1f(gl.getUniformLocation(gp,'boost'),Math.max(1.0,Math.min(2.8,camDist()/125)));gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,gIB);if(inst)inst.drawElementsInstancedANGLE(gl.TRIANGLES,gi.length,gl.UNSIGNED_SHORT,0,visible);for(const n of ['i0','i1']){let l=gl.getAttribLocation(gp,n);if(l>=0&&inst)inst.vertexAttribDivisorANGLE(l,0)}requestAnimationFrame(render)}
 ui();requestAnimationFrame(render);
-</script></body></html>
+</script>
+
+<script id="union-free-navigation">
+(() => {
+  /*
+   * Navigation model
+   * ----------------
+   * Mouse:
+   *   left drag       = pan
+   *   right/shift drag= yaw + clamped pitch orbit
+   *   wheel           = zoom to cursor
+   *   double click    = focus that ground point
+   *
+   * Touch:
+   *   one finger      = pan
+   *   two fingers     = pan + pinch zoom + horizontal twist rotation
+   *   double tap      = focus that ground point
+   *
+   * Camera roll is always zero; pitch never crosses the ground plane.
+   */
+
+  const MOBILE = () => matchMedia("(max-width:720px)").matches;
+  const clamp = (v,lo,hi) => Math.max(lo,Math.min(hi,v));
+
+  /* Derive navigation limits from actual cemetery sections, not a fixed center box. */
+  const sectionExtent = SECTION_META.reduce((b,s) => ({
+    minX: Math.min(b.minX, s.cx - s.w/2),
+    maxX: Math.max(b.maxX, s.cx + s.w/2),
+    minZ: Math.min(b.minZ, s.cz - s.h/2),
+    maxZ: Math.max(b.maxZ, s.cz + s.h/2)
+  }), {minX:Infinity,maxX:-Infinity,minZ:Infinity,maxZ:-Infinity});
+
+  const NAV = {
+    minX: sectionExtent.minX - 110,
+    maxX: sectionExtent.maxX + 110,
+    minZ: sectionExtent.minZ - 95,
+    maxZ: sectionExtent.maxZ + 95
+  };
+
+  function safeGroundForward(v){
+    const g=[v[0],0,v[2]];
+    return V3.len(g)>.0001 ? V3.norm(g) : [0,0,1];
+  }
+
+  function normalizeAngle(a){
+    while(a>Math.PI)a-=Math.PI*2;
+    while(a<-Math.PI)a+=Math.PI*2;
+    return a;
+  }
+
+  function cameraSpherical(){
+    const off=V3.sub(eye,target);
+    const d=Math.max(.0001,V3.len(off));
+    const horizontal=Math.max(.0001,Math.hypot(off[0],off[2]));
+    return {
+      d,
+      az:Math.atan2(off[0],off[2]),
+      elev:Math.atan2(off[1],horizontal)
+    };
+  }
+
+  function setSpherical(az,elev,d){
+    d=clamp(d,MOBILE()?7:9,MOBILE()?620:760);
+    elev=clamp(elev,8*Math.PI/180,88*Math.PI/180);
+    const h=Math.cos(elev)*d;
+    eye=[
+      target[0]+Math.sin(az)*h,
+      target[1]+Math.sin(elev)*d,
+      target[2]+Math.cos(az)*h
+    ];
+    up=[0,1,0];
+  }
+
+  function constrainNavigation(){
+    const oldX=target[0], oldZ=target[2];
+
+    target[0]=clamp(target[0],NAV.minX,NAV.maxX);
+    target[2]=clamp(target[2],NAV.minZ,NAV.maxZ);
+    target[1]=2;
+
+    /* If a boundary was reached, move the camera by the same correction so
+       the current orientation and distance do not snap back to a center pole. */
+    eye[0]+=target[0]-oldX;
+    eye[2]+=target[2]-oldZ;
+
+    const s=cameraSpherical();
+    setSpherical(s.az,s.elev,s.d);
+  }
+
+  function groundPointAt(clientX,clientY){
+    const rect=canvas.getBoundingClientRect();
+    if(!rect.width||!rect.height)return null;
+
+    const nx=((clientX-rect.left)/rect.width)*2-1;
+    const ny=1-((clientY-rect.top)/rect.height)*2;
+    const aspect=rect.width/rect.height;
+    const tanHalf=Math.tan(38*Math.PI/360);
+
+    const b=basis();
+    const forward=V3.norm(V3.sub(target,eye));
+
+    let dir=V3.add(
+      forward,
+      V3.add(
+        V3.mul(b.right,nx*tanHalf*aspect),
+        V3.mul(b.up,ny*tanHalf)
+      )
+    );
+    dir=V3.norm(dir);
+
+    if(Math.abs(dir[1])<1e-5)return null;
+    const t=(2-eye[1])/dir[1];
+    if(!(t>0))return null;
+
+    return V3.add(eye,V3.mul(dir,t));
+  }
+
+  function panPixels(dx,dy){
+    const b=basis();
+    const forward=V3.norm(V3.sub(target,eye));
+    const fGround=safeGroundForward(forward);
+    let rGround=[b.right[0],0,b.right[2]];
+    rGround=V3.len(rGround)>.0001?V3.norm(rGround):[1,0,0];
+
+    const rect=canvas.getBoundingClientRect();
+    const scale=camDist()*Math.tan(38*Math.PI/360)*2/
+      Math.max(1,rect.height)*1.08;
+
+    const delta=V3.add(
+      V3.mul(rGround,-dx*scale),
+      V3.mul(fGround,dy*scale)
+    );
+
+    eye=V3.add(eye,delta);
+    target=V3.add(target,delta);
+    constrainNavigation();
+  }
+
+  function zoomAt(clientX,clientY,factor){
+    const before=groundPointAt(clientX,clientY);
+    const s=cameraSpherical();
+
+    setSpherical(s.az,s.elev,s.d*factor);
+
+    const after=groundPointAt(clientX,clientY);
+    if(before&&after){
+      const shift=[
+        before[0]-after[0],
+        0,
+        before[2]-after[2]
+      ];
+      eye=V3.add(eye,shift);
+      target=V3.add(target,shift);
+    }
+    constrainNavigation();
+  }
+
+  function focusScreenPoint(clientX,clientY,zoomFactor=.72){
+    const p=groundPointAt(clientX,clientY);
+    if(!p)return;
+
+    const s=cameraSpherical();
+    target=[p[0],2,p[2]];
+    setSpherical(s.az,s.elev,s.d*zoomFactor);
+    constrainNavigation();
+  }
+
+  function orbitBy(deltaAz,deltaElev){
+    const s=cameraSpherical();
+    setSpherical(
+      s.az+deltaAz,
+      s.elev+deltaElev,
+      s.d
+    );
+    constrainNavigation();
+
+    if(Math.abs(deltaElev)>.0001 && cameraSpherical().elev < 84*Math.PI/180){
+      leaveTopView();
+    }
+  }
+
+  let topViewActive=false;
+
+  function enterTopView(){
+    const s=cameraSpherical();
+
+    /*
+     * 87.5 degrees reads as top-down but retains a tiny horizontal component,
+     * so azimuth remains defined and 360-degree rotation still works.
+     */
+    setSpherical(s.az,87.5*Math.PI/180,s.d);
+    constrainNavigation();
+    topViewActive=true;
+    document.getElementById("topview")?.classList.add("active");
+  }
+
+  function leaveTopView(){
+    topViewActive=false;
+    document.getElementById("topview")?.classList.remove("active");
+  }
+
+  function toggleTopView(){
+    if(topViewActive){
+      const s=cameraSpherical();
+      setSpherical(s.az,48*Math.PI/180,s.d);
+      constrainNavigation();
+      leaveTopView();
+    }else{
+      enterTopView();
+    }
+  }
+
+  /* Override zoom buttons so they use the center of the actual canvas view. */
+  function canvasCenter(){
+    const r=canvas.getBoundingClientRect();
+    return {x:r.left+r.width/2,y:r.top+r.height/2};
+  }
+
+  document.getElementById("zin").onclick=()=>{
+    const c=canvasCenter();
+    zoomAt(c.x,c.y,.78);
+  };
+
+  document.getElementById("zout").onclick=()=>{
+    const c=canvasCenter();
+    zoomAt(c.x,c.y,1.28);
+  };
+
+  /* Mouse / pen ------------------------------------------------------ */
+  let mouseDown=false;
+  let mouseMode="pan";
+  let mouseX=0,mouseY=0;
+  let startAz=0,startElev=0;
+
+  canvas.onpointerdown=e=>{
+    if(e.pointerType==="touch")return;
+
+    e.preventDefault();
+    mouseDown=true;
+    canvas.classList.add("dragging");
+    mouseX=e.clientX;
+    mouseY=e.clientY;
+
+    const s=cameraSpherical();
+    startAz=s.az;
+    startElev=s.elev;
+
+    mouseMode=(e.button===2||e.shiftKey||e.altKey)?"orbit":"pan";
+    canvas.setPointerCapture?.(e.pointerId);
+  };
+
+  canvas.onpointermove=e=>{
+    if(e.pointerType==="touch"||!mouseDown)return;
+    e.preventDefault();
+
+    const dx=e.clientX-mouseX;
+    const dy=e.clientY-mouseY;
+
+    if(mouseMode==="pan"){
+      panPixels(dx,dy);
+      mouseX=e.clientX;
+      mouseY=e.clientY;
+    }else{
+      const s=cameraSpherical();
+      setSpherical(
+        startAz-dx*.006,
+        startElev+dy*.0045,
+        s.d
+      );
+      constrainNavigation();
+      if(cameraSpherical().elev < 84*Math.PI/180){
+        leaveTopView();
+      }
+    }
+  };
+
+  function endMouse(e){
+    if(e.pointerType==="touch")return;
+    mouseDown=false;
+    canvas.classList.remove("dragging");
+    canvas.releasePointerCapture?.(e.pointerId);
+  }
+
+  canvas.onpointerup=endMouse;
+  canvas.onpointercancel=endMouse;
+
+  /* Capture wheel before the old viewer's center-zoom listener. */
+  canvas.addEventListener("wheel",e=>{
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    zoomAt(e.clientX,e.clientY,Math.exp(e.deltaY*.0012));
+  },{passive:false,capture:true});
+
+  canvas.addEventListener("dblclick",e=>{
+    e.preventDefault();
+    focusScreenPoint(e.clientX,e.clientY,.66);
+  });
+
+  /* Touch ------------------------------------------------------------ */
+  const touches=new Map();
+  let lastOne={x:0,y:0};
+  let pinchDistance=0;
+  let pinchAngle=0;
+  let pinchMid=null;
+  let gestureMoved=false;
+  let lastTapTime=0;
+  let lastTapX=0,lastTapY=0;
+
+  function touchList(){
+    return [...touches.values()];
+  }
+
+  function dist(a,b){
+    return Math.hypot(a.x-b.x,a.y-b.y);
+  }
+
+  function mid(a,b){
+    return {x:(a.x+b.x)/2,y:(a.y+b.y)/2};
+  }
+
+  function angle(a,b){
+    return Math.atan2(b.y-a.y,b.x-a.x);
+  }
+
+  /* These overwrite the mouse-only pointer functions above; dispatch by type. */
+  const mousePointerDown=canvas.onpointerdown;
+  const mousePointerMove=canvas.onpointermove;
+  const mousePointerUp=canvas.onpointerup;
+  const mousePointerCancel=canvas.onpointercancel;
+
+  canvas.onpointerdown=e=>{
+    if(e.pointerType!=="touch"){
+      mousePointerDown(e);
+      return;
+    }
+
+    e.preventDefault();
+    touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    canvas.setPointerCapture?.(e.pointerId);
+    gestureMoved=false;
+
+    const pts=touchList();
+
+    if(pts.length===1){
+      lastOne={x:pts[0].x,y:pts[0].y};
+      pinchDistance=0;
+      pinchMid=null;
+    }else if(pts.length>=2){
+      pinchDistance=dist(pts[0],pts[1]);
+      pinchAngle=angle(pts[0],pts[1]);
+      pinchMid=mid(pts[0],pts[1]);
+    }
+  };
+
+  canvas.onpointermove=e=>{
+    if(e.pointerType!=="touch"){
+      mousePointerMove(e);
+      return;
+    }
+
+    if(!touches.has(e.pointerId))return;
+    e.preventDefault();
+
+    touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    const pts=touchList();
+
+    if(pts.length===1){
+      const p=pts[0];
+      const dx=p.x-lastOne.x;
+      const dy=p.y-lastOne.y;
+
+      if(Math.abs(dx)+Math.abs(dy)>2)gestureMoved=true;
+      panPixels(dx,dy);
+      lastOne={x:p.x,y:p.y};
+
+    }else if(pts.length>=2){
+      const a=pts[0],b=pts[1];
+      const d=Math.max(8,dist(a,b));
+      const m=mid(a,b);
+      const aNow=angle(a,b);
+
+      if(pinchMid){
+        const mdx=m.x-pinchMid.x;
+        const mdy=m.y-pinchMid.y;
+        if(Math.abs(mdx)+Math.abs(mdy)>1.5)gestureMoved=true;
+        panPixels(mdx,mdy);
+      }
+
+      if(pinchDistance>0){
+        const factor=clamp(pinchDistance/d,.72,1.38);
+        if(Math.abs(factor-1)>.008)gestureMoved=true;
+        zoomAt(m.x,m.y,factor);
+      }
+
+      const twist=normalizeAngle(aNow-pinchAngle);
+      if(Math.abs(twist)>.008){
+        gestureMoved=true;
+        /* Horizontal yaw only: no roll and no vertical flip. */
+        orbitBy(-twist,0);
+      }
+
+      pinchDistance=d;
+      pinchAngle=aNow;
+      pinchMid=m;
+    }
+  };
+
+  function endTouch(e){
+    const wasTouch=e.pointerType==="touch";
+
+    if(!wasTouch){
+      mousePointerUp(e);
+      return;
+    }
+
+    const endX=e.clientX,endY=e.clientY;
+    touches.delete(e.pointerId);
+    canvas.releasePointerCapture?.(e.pointerId);
+
+    const pts=touchList();
+
+    if(pts.length===1){
+      lastOne={x:pts[0].x,y:pts[0].y};
+      pinchDistance=0;
+      pinchMid=null;
+
+    }else if(pts.length>=2){
+      pinchDistance=dist(pts[0],pts[1]);
+      pinchAngle=angle(pts[0],pts[1]);
+      pinchMid=mid(pts[0],pts[1]);
+
+    }else{
+      /* Double tap focuses and moves closer to that actual section. */
+      if(!gestureMoved){
+        const now=performance.now();
+        if(
+          now-lastTapTime<340 &&
+          Math.hypot(endX-lastTapX,endY-lastTapY)<44
+        ){
+          focusScreenPoint(endX,endY,.64);
+          lastTapTime=0;
+        }else{
+          lastTapTime=now;
+          lastTapX=endX;
+          lastTapY=endY;
+        }
+      }
+
+      pinchDistance=0;
+      pinchMid=null;
+      gestureMoved=false;
+    }
+  }
+
+  canvas.onpointerup=endTouch;
+  canvas.onpointercancel=e=>{
+    if(e.pointerType==="touch"){
+      touches.delete(e.pointerId);
+      pinchDistance=0;
+      pinchMid=null;
+      gestureMoved=false;
+    }else{
+      mousePointerCancel(e);
+    }
+  };
+
+  /*
+   * Section focus, Home and 3D still work, but once they finish the camera
+   * is normalized into the same safe, freely navigable system.
+   */
+  document.getElementById("section").addEventListener("change",()=>{
+    setTimeout(()=>{
+      constrainNavigation();
+      if(topViewActive) enterTopView();
+    },0);
+  });
+
+  document.getElementById("topview").addEventListener("click",()=>{
+    toggleTopView();
+  });
+
+  document.getElementById("aerial").addEventListener("click",()=>{
+    leaveTopView();
+    setTimeout(constrainNavigation,0);
+  });
+
+  document.getElementById("home").addEventListener("click",()=>{
+    leaveTopView();
+    setTimeout(constrainNavigation,0);
+  });
+
+  constrainNavigation();
+})();
+</script>
+
+</body></html>
